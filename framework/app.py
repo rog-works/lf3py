@@ -1,10 +1,12 @@
-from typing import Callable, Dict, Tuple, Type, Union
 from logging import Logger
+from typing import Callable, Dict, Tuple, Type, Union
 
 
 from framework.data.config import Config
 from framework.http.request import Request
 from framework.http.response import Response, ErrorResponse
+from framework.i18n.datetime import DateTime
+from framework.i18n.translator import Translator
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.di import DI
 from framework.lang.dict import Binder
@@ -35,11 +37,20 @@ class App:
     def request(self) -> Request:
         return self._di.resolve(Request)
 
+    @property
+    def trans(self, path: str) -> str:
+        translator: Translator = self._di.resolve(Translator)
+        return translator.trans(path)
+
+    @property
+    def datetime(self) -> DateTime:
+        return self._di.resolve(DateTime)
+
     def error(self, status: int, message: str, errors: Union[Type[Exception], Tuple[Type[Exception], ...]]):
         """
         Usage:
             ```
-            @app.error(400, @app.i18n.trans('http.bad_request'), ValidationError)
+            @app.error(400, app.trans('http.bad_request'), ValidationError)
             def action(self) -> Response:
                 raise ValidationError()
 
@@ -77,7 +88,7 @@ class App:
         def wrapper(*args, **kwargs) -> Response:
             func_anno = FunctionAnnotation(wrapper_func)
             binded_args = {
-                key: Binder(arg_anno.origin).bind(self.request.params)
+                key: Binder(self.request.params).bind(arg_anno.origin)
                 for key, arg_anno in func_anno.args.items()
             }
             return wrapper_func(**binded_args)
@@ -88,7 +99,7 @@ class App:
         """
         Usage:
             def action(self) -> Response:
-                with @app.transaction(self.rollback):
+                with app.transaction(self.rollback):
                     publish_id = Model.create()
                     raise ValueError()
 

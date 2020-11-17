@@ -20,6 +20,10 @@ class ClassAnnotation:
         return self._klass
 
     @property
+    def constructor(self) -> FunctionAnnotation:
+        return FunctionAnnotation(self.origin.__init__)
+
+    @property
     def properties(self) -> Dict[str, 'PropertyAnnotation']:
         return {key: PropertyAnnotation(prop) for key, prop in self._klass.__annotations__.items()}
 

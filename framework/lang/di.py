@@ -1,25 +1,26 @@
-from typing import Any, Callable, Dict, Type
+from typing import Any, Dict, Type
 
-
-Factory = Callable[[], Any]
+from framework.lang.annotation import ClassAnnotation
 
 
 class DI:
     def __init__(self) -> None:
-        self._factories: Dict[Type, Factory] = {}
+        self._types: Dict[Type, Type] = {}
         self._instances: Dict[Type, Any] = {}
 
-    def register(self, klass: Type, factory: Factory):
-        self._factories[klass] = factory
+    def register(self, from_type: Type, inject_type: Type):
+        self._types[from_type] = inject_type
 
-    def resolve(self, klass: Type) -> Any:
-        if klass not in self._factories:
+    def resolve(self, from_type: Type) -> Any:
+        if from_type not in self._types:
             raise ValueError()
 
-        if klass in self._instances:
-            return self._instances[klass]
+        if from_type in self._instances:
+            return self._instances[from_type]
 
-        factory = self._factories[klass]
-        instance = factory()
-        self._instances[klass] = instance
+        ctor = self._types[from_type]
+        anno = ClassAnnotation(ctor)
+        args = {key: self.resolve(arg_anno.origin) for key, arg_anno in anno.constructor.args.items()}
+        instance = ctor(**args)
+        self._instances[from_type] = instance
         return instance

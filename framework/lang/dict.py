@@ -1,36 +1,40 @@
-from typing import Any, List, Type
+from typing import Any, List, Type, TypeVar
 import re
 
 from framework.lang.annotation import ClassAnnotation, PropertyAnnotation
 
 
-class Binder:
-    def __init__(self, bind_type: Type) -> None:
-        self._bind_anno = ClassAnnotation(bind_type)
+Node = TypeVar('Node', int, float, str, dict, list)
 
-    def bind(self, params: dict) -> Any:
-        binded_params = (self._bind_anno.origin)()
+
+class Binder:
+    def __init__(self, data: dict) -> None:
+        self._data = data
+
+    def bind(self, bind_type: Type) -> Any:
+        binded = (self._bind_anno.origin)()
+        self._bind_anno = ClassAnnotation(bind_type)
         for key, prop_anno in self._bind_anno.properties.items():
-            if not prop_anno.is_optional and key not in params:
+            if not prop_anno.is_optional and key not in self._data:
                 raise TypeError()
 
             candidate_types = [
                 value_type
-                for value_type in self._analyze_value_types(params, key)
+                for value_type in self._analyze_value_types(self._data, key)
                 if value_type in prop_anno.types
             ]
             if len(candidate_types) == 0:
                 raise TypeError()
 
-            setattr(binded_params, key, self._cast_value(prop_anno, params, key))
+            setattr(binded, key, self._cast_value(prop_anno, self._data, key))
 
-        return binded_params
+        return binded
 
-    def _analyze_value_types(self, params: dict, key: str) -> List[Type]:
-        if key not in params:
+    def _analyze_value_types(self, data: dict, key: str) -> List[Type]:
+        if key not in data:
             return [type(None)]
 
-        value = params[key]
+        value = data[key]
         if type(value) is int:
             return [int]
         elif type(value) is float:
@@ -52,11 +56,11 @@ class Binder:
         else:
             return []
 
-    def _cast_value(self, cast_anno: PropertyAnnotation, params: dict, key: str) -> Any:
-        if key not in params:
+    def _cast_value(self, cast_anno: PropertyAnnotation, data: dict, key: str) -> Any:
+        if key not in data:
             return None
 
-        value = params[key]
+        value = data[key]
         if cast_anno.is_enum:
             return (cast_anno.origin)(value)
         elif cast_anno.is_int:
@@ -67,3 +71,15 @@ class Binder:
             return value in ['true', 'false']
         else:
             return value
+
+
+def pluck(self, node: Node, path: str) -> Node:
+    if type(node) is dict and path:
+        key, *remain = path.split('.')
+        return self._pluck(node[key], '.'.join(remain))
+    elif type(node) is list and path:
+        key, *remain = path.split('.')
+        index = int(key)
+        return self._pluck(node[index], '.'.join(remain))
+    else:
+        return node
