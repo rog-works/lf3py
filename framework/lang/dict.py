@@ -21,18 +21,18 @@ class Binder:
 
         return binded
 
-    def _cast_value(self, cast_anno: PropertyAnnotation, data: dict, key: str) -> Any:
+    def _cast_value(self, prop_anno: PropertyAnnotation, data: dict, key: str) -> Any:
         if key not in data:
             return None
 
         value = data[key]
-        if cast_anno.is_enum:
-            return (cast_anno.origin)(value)
-        elif cast_anno.is_int:
+        if prop_anno.is_enum:
+            return (prop_anno.origin)(value)
+        elif prop_anno.is_int:
             return int(value)
-        elif cast_anno.is_float:
+        elif prop_anno.is_float:
             return float(value)
-        elif cast_anno.is_bool:
+        elif prop_anno.is_bool:
             return value in ['true', 'false']
         else:
             return value
