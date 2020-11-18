@@ -8,7 +8,11 @@ class FunctionAnnotation:
 
     @property
     def args(self) -> Dict[str, 'ArgAnnotation']:
-        return {key: ArgAnnotation(arg) for key, arg in self._func.__annotations__.items()}
+        return {key: ArgAnnotation(arg) for key, arg in self._func.__annotations__.items() if key != 'return'}
+
+    @property
+    def returns(self) -> 'ValueAnnotation':
+        return ValueAnnotation(self._func.__annotations__['return'])
 
 
 class ClassAnnotation:
