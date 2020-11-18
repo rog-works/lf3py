@@ -50,15 +50,18 @@ class ValueAnnotation:
 
     @property
     def is_enum(self) -> bool:
-        return issubclass(self._prop, Enum)
+        return type(self._prop) is type(Enum)
 
     @property
     def is_union(self) -> bool:
-        return self.origin is Union
+        if not hasattr(self._prop, '__origin__'):
+            return False
+
+        return self._prop.__origin__ is Union
 
     @property
     def is_optional(self) -> bool:
-        return self.types in type(None)
+        return type(None) in self.types
 
     @property
     def origin(self) -> Type:

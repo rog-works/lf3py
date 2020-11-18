@@ -38,13 +38,12 @@ class App:
         return self._di.resolve(Request)
 
     @property
+    def datetime(self) -> DateTime:
+        return self._di.resolve(DateTime)
+
     def trans(self, path: str) -> str:
         translator: Translator = self._di.resolve(Translator)
         return translator.trans(path)
-
-    @property
-    def datetime(self) -> DateTime:
-        return self._di.resolve(DateTime)
 
     def error(self, status: int, message: str, errors: Union[Type[Exception], Tuple[Type[Exception], ...]]):
         """
