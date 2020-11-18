@@ -58,9 +58,9 @@ class App:
             ```
         """
         def decorator(wrapper_func: Callable[..., Response]):
-            def wrapper(*args, **kwargs) -> Response:
+            def wrapper(self, **kwargs) -> Response:
                 try:
-                    return wrapper_func(*args, **kwargs)
+                    return wrapper_func(self, **kwargs)
                 except errors as e:
                     return ErrorResponse(status, message, e)
 
@@ -68,29 +68,31 @@ class App:
 
         return decorator
 
-    def params(self, wrapper_func: Callable[..., Response]):
+    def params(self, action_func: Callable[..., Response]):
         """
         Usage:
             ```
-            @app.params
-            def action(self, params: Params) -> Response:
-                print(f'{params}')
-                > {'a': 100, 'b': 'hoge', 'c': None}
-
             @dataclass
             class Params:
                 a: int = 0
                 b: str = ''
                 c: Optional[int] = None
+
+            @app.params
+            def action(self, params: Params) -> Response:
+                print(f'{params.__dict__}')
+                > {'a': 100, 'b': 'hoge', 'c': None}
             ```
         """
-        def wrapper(*args, **kwargs) -> Response:
-            func_anno = FunctionAnnotation(wrapper_func)
+        req_params = self.request.params
+
+        def wrapper(self, *_) -> Response:
+            func_anno = FunctionAnnotation(action_func)
             binded_args = {
-                key: Binder(self.request.params).bind(arg_anno.origin)
+                key: Binder(req_params).bind(arg_anno.origin)
                 for key, arg_anno in func_anno.args.items()
             }
-            return wrapper_func(**binded_args)
+            return action_func(self, **binded_args)
 
         return wrapper
 
