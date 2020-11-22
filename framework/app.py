@@ -3,13 +3,11 @@ from typing import Callable, Dict, Tuple, Type, Union
 
 
 from framework.data.config import Config
-from framework.http.request import Request
-from framework.http.response import Response, ErrorResponse
-from framework.i18n.datetime import DateTime
-from framework.i18n.translator import Translator
+from framework.data.http import Request, Response, ErrorResponse
+from framework.i18n.locale import Locale
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.di import DI
-from framework.lang.dict import Binder
+from framework.lang.object import Assigner
 from framework.task.transaction import Transaction
 
 
@@ -18,16 +16,20 @@ class App:
 
     @classmethod
     def get(cls, name: str) -> 'App':
-        return App.__instances[name]
+        return cls.__instances[name]
 
     def __init__(self, name: str, di: DI) -> None:
         self._name = name
-        self._di = DI()
-        App.__instances[name] = self
+        self._di = di
+        self.__instances[name] = self
 
     @property
     def config(self) -> dict:
         return self._di.resolve(Config)
+
+    @property
+    def locale(self) -> Locale:
+        return self._di.resolve(Locale)
 
     @property
     def logger(self) -> Logger:
@@ -37,19 +39,11 @@ class App:
     def request(self) -> Request:
         return self._di.resolve(Request)
 
-    @property
-    def datetime(self) -> DateTime:
-        return self._di.resolve(DateTime)
-
-    def trans(self, path: str) -> str:
-        translator: Translator = self._di.resolve(Translator)
-        return translator.trans(path)
-
-    def error(self, status: int, message: str, errors: Union[Type[Exception], Tuple[Type[Exception], ...]]):
+    def error(self, status: int, message: str, handle_errors: Union[Type[Exception], Tuple[Type[Exception], ...]]):
         """
         Usage:
             ```
-            @app.error(400, app.trans('http.bad_request'), ValidationError)
+            @app.error(400, app.locale.trans('http.400'), ValidationError)
             def action(self) -> Response:
                 raise ValidationError()
 
@@ -57,11 +51,11 @@ class App:
             > ErrorResponse(status: 400, message: '400 Bad Request', error: ValidationError)
             ```
         """
-        def decorator(wrapper_func: Callable[..., Response]):
-            def wrapper(self, **kwargs) -> Response:
+        def decorator(action_func: Callable[..., Response]):
+            def wrapper(*args, **kwargs) -> Response:
                 try:
-                    return wrapper_func(self, **kwargs)
-                except errors as e:
+                    return action_func(*args, **kwargs)
+                except handle_errors as e:
                     return ErrorResponse(status, message, e)
 
             return wrapper
@@ -84,31 +78,29 @@ class App:
                 > {'a': 100, 'b': 'hoge', 'c': None}
             ```
         """
-        req_params = self.request.params
-
-        def wrapper(self, *_) -> Response:
+        def wrapper(*args, **kwargs) -> Response:
             func_anno = FunctionAnnotation(action_func)
-            binded_args = {
-                key: Binder(req_params).bind(arg_anno.origin)
+            assigned_args = {
+                key: Assigner.assign(arg_anno.origin, self.request.params)
                 for key, arg_anno in func_anno.args.items()
             }
-            return action_func(self, **binded_args)
+            return action_func(args[0], **assigned_args) if func_anno.is_method else action_func(**assigned_args)
 
         return wrapper
 
-    def transaction(self, error_handler: Callable[[Exception, dict], None]):
+    def transaction(self, error_handler: Callable[[BaseException, dict], None]):
         """
         Usage:
             def action(self) -> Response:
-                with app.transaction(self.rollback):
+                with app.transaction(error_handler=self.rollback):
                     publish_id = Model.create()
                     raise ValueError()
 
-            def rollback(self, error: Exception, context: dict):
+            def rollback(self, error: BaseException, context: dict):
                 print(error)
                 > ValueError
 
                 print(context)
                 > {'publish_id': 100}
         """
-        return Transaction(error_handler)
+        return Transaction(error_handler=error_handler)

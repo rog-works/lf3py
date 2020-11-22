@@ -7,6 +7,10 @@ class FunctionAnnotation:
         self._func = func
 
     @property
+    def is_method(self) -> bool:
+        return hasattr(self._func, '__self__')
+
+    @property
     def args(self) -> Dict[str, 'ArgAnnotation']:
         return {key: ArgAnnotation(arg) for key, arg in self._func.__annotations__.items() if key != 'return'}
 
