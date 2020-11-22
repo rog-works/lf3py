@@ -1,31 +1,32 @@
 from enum import IntEnum
-from typing import Any, Optional
+from typing import Any, Optional, Type
 from unittest import TestCase
 
-from framework.lang.dict import Binder, pluck
+from framework.lang.dict import pluck
+from framework.lang.object import Assigner
 from tests.helper.fixture import data_provider
 
 
-class AEnum(IntEnum):
+class EnumA(IntEnum):
     A = 1
     B = 2
     C = 3
 
 
-class BindA:
+class ClassA:
     a: int = 0
     b: str = ''
     c: Optional[int] = None
-    e: AEnum = AEnum.A
+    e: EnumA = EnumA.A
 
 
 class TestDict(TestCase):
     @data_provider([
-        ({'a': 1, 'b': 'string', 'e': 3}, BindA),
-        ({'a': 1, 'b': 'string', 'c': 2, 'e': 3}, BindA),
+        ({'a': 1, 'b': 'string', 'e': 3}, ClassA),
+        ({'a': 1, 'b': 'string', 'c': 2, 'e': 3}, ClassA),
     ])
-    def test_binder(self, data: dict, bind_type: Any):
-        actual = Binder(data).bind(bind_type)
+    def test_assigner(self, data: dict, assign_type: Type):
+        actual = Assigner.assign(assign_type, data)
         for key, value in data.items():
             self.assertEquals(getattr(actual, key), value)
 
