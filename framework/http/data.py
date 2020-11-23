@@ -11,6 +11,7 @@ class Request:
     params: dict = field(default_factory=dict)
 
 
+@dataclass
 class Response(Result):
     status: int = 200
     headers: dict = field(default_factory=dict)

@@ -3,7 +3,7 @@ from typing import Any
 from framework.lang.serialize import DictSerializer, Serializer
 
 
-class Result(dict):
+class Result:
     serializer: Serializer = DictSerializer()
 
     def serialize(self) -> Any:
