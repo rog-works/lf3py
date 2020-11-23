@@ -48,8 +48,20 @@ class App:
 
     def run(self) -> Result:
         runner: Runner = self._di.resolve(Runner)
-        self.response.body = runner().serialize()
-        return self.response
+        return runner()
+
+    def success(self, body: dict, status: int = 200) -> Response:
+        return self.http_result(status, body)
+
+    def http_result(self, status: int, body: dict) -> Response:
+        return Response(status=status, headers=self.response.headers, body=body)
+
+    def error_500(self, error: Exception) -> Response:
+        return self.error_result(500, self.locale.trans('http.500'), error)
+
+    def error_result(self, status: int, message: str, error: Exception) -> Response:
+        body = {'message': message, 'stacktrace': stacktrace(error)}
+        return self.http_result(status, body)
 
     def error(self, status: int, message: str, handle_errors: Union[Type[Exception], Tuple[Type[Exception], ...]]):
         """
@@ -73,17 +85,6 @@ class App:
             return wrapper
 
         return decorator
-
-    def error_500(self, error: Exception) -> Result:
-        return self.error_result(500, self.locale.trans('http.500'), error)
-
-    def error_result(self, status: int, message: str, error: Exception) -> Result:
-        self.response.status = status
-        self.response.body = {
-            'message': message,
-            'stacktrace': stacktrace(error),
-        }
-        return self.response
 
     def params(self, runner: Callable[..., Result]):
         """
