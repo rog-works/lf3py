@@ -1,5 +1,5 @@
 from framework.i18n.locale import Locale
-from framework.data.http import Request
+from framework.http.data import Request
 from framework.lang.module import load_module
 
 
