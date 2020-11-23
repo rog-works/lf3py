@@ -20,7 +20,7 @@ class ClassA:
     e: EnumA = EnumA.A
 
 
-class TestDict(TestCase):
+class TestObject(TestCase):
     @data_provider([
         ({'a': 1, 'b': 'string', 'e': 3}, ClassA),
         ({'a': 1, 'b': 'string', 'c': 2, 'e': 3}, ClassA),
