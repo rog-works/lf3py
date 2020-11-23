@@ -4,5 +4,5 @@ from framework.app import App
 app = App.get(__name__)
 
 
-def run() -> Response:
+def action() -> Response:
     return app.api.success({'success': True})
