@@ -41,22 +41,6 @@ class ValueAnnotation:
         self._prop = prop
 
     @property
-    def is_int(self) -> bool:
-        return self.origin is int
-
-    @property
-    def is_float(self) -> bool:
-        return self.origin is float
-
-    @property
-    def is_bool(self) -> bool:
-        return self.origin is bool
-
-    @property
-    def is_str(self) -> bool:
-        return self.origin is str
-
-    @property
     def is_enum(self) -> bool:
         return type(self._prop) is type(Enum)
 

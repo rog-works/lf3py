@@ -24,11 +24,11 @@ class Assigner:
         value = data[key]
         if prop_anno.is_enum:
             return (prop_anno.origin)(value)
-        elif prop_anno.is_int:
+        elif prop_anno.origin is int:
             return int(value)
-        elif prop_anno.is_float:
+        elif prop_anno.origin is float:
             return float(value)
-        elif prop_anno.is_bool:
+        elif prop_anno.origin is bool:
             return value in ['true', 'false']
         else:
             return value
