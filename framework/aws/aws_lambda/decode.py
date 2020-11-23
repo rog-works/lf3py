@@ -1,4 +1,4 @@
-from framework.data.http import Request
+from framework.http.data import Request
 
 
 def decode_request(event: dict) -> Request:

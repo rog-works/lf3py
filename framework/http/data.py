@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from framework.task.result import Result
+
 
 @dataclass
 class Request:
@@ -9,14 +11,7 @@ class Request:
     params: dict = {}
 
 
-@dataclass
-class Response:
-    status: int = 0
+class Response(Result):
+    status: int = 200
     headers: dict = {}
     body: dict = {}
-
-
-@dataclass
-class ErrorResponse(Response):
-    message: str = ''
-    error: Exception = Exception()

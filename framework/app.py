@@ -3,11 +3,14 @@ from typing import Callable, Dict, Tuple, Type, Union
 
 
 from framework.data.config import Config
-from framework.data.http import Request, Response, ErrorResponse
+from framework.http.data import Request, Response
+from framework.task.result import Result
 from framework.i18n.locale import Locale
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.di import DI
+from framework.lang.error import stacktrace
 from framework.lang.object import Assigner
+from framework.task.runner import Runner
 from framework.task.transaction import Transaction
 
 
@@ -39,30 +42,50 @@ class App:
     def request(self) -> Request:
         return self._di.resolve(Request)
 
+    @property
+    def response(self) -> Response:
+        return self._di.resolve(Response)
+
+    def run(self) -> Result:
+        runner: Runner = self._di.resolve(Runner)
+        self.response.body = runner().serialize()
+        return self.response
+
     def error(self, status: int, message: str, handle_errors: Union[Type[Exception], Tuple[Type[Exception], ...]]):
         """
         Usage:
             ```
             @app.error(400, app.locale.trans('http.400'), ValidationError)
-            def action(self) -> Response:
+            def action(self) -> Result:
                 raise ValidationError()
 
             action()
-            > ErrorResponse(status: 400, message: '400 Bad Request', error: ValidationError)
+            > Result(status: 400, message: '400 Bad Request', error: ValidationError)
             ```
         """
-        def decorator(action_func: Callable[..., Response]):
-            def wrapper(*args, **kwargs) -> Response:
+        def decorator(runner: Callable[..., Result]):
+            def wrapper(*args, **kwargs) -> Result:
                 try:
-                    return action_func(*args, **kwargs)
+                    return runner(*args, **kwargs)
                 except handle_errors as e:
-                    return ErrorResponse(status, message, e)
+                    return self.error_result(status, message, e)
 
             return wrapper
 
         return decorator
 
-    def params(self, action_func: Callable[..., Response]):
+    def error_500(self, error: Exception) -> Result:
+        return self.error_result(500, self.locale.trans('http.500'), error)
+
+    def error_result(self, status: int, message: str, error: Exception) -> Result:
+        self.response.status = status
+        self.response.body = {
+            'message': message,
+            'stacktrace': stacktrace(error),
+        }
+        return self.response
+
+    def params(self, runner: Callable[..., Result]):
         """
         Usage:
             ```
@@ -73,18 +96,22 @@ class App:
                 c: Optional[int] = None
 
             @app.params
-            def action(self, params: Params) -> Response:
+            def action(self, params: Params) -> Result:
                 print(f'{params.__dict__}')
                 > {'a': 100, 'b': 'hoge', 'c': None}
             ```
         """
-        def wrapper(*args, **kwargs) -> Response:
-            func_anno = FunctionAnnotation(action_func)
+        def wrapper(*args, **kwargs) -> Result:
+            func_anno = FunctionAnnotation(runner)
             assigned_args = {
                 key: Assigner.assign(arg_anno.origin, self.request.params)
                 for key, arg_anno in func_anno.args.items()
             }
-            return action_func(args[0], **assigned_args) if func_anno.is_method else action_func(**assigned_args)
+            if func_anno.is_method:
+                _args = (args[0])
+                return runner(*_args, **assigned_args)
+            else:
+                return runner(**assigned_args)
 
         return wrapper
 
