@@ -9,7 +9,7 @@ class Router:
 
     def resolve(self, *routes) -> Runner:
         for path, factory in self._routes.items():
-            if '.'.join(routes) == path:
+            if ' '.join(routes) == path:
                 return factory()
 
         raise ModuleNotFoundError()
