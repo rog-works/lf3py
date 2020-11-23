@@ -1,4 +1,4 @@
-FROM python:3.6-buster
+FROM python:3.7-slim-buster
 
 # install openssh-server
 RUN apt-get update \
