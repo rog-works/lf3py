@@ -7,6 +7,7 @@ from framework.http.data import Request, Response
 from framework.i18n.locale import Locale
 from framework.lang.di import DI
 from framework.lang.module import load_module
+from framework.plugins.api import Api
 from framework.task.runner import Runner
 
 
@@ -18,4 +19,5 @@ def aws_app(event: dict, _: object) -> App:
     di.register(Logger, load_module('example.logger', 'make_logger'))
     di.register(Locale, load_module('example.i18n', 'make_locale'))
     di.register(Runner, lambda: load_module('example.router', 'resolve'))
+    di.register(Api, Api)
     return App(__name__, di)

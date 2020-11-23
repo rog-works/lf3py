@@ -5,4 +5,4 @@ app = App.get(__name__)
 
 
 def run() -> Response:
-    return app.success({'success': True})
+    return app.api.success({'success': True})
