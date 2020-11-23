@@ -12,10 +12,16 @@ class FunctionAnnotation:
 
     @property
     def args(self) -> Dict[str, 'ArgAnnotation']:
+        if not hasattr(self._func, '__annotations__'):
+            return {}
+
         return {key: ArgAnnotation(arg) for key, arg in self._func.__annotations__.items() if key != 'return'}
 
     @property
     def returns(self) -> 'ValueAnnotation':
+        if not hasattr(self._func, '__annotations__'):
+            return ValueAnnotation(type(None))
+
         return ValueAnnotation(self._func.__annotations__['return'])
 
 
@@ -33,6 +39,9 @@ class ClassAnnotation:
 
     @property
     def properties(self) -> Dict[str, 'PropertyAnnotation']:
+        if not hasattr(self._klass, '__annotations__'):
+            return {}
+
         return {key: PropertyAnnotation(prop) for key, prop in self._klass.__annotations__.items()}
 
 
