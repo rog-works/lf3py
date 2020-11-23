@@ -33,7 +33,7 @@ class AnnoA:
         return None
 
 
-def func_a(*args, **kwargs) -> int:
+def func_a(a: int, *args, b: str, **kwargs) -> int:
     return 1
 
 
@@ -58,7 +58,8 @@ class TestAnnotation(TestCase):
 
     def test_function(self):
         anno = FunctionAnnotation(func_a)
-        self.assertEquals(anno.args, {})
+        self.assertEquals(anno.args['a'].origin, int)
+        self.assertEquals(anno.args['b'].origin, str)
         self.assertEquals(anno.returns.origin, int)
         self.assertEquals(anno.is_method, False)
 
