@@ -9,13 +9,13 @@ class TZInfo(tzinfo):
         self._dst = definition['dst']
         self._tzname = definition['tzname']
 
-    def utcoffset(self, _) -> timedelta:
+    def utcoffset(self) -> timedelta:
         return timedelta(hours=self._hours)
 
-    def dst(self, _) -> timedelta:
+    def dst(self) -> timedelta:
         return timedelta(self._dst)
 
-    def tzname(self, _) -> str:
+    def tzname(self) -> str:
         return self._tzname
 
     DEFINITIONS = {
