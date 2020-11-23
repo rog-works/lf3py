@@ -9,7 +9,7 @@ from tests.helper.fixture import data_provider
 class TestDateTime(TestCase):
     def test_now(self):
         dt = DateTime(TZInfo('ja'))
-        self.assertEquals(type(dt.now()), datetime)
+        self.assertEqual(type(dt.now()), datetime)
 
     @data_provider([
         ('%Y-%m-%dT%H:%M:%S.%f%z', r'^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}\+\d{4}$'),
@@ -23,4 +23,4 @@ class TestDateTime(TestCase):
     ])
     def test_strptime(self, date: str, format: str, expected: str):
         dt = DateTime(TZInfo('ja'))
-        self.assertEquals(dt.strptime(date, format).strftime(format), expected)
+        self.assertEqual(dt.strptime(date, format).strftime(format), expected)

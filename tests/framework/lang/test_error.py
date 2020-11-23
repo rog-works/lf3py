@@ -27,4 +27,4 @@ class TestError(TestCase):
             except Exception as e:
                 raise Exception('piyopiyo') from e
         except Exception as e:
-            self.assertEquals(stacktrace(e), expected)
+            self.assertEqual(stacktrace(e), expected)

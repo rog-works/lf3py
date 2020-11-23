@@ -40,36 +40,36 @@ def func_a(a: int, *args, b: str, **kwargs) -> int:
 class TestAnnotation(TestCase):
     def test_class(self):
         anno = ClassAnnotation(AnnoA)
-        self.assertEquals(anno.origin, AnnoA)
-        self.assertEquals(anno.properties['a'].origin, int)
-        self.assertEquals(anno.properties['b'].origin, str)
-        self.assertEquals(anno.properties['c'].origin, Union)
-        self.assertEquals(anno.properties['d'].origin, dict)
-        self.assertEquals(anno.properties['e'].origin, list)
-        self.assertEquals(anno.properties['f'].origin, EnumA)
-        self.assertEquals(anno.properties['g'].origin, EnumB)
-        self.assertEquals(anno.constructor.args['a'].origin, int)
-        self.assertEquals(anno.constructor.args['b'].origin, str)
-        self.assertEquals(anno.constructor.args['c'].origin, Union)
-        self.assertEquals(anno.constructor.args['d'].origin, dict)
-        self.assertEquals(anno.constructor.args['e'].origin, list)
-        self.assertEquals(anno.constructor.args['f'].origin, EnumA)
-        self.assertEquals(anno.constructor.args['g'].origin, EnumB)
+        self.assertEqual(anno.origin, AnnoA)
+        self.assertEqual(anno.properties['a'].origin, int)
+        self.assertEqual(anno.properties['b'].origin, str)
+        self.assertEqual(anno.properties['c'].origin, Union)
+        self.assertEqual(anno.properties['d'].origin, dict)
+        self.assertEqual(anno.properties['e'].origin, list)
+        self.assertEqual(anno.properties['f'].origin, EnumA)
+        self.assertEqual(anno.properties['g'].origin, EnumB)
+        self.assertEqual(anno.constructor.args['a'].origin, int)
+        self.assertEqual(anno.constructor.args['b'].origin, str)
+        self.assertEqual(anno.constructor.args['c'].origin, Union)
+        self.assertEqual(anno.constructor.args['d'].origin, dict)
+        self.assertEqual(anno.constructor.args['e'].origin, list)
+        self.assertEqual(anno.constructor.args['f'].origin, EnumA)
+        self.assertEqual(anno.constructor.args['g'].origin, EnumB)
 
     def test_function(self):
         anno = FunctionAnnotation(func_a)
-        self.assertEquals(anno.args['a'].origin, int)
-        self.assertEquals(anno.args['b'].origin, str)
-        self.assertEquals(anno.returns.origin, int)
-        self.assertEquals(anno.is_method, False)
+        self.assertEqual(anno.args['a'].origin, int)
+        self.assertEqual(anno.args['b'].origin, str)
+        self.assertEqual(anno.returns.origin, int)
+        self.assertEqual(anno.is_method, False)
 
     def test_method(self):
         obj = AnnoA()
         anno = FunctionAnnotation(obj.method_a)
-        self.assertEquals(anno.args['a'].origin, int)
-        self.assertEquals(anno.args['b'].origin, str)
-        self.assertEquals(anno.returns.origin, Union)
-        self.assertEquals(anno.is_method, True)
+        self.assertEqual(anno.args['a'].origin, int)
+        self.assertEqual(anno.args['b'].origin, str)
+        self.assertEqual(anno.returns.origin, Union)
+        self.assertEqual(anno.is_method, True)
 
     @data_provider([
         ('a', {'is_enum': False, 'is_union': False, 'is_optional': False}),
@@ -85,4 +85,4 @@ class TestAnnotation(TestCase):
         anno_props = anno.properties
         for method_key, expected in expected_data.items():
             actual = getattr(anno_props[key], method_key)
-            self.assertEquals(actual, expected)
+            self.assertEqual(actual, expected)

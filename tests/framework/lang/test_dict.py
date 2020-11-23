@@ -14,4 +14,4 @@ class TestDict(TestCase):
         ({'a': {'b': 2}, 'c': [{'d': {'e': 4}}]}, 'c.0.d.e', 4),
     ])
     def test_pluck(self, data: dict, path: str, expected: Any):
-        self.assertEquals(pluck(data, path), expected)
+        self.assertEqual(pluck(data, path), expected)

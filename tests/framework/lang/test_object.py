@@ -27,4 +27,4 @@ class TestObject(TestCase):
     def test_assigner(self, data: dict, assign_type: Type):
         actual = Assigner.assign(assign_type, data)
         for key, value in data.items():
-            self.assertEquals(getattr(actual, key), value)
+            self.assertEqual(getattr(actual, key), value)

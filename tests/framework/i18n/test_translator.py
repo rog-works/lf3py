@@ -16,4 +16,4 @@ class TestTranslator(TestCase):
     ])
     def test_trans(self, path: str, expected: str):
         translator = Translator(self.CONFIG)
-        self.assertEquals(translator.trans(path), expected)
+        self.assertEqual(translator.trans(path), expected)

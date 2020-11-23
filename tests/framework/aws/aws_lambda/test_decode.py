@@ -60,4 +60,4 @@ class TestDecode(TestCase):
     ])
     def test_decode_request(self, event: dict, expected: dict):
         request = decode_request(event)
-        self.assertEquals(request.__dict__, expected)
+        self.assertEqual(request.__dict__, expected)
