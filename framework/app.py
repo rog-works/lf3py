@@ -2,7 +2,7 @@ from logging import Logger
 from typing import Dict
 
 from framework.data.config import Config
-from framework.i18n.locale import Locale
+from framework.i18n.i18n import I18n
 from framework.lang.di import DI
 from framework.plugins.api import Api
 from framework.task.result import Result
@@ -26,8 +26,8 @@ class App:
         return self._di.resolve(Config)
 
     @property
-    def locale(self) -> Locale:
-        return self._di.resolve(Locale)
+    def i18n(self) -> I18n:
+        return self._di.resolve(I18n)
 
     @property
     def logger(self) -> Logger:

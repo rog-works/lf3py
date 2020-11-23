@@ -1,7 +1,7 @@
 from typing import Tuple, Type, Union
 
 from framework.http.data import Request, Response
-from framework.i18n.locale import Locale
+from framework.i18n.i18n import I18n
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.error import stacktrace
 from framework.lang.object import Assigner
@@ -10,10 +10,10 @@ from framework.task.runner import Runner
 
 
 class Api:
-    def __init__(self, request: Request, response: Response, locale: Locale) -> None:
+    def __init__(self, request: Request, response: Response, i18n: I18n) -> None:
         self._request = request
         self._response = response
-        self._locale = locale
+        self._i18n = i18n
 
     @property
     def request(self) -> Request:
@@ -30,7 +30,7 @@ class Api:
         return Response(status=status, headers=self.response.headers, body=body)
 
     def error_500(self, error: Exception) -> Response:
-        return self.error_result(500, self._locale.trans('http.500'), error)
+        return self.error_result(500, self._i18n.trans('http.500'), error)
 
     def error_result(self, status: int, message: str, error: Exception) -> Response:
         body = {'message': message, 'stacktrace': stacktrace(error)}
@@ -40,7 +40,7 @@ class Api:
         """
         Usage:
             ```
-            @app.api.error(400, app.locale.trans('http.400'), ValidationError)
+            @app.api.error(400, app.18n.trans('http.400'), ValidationError)
             def action() -> Result:
                 raise ValidationError()
 

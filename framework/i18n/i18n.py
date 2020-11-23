@@ -3,7 +3,7 @@ from framework.i18n.tzinfo import TZInfo
 from framework.i18n.translator import Translator
 
 
-class Locale:
+class I18n:
     def __init__(self, locale: str, trans_config: dict) -> None:
         self._datetime = DateTime(TZInfo(locale))
         self._translator = Translator(trans_config)
