@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from framework.task.result import Result
 
@@ -7,11 +7,11 @@ from framework.task.result import Result
 class Request:
     path: str = ''
     method: str = ''
-    headers: dict = {}
-    params: dict = {}
+    headers: dict = field(default_factory=dict)
+    params: dict = field(default_factory=dict)
 
 
 class Response(Result):
     status: int = 200
-    headers: dict = {}
-    body: dict = {}
+    headers: dict = field(default_factory=dict)
+    body: dict = field(default_factory=dict)
