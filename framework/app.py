@@ -68,14 +68,14 @@ class App:
         Usage:
             ```
             @app.error(400, app.locale.trans('http.400'), ValidationError)
-            def action(self) -> Result:
+            def action() -> Result:
                 raise ValidationError()
 
             action()
-            > Result(status: 400, message: '400 Bad Request', error: ValidationError)
+            > Result({'status': 400, 'headers': {...}, 'body': {'message': '400 Bad Request', 'stacktrace': [...]})
             ```
         """
-        def decorator(runner: Callable[..., Result]):
+        def decorator(runner: Runner):
             def wrapper(*args, **kwargs) -> Result:
                 try:
                     return runner(*args, **kwargs)
@@ -86,7 +86,7 @@ class App:
 
         return decorator
 
-    def params(self, runner: Callable[..., Result]):
+    def params(self, runner: Runner):
         """
         Usage:
             ```
@@ -97,7 +97,7 @@ class App:
                 c: Optional[int] = None
 
             @app.params
-            def action(self, params: Params) -> Result:
+            def action(params: Params) -> Result:
                 print(f'{params.__dict__}')
                 > {'a': 100, 'b': 'hoge', 'c': None}
             ```
@@ -119,12 +119,12 @@ class App:
     def transaction(self, error_handler: Callable[[BaseException, dict], None]):
         """
         Usage:
-            def action(self) -> Response:
-                with app.transaction(error_handler=self.rollback):
+            def action() -> Result:
+                with app.transaction(error_handler=rollback):
                     publish_id = Model.create()
                     raise ValueError()
 
-            def rollback(self, error: BaseException, context: dict):
+            def rollback(error: BaseException, context: dict):
                 print(error)
                 > ValueError
 

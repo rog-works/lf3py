@@ -4,10 +4,10 @@ from typing import Any
 
 class Serializer(metaclass=ABCMeta):
     @abstractmethod
-    def serialize(self, any: Any) -> Any:
+    def serialize(self, obj: Any) -> Any:
         raise NotImplementedError()
 
 
 class DictSerializer(Serializer):
-    def serialize(self, any: Any) -> dict:
-        return any.__dict__
+    def serialize(self, obj: Any) -> dict:
+        return obj.__dict__
