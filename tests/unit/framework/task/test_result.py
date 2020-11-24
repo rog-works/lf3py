@@ -12,6 +12,6 @@ class ResultA(Result):
 
 class TestDict(TestCase):
     def test_result(self):
-        result = ResultA(1, 'hoge')
+        result = ResultA(a=1, b='hoge')
         expected = {'a': 1, 'b': 'hoge'}
         self.assertEqual(result.serialize(), expected)
