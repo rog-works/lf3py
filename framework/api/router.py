@@ -1,3 +1,4 @@
+import re
 from typing import Callable, Dict
 
 from framework.task.runner import Runner
@@ -8,8 +9,9 @@ class Router:
         self._routes = routes
 
     def resolve(self, *routes) -> Runner:
-        for path, factory in self._routes.items():
-            if ' '.join(routes) == path:
+        for pattern, factory in self._routes.items():
+            route = ' '.join(routes)
+            if re.search(f'^{pattern}$', route):
                 return factory()
 
         raise ModuleNotFoundError()
