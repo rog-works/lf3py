@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from framework.http.data import Request, Response
+from framework.api.data import Request, Response
 from tests.helper.fixture import data_provider
 
 

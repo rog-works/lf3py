@@ -1,4 +1,4 @@
-from framework.http.data import Request
+from framework.api.data import Request
 from framework.i18n.i18n import I18n
 from framework.lang.module import load_module
 

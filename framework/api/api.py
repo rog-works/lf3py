@@ -1,6 +1,6 @@
 from typing import Tuple, Type, Union
 
-from framework.http.data import Request, Response
+from framework.api.data import Request, Response
 from framework.i18n.i18n import I18n
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.error import stacktrace

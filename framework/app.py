@@ -1,10 +1,10 @@
 from logging import Logger
 from typing import Dict
 
+from framework.api.api import Api
 from framework.data.config import Config
 from framework.i18n.i18n import I18n
 from framework.lang.di import DI
-from framework.plugins.api import Api
 from framework.task.result import Result
 from framework.task.runner import Runner
 

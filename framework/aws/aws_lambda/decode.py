@@ -3,7 +3,7 @@ import json
 from urllib.parse import parse_qsl
 
 
-from framework.http.data import Request
+from framework.api.data import Request
 
 
 def decode_request(event: dict) -> Request:
