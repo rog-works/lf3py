@@ -19,7 +19,7 @@ class App:
     def __init__(self, name: str, di: DI) -> None:
         self._name = name
         self._di = di
-        self.__instances[name] = self
+        App.__instances[name] = self
 
     @property
     def config(self) -> dict:
