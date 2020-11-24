@@ -1,4 +1,5 @@
-from typing import Callable, Optional, TracebackType, Type
+from types import TracebackType
+from typing import Callable, Optional, Type
 
 ErrorHandler = Callable[[BaseException, dict], None]
 
