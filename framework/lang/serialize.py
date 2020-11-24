@@ -10,4 +10,4 @@ class Serializer(metaclass=ABCMeta):
 
 class DictSerializer(Serializer):
     def serialize(self, obj: Any) -> dict:
-        return obj.__dict__
+        return {key: value for key, value in obj.__dict__.items() if not key.startswith('_')}
