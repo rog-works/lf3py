@@ -18,17 +18,17 @@ class Transaction:
 
 def transaction(error_handler: ErrorHandler) -> Transaction:
     """
-    Usage:
-        def action() -> Result:
-            with transaction(error_handler=rollback):
-                publish_id = Model.create()
-                raise ValueError()
+    Examples:
+        >>> def action() -> Result:
+        >>>     with transaction(error_handler=rollback):
+        >>>         publish_id = Model.create()
+        >>>         raise ValueError()
 
-        def rollback(error: BaseException, context: dict):
-            print(error)
-            > ValueError
+        >>> def rollback(error: BaseException, context: dict):
+        >>>     print(error)
+        ValueError
 
-            print(context)
-            > {'publish_id': 100}
+        >>> print(context)
+        {'publish_id': 100}
     """
     return Transaction(error_handler=error_handler)

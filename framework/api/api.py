@@ -38,15 +38,13 @@ class Api:
 
     def error(self, status: int, message: str, handle_errors: Union[Type[Exception], Tuple[Type[Exception], ...]]):
         """
-        Usage:
-            ```
-            @app.api.error(400, app.18n.trans('http.400'), ValidationError)
-            def action() -> Result:
-                raise ValidationError()
+        Examples:
+            >>> @app.api.error(400, app.18n.trans('http.400'), ValidationError)
+            >>> def action() -> Result:
+            >>>     raise ValidationError()
 
-            action()
-            > Result({'status': 400, 'headers': {...}, 'body': {'message': '400 Bad Request', 'stacktrace': [...]})
-            ```
+            >>> action()
+            Result({'status': 400, 'headers': {...}, 'body': {'message': '400 Bad Request', 'stacktrace': [...]})
         """
         def decorator(runner: Runner):
             def wrapper(*args, **kwargs) -> Result:
@@ -61,19 +59,17 @@ class Api:
 
     def params(self, runner: Runner):
         """
-        Usage:
-            ```
-            @dataclass
-            class Params:
-                a: int = 0
-                b: str = ''
-                c: Optional[int] = None
+        Examples:
+            >>> @dataclass
+            >>> class Params:
+            >>>     a: int = 0
+            >>>     b: str = ''
+            >>>     c: Optional[int] = None
 
-            @app.api.params
-            def action(params: Params) -> Result:
-                print(f'{params.__dict__}')
-                > {'a': 100, 'b': 'hoge', 'c': None}
-            ```
+            >>> @app.api.params
+            >>> def action(params: Params) -> Result:
+            >>>     print(f'{params.__dict__}')
+            {'a': 100, 'b': 'hoge', 'c': None}
         """
         def wrapper(*args, **kwargs) -> Result:
             func_anno = FunctionAnnotation(runner)
