@@ -2,6 +2,7 @@ version: '3'
 services:
   app:
     container_name: lambda-fw-app
+    image: lambda-fw-app:latest
     build: ./docker/app
     volumes:
       - ./:/opt/app

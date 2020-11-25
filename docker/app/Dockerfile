@@ -31,7 +31,8 @@ RUN apt-get install -y curl git
 USER worker
 ENV USER=worker
 
-RUN echo 'export PYTHONDONTWRITEBYTECODE=1' >> /home/worker/.bashrc
+RUN echo 'export PYTHONDONTWRITEBYTECODE=1' >> /home/worker/.bashrc \
+ && echo 'export PATH=/home/worker/.local/bin:$PATH' >> /home/worker/.bashrc
 
 WORKDIR /opt/app
 
