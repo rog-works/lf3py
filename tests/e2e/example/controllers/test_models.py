@@ -1,11 +1,7 @@
 from unittest import TestCase
 
-from framework.lang.module import load_module
+from example.provider import aws_app
 from tests.helper.fixture import data_provider
-
-
-class Context:
-    pass
 
 
 class TestModels(TestCase):
@@ -25,6 +21,6 @@ class TestModels(TestCase):
         )
     ])
     def test_action(self, event: dict, expected: dict):
-        handler = load_module('example.handler', 'handler')
-        actual = handler(event, Context())
+        app = aws_app(event, object())
+        actual = app.run().serialize()
         self.assertEqual(actual, expected)
