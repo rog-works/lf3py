@@ -11,11 +11,14 @@ def decode_request(event: dict) -> Request:
         path=event['path'],
         method=event['httpMethod'],
         headers=event['headers'],
-        params={**event['queryStringParameters'], **__decode_body(event)},
+        params={**event.get('queryStringParameters', {}), **__decode_body(event)},
     )
 
 
 def __decode_body(event: dict) -> dict:
+    if 'body' not in event:
+        return {}
+
     content_type = event['headers'].get('content-type', '')
     if content_type.find('application/json') != -1:
         return json.loads(event['body'])
