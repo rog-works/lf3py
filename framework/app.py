@@ -1,5 +1,5 @@
 from logging import Logger
-from typing import Dict
+from typing import Optional
 
 from framework.api.api import Api
 from framework.data.config import Config
@@ -10,16 +10,18 @@ from framework.task.runner import Runner
 
 
 class App:
-    __instances: Dict[str, 'App'] = {}
+    __instance: Optional['App'] = None
 
     @classmethod
-    def get(cls, name: str) -> 'App':
-        return cls.__instances[name]
+    def get(cls) -> 'App':
+        if cls.__instance is None:
+            raise ModuleNotFoundError()
 
-    def __init__(self, name: str, di: DI) -> None:
-        self._name = name
+        return cls.__instance
+
+    def __init__(self, di: DI) -> None:
         self._di = di
-        App.__instances[name] = self
+        App.__instance = self
 
     @property
     def config(self) -> dict:

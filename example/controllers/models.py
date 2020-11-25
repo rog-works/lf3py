@@ -1,7 +1,7 @@
 from framework.api.data import Response
 from framework.app import App
 
-app = App.get(__name__)
+app = App.get()
 
 
 def action() -> Response:

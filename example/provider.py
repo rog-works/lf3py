@@ -18,6 +18,6 @@ def aws_app(event: dict, _: object) -> App:
     di.register(Config, lambda: load_module('example.config', 'config'))
     di.register(Logger, load_module('example.logger', 'make_logger'))
     di.register(I18n, load_module('example.i18n', 'make_i18n'))
-    di.register(Runner, lambda: load_module('example.router', 'resolve'))
+    di.register(Runner, load_module('example.router', 'resolve'))
     di.register(Api, Api)
-    return App(__name__, di)
+    return App(di)
