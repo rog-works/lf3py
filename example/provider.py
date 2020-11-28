@@ -20,4 +20,4 @@ def aws_app(event: dict, _: object) -> App:
     di.register(I18n, load_module('example.i18n', 'make_i18n'))
     di.register(Runner, load_module('example.router', 'resolve'))
     di.register(Api, Api)
-    return App(di)
+    return App.create(di)
