@@ -48,4 +48,4 @@ class App:
         return self._di.resolve(Api)
 
     def run(self) -> Result:
-        return self.runner.run()
+        return self.runner()
