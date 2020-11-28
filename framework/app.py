@@ -15,13 +15,17 @@ class App:
     @classmethod
     def get(cls) -> 'App':
         if cls.__instance is None:
-            raise ModuleNotFoundError()
+            raise AssertionError()
 
+        return cls.__instance
+
+    @classmethod
+    def create(cls, di: DI) -> 'App':
+        cls.__instance = cls(di)
         return cls.__instance
 
     def __init__(self, di: DI) -> None:
         self._di = di
-        App.__instance = self
 
     @property
     def config(self) -> dict:
@@ -36,9 +40,12 @@ class App:
         return self._di.resolve(Logger)
 
     @property
+    def runner(self) -> Runner:
+        return self._di.resolve(Runner)
+
+    @property
     def api(self) -> Api:
         return self._di.resolve(Api)
 
     def run(self) -> Result:
-        runner: Runner = self._di.resolve(Runner)
-        return runner()
+        return self.runner.run()
