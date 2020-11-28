@@ -6,7 +6,8 @@ from framework.task.runner import Runner
 
 def resolve(request: Request) -> Runner:
     routes = {
-        'GET /models': lambda: load_module('example.controllers.models', 'index'),
-        r'GET /models/\d+': lambda: load_module('example.controllers.models', 'show'),
+        'GET /users': lambda: load_module('example.controllers.users', 'index'),
+        r'GET /users/\d+': lambda: load_module('example.controllers.users', 'show'),
+        'POST /users': lambda: load_module('example.controllers.users', 'create'),
     }
     return Router(routes).resolve(request.method, request.path)
