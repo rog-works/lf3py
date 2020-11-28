@@ -4,7 +4,7 @@ from unittest import TestCase
 import urllib.parse
 
 from framework.aws.aws_lambda.decode import decode_request
-from tests.helper.fixture import data_provider
+from framework.test.helper import data_provider
 
 
 class TestDecode(TestCase):

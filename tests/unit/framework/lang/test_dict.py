@@ -2,7 +2,7 @@ from typing import Any
 from unittest import TestCase
 
 from framework.lang.dict import pluck
-from tests.helper.fixture import data_provider
+from framework.test.helper import data_provider
 
 
 class TestDict(TestCase):

@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from framework.i18n.datetime import DateTime
 from framework.i18n.tzinfo import TZInfo
-from tests.helper.fixture import data_provider
+from framework.test.helper import data_provider
 
 
 class TestDateTime(TestCase):

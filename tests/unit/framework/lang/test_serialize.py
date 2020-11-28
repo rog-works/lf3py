@@ -4,7 +4,7 @@ from typing import Optional, Type
 from unittest import TestCase
 
 from framework.lang.serialize import DictDeserializer, DictSerializer
-from tests.helper.fixture import data_provider
+from framework.test.helper import data_provider
 
 
 @dataclass

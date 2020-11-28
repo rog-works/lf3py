@@ -4,7 +4,7 @@ from typing import Dict, Optional, Union
 from unittest import TestCase
 
 from framework.lang.annotation import ClassAnnotation, FunctionAnnotation
-from tests.helper.fixture import data_provider
+from framework.test.helper import data_provider
 
 
 class EnumA(IntEnum):

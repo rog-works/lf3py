@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from framework.api.data import Request, Response
-from tests.helper.fixture import data_provider
+from framework.test.helper import data_provider
 
 
 class TestData(TestCase):

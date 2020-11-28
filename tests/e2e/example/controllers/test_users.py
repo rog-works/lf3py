@@ -1,9 +1,8 @@
 import json
 from unittest import TestCase
 
-from example.provider import aws_app
-from framework.lang.module import unload_module
-from tests.helper.fixture import data_provider
+from framework.test.helper import data_provider
+from tests.helper.example import perform_api
 
 
 class TestUsers(TestCase):
@@ -50,7 +49,4 @@ class TestUsers(TestCase):
         ),
     ])
     def test_action(self, event: dict, expected: dict):
-        app = aws_app(event, object())
-        actual = app.run().serialize()
-        self.assertEqual(actual, expected)
-        unload_module(app.runner.__module__)
+        self.assertEqual(perform_api(event), expected)

@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from framework.i18n.translator import Translator
-from tests.helper.fixture import data_provider
+from framework.test.helper import data_provider
 
 
 class TestTranslator(TestCase):
