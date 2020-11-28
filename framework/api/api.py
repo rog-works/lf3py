@@ -4,7 +4,7 @@ from framework.api.data import Request, Response
 from framework.i18n.i18n import I18n
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.error import stacktrace
-from framework.lang.object import Assigner
+from framework.lang.serialize import DictDeserializer
 from framework.task.result import Result
 from framework.task.runner import Runner
 
@@ -73,8 +73,9 @@ class Api:
         """
         def wrapper(*args, **kwargs) -> Result:
             func_anno = FunctionAnnotation(runner)
+            deserializer = DictDeserializer()
             assigned_args = {
-                key: Assigner.assign(arg_anno.origin, self.request.params)
+                key: deserializer.deserialize(arg_anno.origin, self.request.params)
                 for key, arg_anno in func_anno.args.items()
             }
             if func_anno.is_method:
