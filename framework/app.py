@@ -28,7 +28,7 @@ class App:
         self._di = di
 
     @property
-    def config(self) -> dict:
+    def config(self) -> Config:
         return self._di.resolve(Config)
 
     @property

@@ -1,6 +1,5 @@
 from typing import cast
 
-
 from framework.lang.dict import pluck
 
 
