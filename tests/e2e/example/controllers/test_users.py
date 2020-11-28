@@ -1,3 +1,4 @@
+import json
 from unittest import TestCase
 
 from example.provider import aws_app
@@ -5,11 +6,11 @@ from framework.lang.module import unload_module
 from tests.helper.fixture import data_provider
 
 
-class TestModels(TestCase):
+class TestUsers(TestCase):
     @data_provider([
         (
             {
-                'path': '/models',
+                'path': '/users',
                 'httpMethod': 'GET',
                 'headers': {},
                 'queryStringParameters': {'locale': 'ja'},
@@ -17,12 +18,12 @@ class TestModels(TestCase):
             {
                 'status': 200,
                 'headers': {'Content-Type': 'application/json'},
-                'body': {'success': True},
+                'body': {'success': True, 'users': []},
             },
         ),
         (
             {
-                'path': '/models/1234',
+                'path': '/users/1234',
                 'httpMethod': 'GET',
                 'headers': {},
                 'queryStringParameters': {'locale': 'ja'},
@@ -30,7 +31,21 @@ class TestModels(TestCase):
             {
                 'status': 200,
                 'headers': {'Content-Type': 'application/json'},
-                'body': {'success': True, 'id': 1234},
+                'body': {'success': True, 'user': {'id': 1234, 'name': 'hoge'}},
+            },
+        ),
+        (
+            {
+                'path': '/users',
+                'httpMethod': 'POST',
+                'headers': {'content-type': 'application/json'},
+                'queryStringParameters': {'locale': 'ja'},
+                'body': json.dumps({'name': 'fuga'}),
+            },
+            {
+                'status': 200,
+                'headers': {'Content-Type': 'application/json'},
+                'body': {'success': True, 'user': {'id': 1, 'name': 'fuga'}},
             },
         ),
     ])
