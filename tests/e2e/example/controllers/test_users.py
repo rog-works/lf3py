@@ -1,5 +1,5 @@
 import json
-from unittest import TestCase
+from unittest import TestCase, mock
 
 from framework.test.helper import data_provider
 from tests.helper.example import perform_api
@@ -17,9 +17,25 @@ class TestUsers(TestCase):
             {
                 'status': 200,
                 'headers': {'Content-Type': 'application/json'},
-                'body': {'success': True, 'users': []},
+                'body': {
+                    'success': True,
+                    'users': [
+                        {'id': 1, 'name': 'hoge'},
+                        {'id': 2, 'name': 'fuga'},
+                    ],
+                },
             },
         ),
+    ])
+    def test_index(self, event: dict, expected: dict):
+        with mock.patch('example.repos.user_repo.UserRepo.find_all') as p:
+            p.return_value = [
+                {'id': 1, 'name': 'hoge'},
+                {'id': 2, 'name': 'fuga'},
+            ]
+            self.assertEqual(perform_api(event), expected)
+
+    @data_provider([
         (
             {
                 'path': '/users/1234',
@@ -33,23 +49,32 @@ class TestUsers(TestCase):
                 'body': {'success': True, 'user': {'id': 1234, 'name': 'hoge'}},
             },
         ),
+    ])
+    def test_show(self, event: dict, expected: dict):
+        with mock.patch('example.repos.user_repo.UserRepo.find') as p:
+            p.return_value = {'id': 1234, 'name': 'hoge'}
+            self.assertEqual(perform_api(event), expected)
+
+    @data_provider([
         (
             {
                 'path': '/users',
                 'httpMethod': 'POST',
                 'headers': {'content-type': 'application/json'},
                 'queryStringParameters': {'locale': 'ja'},
-                'body': json.dumps({'name': 'fuga'}),
+                'body': json.dumps({'name': 'piyo'}),
             },
             {
                 'status': 200,
                 'headers': {'Content-Type': 'application/json'},
-                'body': {'success': True, 'user': {'id': 1, 'name': 'fuga'}},
+                'body': {'success': True, 'user': {'id': 100, 'name': 'piyo'}},
             },
         ),
     ])
-    def test_action(self, event: dict, expected: dict):
-        self.assertEqual(perform_api(event), expected)
+    def test_create(self, event: dict, expected: dict):
+        with mock.patch('example.repos.user_repo.UserRepo.create') as p:
+            p.return_value = {'id': 100, 'name': 'piyo'}
+            self.assertEqual(perform_api(event), expected)
 
     @data_provider([
         (
