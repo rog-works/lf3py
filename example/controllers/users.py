@@ -27,6 +27,7 @@ class CreateParams:
     name: str = ''
 
 
+@app.api.error(400, app.i18n.trans('http.400'), ValueError)
 @app.api.params
 def create(params: CreateParams) -> Response:
     serializer = DictSerializer()
