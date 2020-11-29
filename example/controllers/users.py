@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-import re
 
 from example.models.user import User
 from framework.api.data import Response
@@ -15,8 +14,8 @@ def index() -> Response:
     return app.api.success({'success': True, 'users': [serializer.serialize(user) for user in users]})
 
 
-def show() -> Response:
-    user_id = int(re.search(r'(\d+)$', app.api.request.path).group(1))
+@app.api.path_params('/users/{user_id}')
+def show(user_id: int) -> Response:
     user = User.find(user_id)
     serializer = DictSerializer()
     return app.api.success({'success': True, 'user': serializer.serialize(user)})

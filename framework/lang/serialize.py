@@ -45,6 +45,6 @@ class DictDeserializer(Deserializer):
         elif prop_anno.origin is float:
             return float(value)
         elif prop_anno.origin is bool:
-            return value in ['true', 'false']
+            return value == 'true' if value in ['true', 'false'] else bool(value)
         else:
             return value

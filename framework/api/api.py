@@ -1,6 +1,7 @@
 from typing import Tuple, Type, Union
 
 from framework.api.data import Request, Response
+from framework.api.path import capture_params
 from framework.i18n.i18n import I18n
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.error import stacktrace
@@ -43,10 +44,10 @@ class Api:
             >>> def action() -> Result:
             >>>     raise ValidationError()
 
-            >>> action()
-            Result({'status': 400, 'headers': {...}, 'body': {'message': '400 Bad Request', 'stacktrace': [...]})
+            >>> action().serialize()
+            {'status': 400, 'headers': {...}, 'body': {'message': '400 Bad Request', 'stacktrace': [...]}
         """
-        def decorator(runner: Runner):
+        def decorator(runner: Runner) -> Runner:
             def wrapper(*args, **kwargs) -> Result:
                 try:
                     return runner(*args, **kwargs)
@@ -57,7 +58,7 @@ class Api:
 
         return decorator
 
-    def params(self, runner: Runner):
+    def params(self, runner: Runner) -> Runner:
         """
         Examples:
             >>> @dataclass
@@ -74,14 +75,38 @@ class Api:
         def wrapper(*args, **kwargs) -> Result:
             func_anno = FunctionAnnotation(runner)
             deserializer = DictDeserializer()
-            assigned_args = {
+            assigned_kwargs = {
                 key: deserializer.deserialize(arg_anno.origin, self.request.params)
                 for key, arg_anno in func_anno.args.items()
             }
             if func_anno.is_method:
-                _args = (args[0])
-                return runner(*_args, **assigned_args)
+                return runner(*(args[0]), **assigned_kwargs)
             else:
-                return runner(**assigned_args)
+                return runner(**assigned_kwargs)
 
         return wrapper
+
+    def path_params(self, path_spec: str):
+        """
+        Examples:
+            >>> @app.api.path_params('/models/{id}')
+            >>> def action(id: int) -> Result:
+            >>>     print(f'id: {id}, type: {type(id)}')
+            id: 1234, type: <class 'int'>
+        """
+        def decorator(runner: Runner) -> Runner:
+            def wrapper(*args, **kwargs) -> Result:
+                func_anno = FunctionAnnotation(runner)
+                params = capture_params(self.request.path, path_spec)
+                assigned_kwargs = {
+                    key: int(params[key]) if arg_anno.origin is int else params[key]
+                    for key, arg_anno in func_anno.args.items()
+                }
+                if func_anno.is_method:
+                    return runner(*(args[0]), **assigned_kwargs)
+                else:
+                    return runner(**assigned_kwargs)
+
+            return wrapper
+
+        return decorator
