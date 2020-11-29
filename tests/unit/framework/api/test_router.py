@@ -15,8 +15,8 @@ def runner_b() -> Result:
 class TestRouter(TestCase):
     def test_resolve(self):
         router = Router({
-            'GET /models': lambda: runner_a,
-            r'GET /models/\d+': lambda: runner_b,
+            'GET /models': runner_a,
+            r'GET /models/\d+': runner_b,
         })
         self.assertEqual(router.resolve('GET', '/models'), runner_a)
         self.assertEqual(router.resolve('GET', '/models/1234'), runner_b)
