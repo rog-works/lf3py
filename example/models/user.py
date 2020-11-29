@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import List
 
+from example.repos.user_repo import UserRepo
+
 
 @dataclass
 class User:
@@ -9,12 +11,14 @@ class User:
 
     @classmethod
     def create(cls, name: str) -> 'User':
-        return cls(id=1, name=name)
+        tobj = UserRepo.create(name=name)
+        return cls(**tobj)
 
     @classmethod
     def find_all(cls) -> List['User']:
-        return []
+        return [cls(**tobj) for tobj in UserRepo.find_all()]
 
     @classmethod
     def find(cls, id: int) -> 'User':
-        return cls(id=id, name='hoge')
+        tobj = UserRepo.find(id)
+        return cls(**tobj)
