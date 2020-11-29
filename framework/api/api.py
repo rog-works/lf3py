@@ -24,7 +24,7 @@ class Api:
     def response(self) -> Response:
         return self._response
 
-    def success(self, body: dict, status: int = 200) -> Response:
+    def success(self, status: int = 200, body: dict = {}) -> Response:
         return self.http_result(status, body)
 
     def http_result(self, status: int, body: dict) -> Response:

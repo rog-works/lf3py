@@ -11,14 +11,14 @@ app = App.get()
 def index() -> Response:
     users = User.find_all()
     serializer = DictSerializer()
-    return app.api.success({'success': True, 'users': [serializer.serialize(user) for user in users]})
+    return app.api.success(body={'success': True, 'users': [serializer.serialize(user) for user in users]})
 
 
 @app.api.path_params('/users/{user_id}')
 def show(user_id: int) -> Response:
     user = User.find(user_id)
     serializer = DictSerializer()
-    return app.api.success({'success': True, 'user': serializer.serialize(user)})
+    return app.api.success(body={'success': True, 'user': serializer.serialize(user)})
 
 
 @dataclass
@@ -31,4 +31,4 @@ class CreateParams:
 def create(params: CreateParams) -> Response:
     serializer = DictSerializer()
     user = User.create(**serializer.serialize(params))
-    return app.api.success({'success': True, 'user': serializer.serialize(user)})
+    return app.api.success(body={'success': True, 'user': serializer.serialize(user)})
