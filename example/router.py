@@ -3,11 +3,13 @@ from framework.api.router import Router
 from framework.lang.module import load_module
 from framework.task.runner import Runner
 
+routes = {
+    'GET /users': ('example.controllers.users', 'index'),
+    r'GET /users/\d+': ('example.controllers.users', 'show'),
+    'POST /users': ('example.controllers.users', 'create'),
+}
+
 
 def resolve(request: Request) -> Runner:
-    routes = {
-        'GET /users': lambda: load_module('example.controllers.users', 'index'),
-        r'GET /users/\d+': lambda: load_module('example.controllers.users', 'show'),
-        'POST /users': lambda: load_module('example.controllers.users', 'create'),
-    }
-    return Router(routes).resolve(request.method, request.path)
+    path, module = Router(routes).resolve(request.method, request.path)
+    return load_module(path, module)
