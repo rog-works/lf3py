@@ -44,9 +44,9 @@ class DictDeserializer(Deserializer):
             else:
                 return value
         elif prop_anno.origin is list:
-            return [self.__cast_value(prop_anno.iter_value, in_value) for in_value in value]
+            return [self.__cast_value(prop_anno.primary_value, in_value) for in_value in value]
         elif prop_anno.origin is dict:
-            return {key: self.__cast_value(prop_anno.iter_value, in_value) for key, in_value in value.items()}
+            return {key: self.__cast_value(prop_anno.dict_value, in_value) for key, in_value in value.items()}
         elif prop_anno.is_union:
             return self.__cast_value(prop_anno.primary_value, value)
         elif prop_anno.is_enum:

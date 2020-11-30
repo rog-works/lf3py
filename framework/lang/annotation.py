@@ -70,8 +70,8 @@ class ValueAnnotation:
         return ValueAnnotation(self.types[0])
 
     @property
-    def iter_value(self) -> 'ValueAnnotation':
-        return self.primary_value
+    def dict_value(self) -> 'ValueAnnotation':
+        return ValueAnnotation(self.types[1])
 
     @property
     def origin(self) -> Type:
