@@ -60,6 +60,7 @@ class ClassB:
     e: Optional[EnumA] = None
     f: Optional[ClassA] = ClassA()
     g: List[ClassA] = field(default_factory=list)
+    h: Dict[str, ClassA] = field(default_factory=dict)
 
 
 class TestDeserialize(TestCase):
@@ -68,7 +69,9 @@ class TestDeserialize(TestCase):
             {
                 'a': 1,
                 'b': 'hoge',
-                'd': 3, 'g': [],
+                'd': 3,
+                'g': [],
+                'h': {},
             },
             {
                 'a': 1,
@@ -78,6 +81,7 @@ class TestDeserialize(TestCase):
                 'e': None,
                 'f': None,
                 'g': [],
+                'h': {},
             },
         ),
         (
@@ -87,6 +91,7 @@ class TestDeserialize(TestCase):
                 'c': 2,
                 'd': 3,
                 'g': [],
+                'h': {},
             },
             {
                 'a': 1,
@@ -96,6 +101,7 @@ class TestDeserialize(TestCase):
                 'e': None,
                 'f': None,
                 'g': [],
+                'h': {},
             },
         ),
         (
@@ -107,6 +113,7 @@ class TestDeserialize(TestCase):
                 'e': 1,
                 'f': {'a': 1, 'b': 'fuga'},
                 'g': [{'a': 4, 'b': 'piyo'}],
+                'h': {'key': {'a': 5, 'b': 'abcd'}},
             },
             {
                 'a': 1,
@@ -116,6 +123,7 @@ class TestDeserialize(TestCase):
                 'e': EnumA.A,
                 'f': ClassA(1, 'fuga'),
                 'g': [ClassA(4, 'piyo')],
+                'h': {'key': ClassA(5, 'abcd')},
             },
         ),
     ])
