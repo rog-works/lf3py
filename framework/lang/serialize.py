@@ -29,22 +29,33 @@ class DictDeserializer(Deserializer):
             if not prop_anno.is_optional and key not in data:
                 raise ValueError(f'"{key}" is required key. from {obj_type}')
 
-            setattr(deserialized, key, self.__cast_value(prop_anno, data, key))
+            setattr(deserialized, key, self.__cast_value(prop_anno, data[key]) if key in data else None)
 
         return deserialized
 
-    def __cast_value(self, prop_anno: PropertyAnnotation, data: dict, key: str) -> Any:
-        if key not in data:
-            return None
-
-        value = data[key]
-        if prop_anno.is_enum:
+    def __cast_value(self, prop_anno: PropertyAnnotation, value: Any) -> Any:
+        if prop_anno.is_primitive:
+            if prop_anno.origin is int:
+                return int(value)
+            elif prop_anno.origin is float:
+                return float(value)
+            elif prop_anno.origin is bool:
+                return value == 'true' if value in ['true', 'false'] else bool(value)
+            else:
+                return value
+        elif prop_anno.origin is list:
+            return [
+                self.__cast_value(PropertyAnnotation(prop_anno.primary_type), in_value)
+                for in_value in value
+            ]
+        elif prop_anno.origin is dict:
+            return {
+                in_key: self.__cast_value(PropertyAnnotation(prop_anno.primary_type), in_value)
+                for in_key, in_value in value.items()
+            }
+        elif prop_anno.is_union:
+            return self.__cast_value(PropertyAnnotation(prop_anno.primary_type), value)
+        elif prop_anno.is_enum:
             return (prop_anno.origin)(value)
-        elif prop_anno.origin is int:
-            return int(value)
-        elif prop_anno.origin is float:
-            return float(value)
-        elif prop_anno.origin is bool:
-            return value == 'true' if value in ['true', 'false'] else bool(value)
         else:
-            return value
+            return self.deserialize(prop_anno.origin, value)

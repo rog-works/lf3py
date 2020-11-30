@@ -65,8 +65,16 @@ class ValueAnnotation:
         return type(None) in self.types
 
     @property
+    def is_primitive(self) -> bool:
+        return self._prop in [int, float, bool, str]
+
+    @property
     def origin(self) -> Type:
         return self._prop.__origin__ if self.is_union else self._prop
+
+    @property
+    def primary_type(self) -> Type:
+        return self.types[0]
 
     @property
     def types(self) -> List[Type]:
