@@ -45,20 +45,39 @@ class EnumA(IntEnum):
     C = 3
 
 
+@dataclass
 class ClassA:
     a: int = 0
     b: str = ''
+
+
+@dataclass
+class ClassB:
+    a: int = 0
+    b: str = ''
     c: Optional[int] = None
-    e: EnumA = EnumA.A
+    d: EnumA = EnumA.A
+    e: Optional[EnumA] = None
+    f: Optional[ClassA] = ClassA()
 
 
 class TestDeserialize(TestCase):
     @data_provider([
-        ({'a': 1, 'b': 'string', 'e': 3}, ClassA),
-        ({'a': 1, 'b': 'string', 'c': 2, 'e': 3}, ClassA),
+        (
+            {'a': 1, 'b': 'hoge', 'd': 3},
+            {'a': 1, 'b': 'hoge', 'c': None, 'd': EnumA.C, 'e': None, 'f': None}
+        ),
+        (
+            {'a': 1, 'b': 'hoge', 'c': 2, 'd': 3},
+            {'a': 1, 'b': 'hoge', 'c': 2, 'd': EnumA.C, 'e': None, 'f': None}
+        ),
+        (
+            {'a': 1, 'b': 'hoge', 'c': 2, 'd': 3, 'e': 1, 'f': {'a': 1, 'b': 'fuga'}},
+            {'a': 1, 'b': 'hoge', 'c': 2, 'd': EnumA.C, 'e': EnumA.A, 'f': ClassA(a=1, b='fuga')}
+        ),
     ])
-    def test_dict_deserializer(self, data: dict, obj_type: Type):
+    def test_dict_deserializer(self, data: dict, expected: dict):
         deserializer = DictDeserializer()
-        actual = deserializer.deserialize(obj_type, data)
-        for key, value in data.items():
+        actual = deserializer.deserialize(ClassB, data)
+        for key, value in expected.items():
             self.assertEqual(getattr(actual, key), value)
