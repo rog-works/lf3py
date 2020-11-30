@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import IntEnum
-from typing import Optional, Type
+from typing import Dict, List, Optional
 from unittest import TestCase
 
 from framework.lang.serialize import DictDeserializer, DictSerializer
@@ -59,21 +59,64 @@ class ClassB:
     d: EnumA = EnumA.A
     e: Optional[EnumA] = None
     f: Optional[ClassA] = ClassA()
+    g: List[ClassA] = field(default_factory=list)
 
 
 class TestDeserialize(TestCase):
     @data_provider([
         (
-            {'a': 1, 'b': 'hoge', 'd': 3},
-            {'a': 1, 'b': 'hoge', 'c': None, 'd': EnumA.C, 'e': None, 'f': None}
+            {
+                'a': 1,
+                'b': 'hoge',
+                'd': 3, 'g': [],
+            },
+            {
+                'a': 1,
+                'b': 'hoge',
+                'c': None,
+                'd': EnumA.C,
+                'e': None,
+                'f': None,
+                'g': [],
+            },
         ),
         (
-            {'a': 1, 'b': 'hoge', 'c': 2, 'd': 3},
-            {'a': 1, 'b': 'hoge', 'c': 2, 'd': EnumA.C, 'e': None, 'f': None}
+            {
+                'a': 1,
+                'b': 'hoge',
+                'c': 2,
+                'd': 3,
+                'g': [],
+            },
+            {
+                'a': 1,
+                'b': 'hoge',
+                'c': 2,
+                'd': EnumA.C,
+                'e': None,
+                'f': None,
+                'g': [],
+            },
         ),
         (
-            {'a': 1, 'b': 'hoge', 'c': 2, 'd': 3, 'e': 1, 'f': {'a': 1, 'b': 'fuga'}},
-            {'a': 1, 'b': 'hoge', 'c': 2, 'd': EnumA.C, 'e': EnumA.A, 'f': ClassA(a=1, b='fuga')}
+            {
+                'a': 1,
+                'b': 'hoge',
+                'c': 2,
+                'd': 3,
+                'e': 1,
+                'f': {'a': 1, 'b': 'fuga'},
+                'g': [{'a': 4, 'b': 'piyo'}],
+            },
+            {
+                'a': 1,
+                'b': 'hoge',
+                'c': 2,
+                'd': EnumA.C,
+                'e': EnumA.A,
+                'f': ClassA(1, 'fuga'),
+                'g': [ClassA(4, 'piyo')],
+            },
         ),
     ])
     def test_dict_deserializer(self, data: dict, expected: dict):
