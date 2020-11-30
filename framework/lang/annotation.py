@@ -55,10 +55,7 @@ class ValueAnnotation:
 
     @property
     def is_union(self) -> bool:
-        if not hasattr(self._prop, '__origin__'):
-            return False
-
-        return self._prop.__origin__ is Union
+        return getattr(self._prop, '__origin__', type(None)) is Union
 
     @property
     def is_optional(self) -> bool:
@@ -69,25 +66,25 @@ class ValueAnnotation:
         return self._prop in [int, float, bool, str]
 
     @property
-    def origin(self) -> Type:
-        return self._prop.__origin__ if self.is_union else self._prop
+    def primary_value(self) -> 'ValueAnnotation':
+        return ValueAnnotation(self.types[0])
 
     @property
-    def primary_type(self) -> Type:
-        return self.types[0]
+    def iter_value(self) -> 'ValueAnnotation':
+        return self.primary_value
+
+    @property
+    def origin(self) -> Type:
+        return getattr(self._prop, '__origin__', self._prop)
 
     @property
     def types(self) -> List[Type]:
-        return self._prop.__args__ if self.is_union else [self._prop]
+        return getattr(self._prop, '__args__', [self._prop])
 
     @property
     def enum_members(self) -> Dict[str, Enum]:
-        return self.origin.__members__
+        return getattr(self.origin, '__members__', {})
 
 
-class PropertyAnnotation(ValueAnnotation):
-    pass
-
-
-class ArgAnnotation(ValueAnnotation):
-    pass
+PropertyAnnotation = ValueAnnotation
+ArgAnnotation = ValueAnnotation
