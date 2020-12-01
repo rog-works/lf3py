@@ -3,16 +3,16 @@ from typing import Callable, Dict, List, Type, Union
 
 
 class ValueAnnotation:
-    def __init__(self, prop: Type) -> None:
-        self._prop = prop
+    def __init__(self, value_type: Type) -> None:
+        self._type = value_type
 
     @property
     def is_enum(self) -> bool:
-        return type(self._prop) is type(Enum)
+        return type(self._type) is type(Enum)
 
     @property
     def is_union(self) -> bool:
-        return getattr(self._prop, '__origin__', type(None)) is Union
+        return getattr(self._type, '__origin__', type(None)) is Union
 
     @property
     def is_optional(self) -> bool:
@@ -20,7 +20,7 @@ class ValueAnnotation:
 
     @property
     def is_primitive(self) -> bool:
-        return self._prop in [int, float, bool, str]
+        return self._type in [int, float, bool, str]
 
     @property
     def primary_value(self) -> 'ValueAnnotation':
@@ -32,11 +32,11 @@ class ValueAnnotation:
 
     @property
     def origin(self) -> Type:
-        return getattr(self._prop, '__origin__', self._prop)
+        return getattr(self._type, '__origin__', self._type)
 
     @property
     def types(self) -> List[Type]:
-        return getattr(self._prop, '__args__', [self._prop])
+        return getattr(self._type, '__args__', [self._type])
 
     @property
     def enum_members(self) -> Dict[str, Enum]:
@@ -71,12 +71,12 @@ class FunctionAnnotation:
 
 
 class ClassAnnotation:
-    def __init__(self, klass: Type) -> None:
-        self._klass = klass
+    def __init__(self, class_type: Type) -> None:
+        self._type = class_type
 
     @property
     def origin(self) -> Type:
-        return self._klass
+        return self._type
 
     @property
     def constructor(self) -> FunctionAnnotation:
@@ -84,7 +84,7 @@ class ClassAnnotation:
 
     @property
     def properties(self) -> Dict[str, PropertyAnnotation]:
-        if not hasattr(self._klass, '__annotations__'):
+        if not hasattr(self._type, '__annotations__'):
             return {}
 
-        return {key: PropertyAnnotation(prop) for key, prop in self._klass.__annotations__.items()}
+        return {key: PropertyAnnotation(prop) for key, prop in self._type.__annotations__.items()}
