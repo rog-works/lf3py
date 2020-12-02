@@ -1,6 +1,6 @@
 from typing import Tuple, Type, Union
 
-from framework.api.data import Request, Response
+from framework.api.data import ErrorBody, Request, Response
 from framework.api.path import capture_params
 from framework.i18n.i18n import I18n
 from framework.lang.annotation import FunctionAnnotation
@@ -24,17 +24,17 @@ class Api:
     def response(self) -> Response:
         return self._response
 
-    def success(self, status: int = 200, body: dict = {}) -> Response:
+    def success(self, status: int = 200, body: Result = Result()) -> Response:
         return self.http_result(status, body)
 
-    def http_result(self, status: int, body: dict) -> Response:
+    def http_result(self, status: int, body: Result) -> Response:
         return Response(status=status, headers=self.response.headers, body=body)
 
     def error_500(self, error: Exception) -> Response:
         return self.error_result(500, self._i18n.trans('http.500'), error)
 
     def error_result(self, status: int, message: str, error: Exception) -> Response:
-        body = {'message': message, 'stacktrace': stacktrace(error)}
+        body = ErrorBody(message=message, stacktrace=stacktrace(error))
         return self.http_result(status, body)
 
     def error(self, status: int, message: str, handle_errors: Union[Type[Exception], Tuple[Type[Exception], ...]]):

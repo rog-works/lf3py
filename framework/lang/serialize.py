@@ -12,7 +12,26 @@ class Serializer(metaclass=ABCMeta):
 
 class DictSerializer(Serializer):
     def serialize(self, obj: Any) -> dict:
-        return {key: value for key, value in obj.__dict__.items() if not key.startswith('_')}
+        obj_anno = ClassAnnotation(type(obj))
+        return {
+            key: self.__serialize_value(prop_anno, getattr(obj, key))
+            for key, prop_anno in obj_anno.properties.items()
+            if not key.startswith('_')
+        }
+
+    def __serialize_value(self, prop_anno: PropertyAnnotation, value: Any) -> Any:
+        if prop_anno.is_primitive:
+            return value
+        elif prop_anno.origin is list:
+            return [self.__serialize_value(prop_anno.primary_value, in_value) for in_value in value]
+        elif prop_anno.origin is dict:
+            return {key: self.__serialize_value(prop_anno.dict_value, in_value) for key, in_value in value.items()}
+        elif prop_anno.is_union:
+            return self.__serialize_value(prop_anno.primary_value, value)
+        elif prop_anno.is_enum:
+            return value.value
+        else:
+            return self.serialize(value)
 
 
 class Deserializer(metaclass=ABCMeta):
@@ -42,7 +61,7 @@ class DictDeserializer(Deserializer):
             elif prop_anno.origin is bool:
                 return value == 'true' if value in ['true', 'false'] else bool(value)
             else:
-                return value
+                return str(value)
         elif prop_anno.origin is list:
             return [self.__cast_value(prop_anno.primary_value, in_value) for in_value in value]
         elif prop_anno.origin is dict:
