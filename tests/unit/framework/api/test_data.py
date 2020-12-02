@@ -1,7 +1,14 @@
+from dataclasses import dataclass
 from unittest import TestCase
 
 from framework.api.data import Request, Response
+from framework.task.result import Result
 from framework.test.helper import data_provider
+
+
+@dataclass
+class Body(Result):
+    success: bool = False
 
 
 class TestData(TestCase):
@@ -11,7 +18,7 @@ class TestData(TestCase):
                 'path': '/models',
                 'method': 'GET',
                 'headers': {'content-type': 'application/json'},
-                'params': {'model_id': 1234}
+                'params': {'model_id': 1234},
             },
         ),
     ])
@@ -27,7 +34,7 @@ class TestData(TestCase):
             {
                 'status': 200,
                 'headers': {'content-type': 'application/json'},
-                'body': {'success': True}
+                'body': Body(success=True),
             },
         ),
     ])
@@ -36,4 +43,3 @@ class TestData(TestCase):
         self.assertEqual(response.status, res['status'])
         self.assertEqual(response.headers, res['headers'])
         self.assertEqual(response.body, res['body'])
-        self.assertEqual(response.serialize(), res)

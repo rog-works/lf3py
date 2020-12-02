@@ -13,8 +13,8 @@ class DataA:
     b: str = ''
     c: bool = False
     d: float = 0.0
-    e: dict = field(default_factory=dict)
-    f: list = field(default_factory=list)
+    e: Dict[str, int] = field(default_factory=dict)
+    f: List[int] = field(default_factory=list)
 
     @property
     def prop_a(self) -> str:
