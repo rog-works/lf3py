@@ -1,4 +1,4 @@
-from typing import Tuple, Type, Union
+from typing import Callable, List, Type, Tuple
 
 from framework.api.data import ErrorBody, Request, Response
 from framework.api.path import capture_params
@@ -6,8 +6,11 @@ from framework.i18n.i18n import I18n
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.error import stacktrace
 from framework.lang.serialize import DictDeserializer
+from framework.lang.sequence import first, flatten
 from framework.task.result import Result
 from framework.task.runner import Runner
+
+ErrorDefinition = Tuple[int, str, Tuple[Type[Exception], ...]]
 
 
 class Api:
@@ -37,7 +40,7 @@ class Api:
         body = ErrorBody(message=message, stacktrace=stacktrace(error))
         return self.http_result(status, body)
 
-    def error(self, status: int, message: str, handle_errors: Union[Type[Exception], Tuple[Type[Exception], ...]]):
+    def error(self, status: int, message: str, *handle_errors: Type[Exception]) -> Callable[[Runner], Runner]:
         """
         Examples:
             >>> @app.api.error(400, app.18n.trans('http.400'), ValidationError)
@@ -47,11 +50,39 @@ class Api:
             >>> action().serialize()
             {'status': 400, 'headers': {...}, 'body': {'message': '400 Bad Request', 'stacktrace': [...]}
         """
+        return self.errors([(status, message, handle_errors)])
+
+    def custom_error(self, wrapper_func: Callable[..., List[ErrorDefinition]]) -> Callable[..., Callable[[Runner], Runner]]:
+        """
+        Examples:
+            >>> @app.api.custom_error
+            >>> def errors_with(*statuses: int) -> List[ErrorDefinition]:
+            >>>     defs = {
+            >>>         [401, app.i18n.trans('http.401'), (UnauthorizedError,)],
+            >>>         [503, app.i18n.trans('http.503'), (ServiceUnavailableError,)],
+            >>>     }
+            >>>     return [(status, *remain_args) for status, *remain_args in defs if status in statuses)]
+
+            >>> @errors_with(401, 503)
+            >>> def action() -> Response:
+            >>>     raise UnauthorizeError()
+
+            >>> action().serialize()
+            {'status': 400, 'headers': {...}, 'body': {'message': '401 Unauthorized', 'stacktrace': [...]}
+        """
+        def wrapper(*args, **kwargs) -> Callable[[Runner], Runner]:
+            return self.errors(wrapper_func(*args, **kwargs))
+
+        return wrapper
+
+    def errors(self, error_defs: List[ErrorDefinition]) -> Callable[[Runner], Runner]:
         def decorator(runner: Runner) -> Runner:
             def wrapper(*args, **kwargs) -> Result:
+                handle_errors = tuple(flatten([errors for _, _, errors in error_defs]))
                 try:
                     return runner(*args, **kwargs)
                 except handle_errors as e:
+                    status, message = first([(status, message) for status, message, errors in error_defs if type(e) in errors])
                     return self.error_result(status, message, e)
 
             return wrapper
