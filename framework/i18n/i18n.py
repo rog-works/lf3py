@@ -4,8 +4,8 @@ from framework.i18n.translator import Translator
 
 
 class I18n:
-    def __init__(self, locale: str, trans_config: dict) -> None:
-        self._datetime = DateTime(TZInfo(locale))
+    def __init__(self, tzinfo: TZInfo, trans_config: dict) -> None:
+        self._datetime = DateTime(tzinfo)
         self._translator = Translator(trans_config)
 
     def datetime(self) -> DateTime:

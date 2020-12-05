@@ -21,4 +21,13 @@ config = {
             },
         },
     },
+    'i18n': {
+        'locale': {
+            'default': 'ja',
+        },
+        'trans': {
+            'path': 'example.config.trans.{}',
+            'module': 'config',
+        },
+    },
 }

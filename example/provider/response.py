@@ -1,6 +1,6 @@
-from framework.lang.module import load_module
-from framework.data.config import Config
 from framework.api.data import Response
+from framework.data.config import Config
+from framework.lang.module import load_module
 
 
 def make_response(config: Config) -> Response:
