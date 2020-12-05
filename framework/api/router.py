@@ -1,15 +1,13 @@
 import re
-from typing import Any, Dict
+from typing import Dict, TypeVar
+
+_T = TypeVar('_T')
 
 
-class Router:
-    def __init__(self, routes: Dict[str, Any]) -> None:
-        self._routes = routes
+def resolver(routes: Dict[str, _T], *route_elems: str) -> _T:
+    route = ' '.join(route_elems)
+    for pattern, target in routes.items():
+        if re.search(f'^{pattern}$', route):
+            return target
 
-    def resolve(self, *routes) -> Any:
-        route = ' '.join(routes)
-        for pattern, target in self._routes.items():
-            if re.search(f'^{pattern}$', route):
-                return target
-
-        raise AssertionError()
+    raise LookupError(f'Missing route. route = {route}')

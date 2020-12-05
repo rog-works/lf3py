@@ -1,5 +1,6 @@
-from example.provider import aws_app
 from framework.task.runner import Runner
+
+from example.provider.app import aws_app
 
 
 def handler(event: dict, context: object) -> dict:

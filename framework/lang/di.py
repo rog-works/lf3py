@@ -24,7 +24,7 @@ class DI:
 
         injector = self._injectors[symbol]
         anno = FunctionAnnotation(injector if isinstance(injector, FunctionType) else injector.__init__)
-        args = {key: self.resolve(arg_anno.origin) for key, arg_anno in anno.args.items()}
-        instance = injector(**args)
+        kwargs = {key: self.resolve(arg_anno.org_type) for key, arg_anno in anno.args.items()}
+        instance = injector(**kwargs)
         self._instances[symbol] = instance
         return instance

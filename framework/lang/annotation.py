@@ -39,6 +39,10 @@ class ValueAnnotation:
         return getattr(self._type, '__origin__', self._type)
 
     @property
+    def org_type(self) -> Type:
+        return self._type
+
+    @property
     def types(self) -> List[Type]:
         return getattr(self._type, '__args__', [self._type])
 
