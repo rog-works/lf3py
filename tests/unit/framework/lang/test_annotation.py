@@ -72,13 +72,13 @@ class TestAnnotation(TestCase):
         self.assertEqual(anno.is_method, True)
 
     @data_provider([
-        ('a', {'is_enum': False, 'is_union': False, 'is_optional': False}),
-        ('b', {'is_enum': False, 'is_union': False, 'is_optional': False}),
-        ('c', {'is_enum': False, 'is_union': True, 'is_optional': True}),
-        ('d', {'is_enum': False, 'is_union': False, 'is_optional': False}),
-        ('e', {'is_enum': False, 'is_union': False, 'is_optional': False}),
-        ('f', {'is_enum': True, 'is_union': False, 'is_optional': False}),
-        ('g', {'is_enum': True, 'is_union': False, 'is_optional': False}),
+        ('a', {'is_enum': False, 'is_union': False, 'is_optional': False, 'is_primitive': True}),
+        ('b', {'is_enum': False, 'is_union': False, 'is_optional': False, 'is_primitive': True}),
+        ('c', {'is_enum': False, 'is_union': True, 'is_optional': True, 'is_primitive': False}),
+        ('d', {'is_enum': False, 'is_union': False, 'is_optional': False, 'is_primitive': False}),
+        ('e', {'is_enum': False, 'is_union': False, 'is_optional': False, 'is_primitive': False}),
+        ('f', {'is_enum': True, 'is_union': False, 'is_optional': False, 'is_primitive': False}),
+        ('g', {'is_enum': True, 'is_union': False, 'is_optional': False, 'is_primitive': False}),
     ])
     def test_value(self, key: str, expected_data: Dict[str, bool]):
         anno = ClassAnnotation(AnnoA)
