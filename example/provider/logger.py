@@ -5,17 +5,12 @@ from framework.lang.module import load_module
 
 
 def make_logger(config: Config) -> logging.Logger:
-    log_config = config['logger']
-
     logger = logging.getLogger(__name__)
-    logger.setLevel(log_config['level'])
+    logger.setLevel(logging.DEBUG)
 
-    func_name = log_config['module']
-    func_args = log_config['modules'][func_name]
-    base_args = {'level': log_config['level'], 'format': log_config['format']}
-    kwargs = {**base_args, **func_args}
-    handler: logging.Handler = load_module(__name__, func_name)(**kwargs)
-    logger.addHandler(handler)
+    func_name = config['logger']['module']
+    func_args = config['logger']['modules'][func_name]
+    logger.addHandler(load_module(__name__, func_name)(**func_args))
     return logger
 
 
