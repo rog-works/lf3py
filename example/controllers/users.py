@@ -31,12 +31,16 @@ CreateBody = ShowBody
 
 
 def index() -> Response:
+    app.logger.info('index')
+
     users = User.find_all()
     return app.api.success(body=IndexBody(success=True, users=users))
 
 
 @app.api.path_params('/users/{user_id}')
 def show(user_id: int) -> Response:
+    app.logger.info(f'show: {app.api.request.params}')
+
     user = User.find(user_id)
     return app.api.success(body=ShowBody(success=True, user=user))
 
@@ -44,6 +48,8 @@ def show(user_id: int) -> Response:
 @app.api.error(400, app.i18n.trans('http.400'), TypeError)
 @app.api.params
 def create(params: CreateParams) -> Response:
+    app.logger.info(f'create: {app.api.request.params}')
+
     serializer = DictSerializer()
     user = User.create(**serializer.serialize(params))
     return app.api.success(body=CreateBody(success=True, user=user))

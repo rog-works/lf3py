@@ -4,7 +4,8 @@ from os import environ
 config = {
     'env': environ.get('ENV', 'local'),
     'logger': {
-        'level': environ.get('LOGGER_LEVEL', 'debug'),
+        'level': environ.get('LOGGER_LEVEL', 'DEBUG'),
+        'format': '%(asctime)s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',
         'module': environ.get('LOGGER_MODULE', 'file_handler'),
         'modules': {
             'file_handler': {
