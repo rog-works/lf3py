@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import IntEnum
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 from unittest import TestCase
 
 from framework.lang.serialize import DictDeserializer, DictSerializer
@@ -15,6 +15,7 @@ class DataA:
     d: float = 0.0
     e: Dict[str, int] = field(default_factory=dict)
     f: List[int] = field(default_factory=list)
+    g: Union[int, str] = 0
 
     @property
     def prop_a(self) -> str:
@@ -26,7 +27,7 @@ class DataA:
 
 class TestSerialize(TestCase):
     def test_dict_serializer(self):
-        data = DataA(10, 'hoge', True, 1.0, {'a': 1}, [1, 2, 3])
+        data = DataA(10, 'hoge', True, 1.0, {'a': 1}, [1, 2, 3], 'fuga')
         serializer = DictSerializer()
         expected = {
             'a': 10,
@@ -35,6 +36,7 @@ class TestSerialize(TestCase):
             'd': 1.0,
             'e': {'a': 1},
             'f': [1, 2, 3],
+            'g': 'fuga',
         }
         self.assertEqual(serializer.serialize(data), expected)
 
@@ -61,6 +63,7 @@ class ClassB:
     f: Optional[ClassA] = ClassA()
     g: List[ClassA] = field(default_factory=list)
     h: Dict[str, ClassA] = field(default_factory=dict)
+    i: Union[int, str, ClassA] = 0
 
 
 class TestDeserialize(TestCase):
@@ -72,6 +75,7 @@ class TestDeserialize(TestCase):
                 'd': 3,
                 'g': [],
                 'h': {},
+                'i': 1,
             },
             {
                 'a': 1,
@@ -82,6 +86,7 @@ class TestDeserialize(TestCase):
                 'f': None,
                 'g': [],
                 'h': {},
+                'i': 1,
             },
         ),
         (
@@ -92,6 +97,7 @@ class TestDeserialize(TestCase):
                 'd': 3,
                 'g': [],
                 'h': {},
+                'i': 'hoge',
             },
             {
                 'a': 1,
@@ -102,6 +108,7 @@ class TestDeserialize(TestCase):
                 'f': None,
                 'g': [],
                 'h': {},
+                'i': 'hoge',
             },
         ),
         (
@@ -114,6 +121,7 @@ class TestDeserialize(TestCase):
                 'f': {'a': 1, 'b': 'fuga'},
                 'g': [{'a': 4, 'b': 'piyo'}],
                 'h': {'key': {'a': 5, 'b': 'abcd'}},
+                'i': {'a': 6, 'b': 'aaa'},
             },
             {
                 'a': 1,
@@ -124,6 +132,7 @@ class TestDeserialize(TestCase):
                 'f': ClassA(1, 'fuga'),
                 'g': [ClassA(4, 'piyo')],
                 'h': {'key': ClassA(5, 'abcd')},
+                'i': ClassA(6, 'aaa'),
             },
         ),
     ])
