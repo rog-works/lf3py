@@ -2,7 +2,6 @@ from base64 import b64decode
 import json
 from urllib.parse import parse_qsl
 
-
 from framework.api.data import Request
 
 
