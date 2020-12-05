@@ -15,8 +15,8 @@ from example.config.routes import Routes
 
 def aws_app(event: dict, _: object) -> App:
     di = DI()
-    di.register(Config, lambda: load_module('example.config.config', 'config'))
-    di.register(Routes, lambda: load_module('example.config.routes', 'routes'))
+    di.register(Config, load_module('example.config.config', 'config'))
+    di.register(Routes, load_module('example.config.routes', 'routes'))
     di.register(Request, lambda: decode_request(event))
     di.register(Response, load_module('example.provider.response', 'make_response'))
     di.register(Logger, load_module('example.provider.logger', 'make_logger'))

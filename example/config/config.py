@@ -1,33 +1,37 @@
-from os import environ
+import os
 
 
-config = {
-    'env': environ.get('ENV', 'local'),
-    'logger': {
-        'module': environ.get('LOGGER_MODULE', 'file_handler'),
-        'modules': {
-            'file_handler': {
-                'level': environ.get('LOGGER_LEVEL', 'DEBUG'),
-                'path': 'example/logs/app.log',
-                'format': '%(asctime)s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',
+def config() -> dict:
+    return {
+        'env': os.environ.get('ENV', 'local'),
+        'logger': {
+            'module': os.environ.get('LOGGER_MODULE', 'dev_handler'),
+            'modules': {
+                'dev_handler': {
+                    'level': 'DEBUG',
+                    'path': 'example/logs/app.log',
+                    'format': '%(asctime)s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',
+                },
             },
         },
-    },
-    'response': {
-        'module': environ.get('RESPONSE_MODULE', 'dev_response'),
-        'modules': {
-            'dev_response': {
-                'headers': {'Content-Type': 'application/json'},
+        'response': {
+            'module': os.environ.get('RESPONSE_MODULE', 'dev_response'),
+            'modules': {
+                'dev_response': {
+                    'headers': {'Content-Type': 'application/json'},
+                },
+                'prd_response': {
+                    'headers': {'Content-Type': 'application/json'},
+                },
             },
         },
-    },
-    'i18n': {
-        'locale': {
-            'default': 'ja',
+        'i18n': {
+            'locale': {
+                'default': 'ja',
+            },
+            'trans': {
+                'path': 'example.config.trans.{}',
+                'module': 'config',
+            },
         },
-        'trans': {
-            'path': 'example.config.trans.{}',
-            'module': 'config',
-        },
-    },
-}
+    }

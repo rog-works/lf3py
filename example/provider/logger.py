@@ -14,7 +14,7 @@ def make_logger(config: Config) -> logging.Logger:
     return logger
 
 
-def file_handler(path: str, level: str, format: str) -> logging.Handler:
+def dev_handler(path: str, level: str, format: str) -> logging.Handler:
     handler = logging.FileHandler(path)
     handler.setLevel(level)
     handler.setFormatter(logging.Formatter(format))

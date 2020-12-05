@@ -12,13 +12,13 @@ app = App.get()
 
 @dataclass
 class IndexBody(Result):
-    success: bool = False
+    success: bool = True
     users: List[User] = field(default_factory=list)
 
 
 @dataclass
 class ShowBody(Result):
-    success: bool = False
+    success: bool = True
     user: User = field(default_factory=User)
 
 
@@ -34,7 +34,7 @@ def index() -> Response:
     app.logger.info('index')
 
     users = User.find_all()
-    return app.api.success(body=IndexBody(success=True, users=users))
+    return app.api.success(body=IndexBody(users=users))
 
 
 @app.api.path_params('/users/{user_id}')
@@ -42,7 +42,7 @@ def show(user_id: int) -> Response:
     app.logger.info(f'show: {app.api.request.params}')
 
     user = User.find(user_id)
-    return app.api.success(body=ShowBody(success=True, user=user))
+    return app.api.success(body=ShowBody(user=user))
 
 
 @app.api.error(400, app.i18n.trans('http.400'), TypeError)
@@ -52,4 +52,4 @@ def create(params: CreateParams) -> Response:
 
     serializer = DictSerializer()
     user = User.create(**serializer.serialize(params))
-    return app.api.success(body=CreateBody(success=True, user=user))
+    return app.api.success(body=CreateBody(user=user))
