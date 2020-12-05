@@ -41,7 +41,7 @@ def show(user_id: int) -> Response:
     return app.api.success(body=ShowBody(success=True, user=user))
 
 
-@app.api.error(400, app.i18n.trans('http.400'), ValueError)
+@app.api.error(400, app.i18n.trans('http.400'), TypeError)
 @app.api.params
 def create(params: CreateParams) -> Response:
     serializer = DictSerializer()

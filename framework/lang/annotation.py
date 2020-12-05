@@ -23,12 +23,16 @@ class ValueAnnotation:
         return self._type in [int, float, bool, str]
 
     @property
-    def primary_value(self) -> 'ValueAnnotation':
+    def list_value(self) -> 'ValueAnnotation':
         return ValueAnnotation(self.types[0])
 
     @property
     def dict_value(self) -> 'ValueAnnotation':
         return ValueAnnotation(self.types[1])
+
+    @property
+    def union_values(self) -> List['ValueAnnotation']:
+        return [ValueAnnotation(candidate_type) for candidate_type in self.types]
 
     @property
     def origin(self) -> Type:
