@@ -1,12 +1,12 @@
 from logging import Logger
-from typing import Optional
+from typing import Callable, Optional, Type, TypeVar
 
 from framework.api.api import Api
 from framework.data.config import Config
 from framework.i18n.i18n import I18n
 from framework.lang.di import DI
-from framework.task.result import Result
-from framework.task.runner import Runner
+
+_T = TypeVar('_T')
 
 
 class App:
@@ -40,12 +40,8 @@ class App:
         return self._di.resolve(Logger)
 
     @property
-    def runner(self) -> Runner:
-        return self._di.resolve(Runner)
-
-    @property
     def api(self) -> Api:
         return self._di.resolve(Api)
 
-    def run(self) -> Result:
-        return self.runner()
+    def perform(self, runner: Type[Callable[..., _T]], *args, **kwargs) -> _T:
+        return (self._di.resolve(runner))(*args, **kwargs)
