@@ -1,7 +1,9 @@
 from abc import ABCMeta, abstractmethod
-from typing import Any, Type
+from typing import Any, Type, TypeVar
 
 from framework.lang.annotation import ClassAnnotation, PropertyAnnotation
+
+_T = TypeVar('_T')
 
 
 class Serializer(metaclass=ABCMeta):
@@ -48,7 +50,7 @@ class Deserializer(metaclass=ABCMeta):
 
 
 class DictDeserializer(Deserializer):
-    def deserialize(self, obj_type: Type, data: dict) -> dict:
+    def deserialize(self, obj_type: Type[_T], data: dict) -> _T:
         obj_anno = ClassAnnotation(obj_type)
         deserialized = (obj_anno.origin)()
         for key, prop_anno in obj_anno.properties.items():
