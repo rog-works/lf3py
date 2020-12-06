@@ -14,7 +14,7 @@ class Request:
 
 @dataclass
 class Response(Result):
-    status: int = 200
+    statusCode: int = 200
     headers: Dict[str, str] = field(default_factory=dict)
     body: Result = Result()
 

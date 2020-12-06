@@ -17,7 +17,7 @@ class TestUsers(TestCase):
                 'queryStringParameters': {'locale': 'ja'},
             },
             {
-                'status': 200,
+                'statusCode': 200,
                 'headers': {'Content-Type': 'application/json'},
                 'body': {
                     'success': True,
@@ -46,7 +46,7 @@ class TestUsers(TestCase):
                 'queryStringParameters': {'locale': 'ja'},
             },
             {
-                'status': 200,
+                'statusCode': 200,
                 'headers': {'Content-Type': 'application/json'},
                 'body': {'success': True, 'user': {'id': 1234, 'name': 'hoge'}},
             },
@@ -67,7 +67,7 @@ class TestUsers(TestCase):
                 'body': json.dumps({'name': 'piyo'}),
             },
             {
-                'status': 200,
+                'statusCode': 200,
                 'headers': {'Content-Type': 'application/json'},
                 'body': {'success': True, 'user': {'id': 100, 'name': 'piyo'}},
             },
@@ -89,7 +89,7 @@ class TestUsers(TestCase):
                 'body': json.dumps({'unknown': 'piyo'}),
             },
             {
-                'status': 400,
+                'statusCode': 400,
                 'headers': {'Content-Type': 'application/json'},
                 'body': {'message': '400 Bad Request', 'stacktrace': list},
             },
@@ -106,7 +106,7 @@ class TestUsers(TestCase):
                 'body': json.dumps({'unknown': 'piyo'}),
             },
             {
-                'status': 400,
+                'statusCode': 400,
                 'headers': {'Content-Type': 'application/json'},
                 'body': {'message': '400 Bad Request', 'stacktrace': type(None)},
             },
@@ -115,7 +115,7 @@ class TestUsers(TestCase):
     def test_error(self, environ: dict, event: dict, expected: dict):
         with mock.patch.dict(os.environ, environ):
             actual = perform_api(event)
-            self.assertEqual(actual['status'], expected['status'])
+            self.assertEqual(actual['statusCode'], expected['statusCode'])
             self.assertEqual(actual['headers'], expected['headers'])
             self.assertEqual(actual['body']['message'], expected['body']['message'])
             self.assertTrue(type(actual['body'].get('stacktrace')) is expected['body']['stacktrace'])

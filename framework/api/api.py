@@ -36,7 +36,7 @@ class Api:
         return self.http_result(status, body)
 
     def http_result(self, status: int, body: Result) -> Response:
-        return Response(status=status, headers=self.response.headers, body=body)
+        return Response(statusCode=status, headers=self.response.headers, body=body)
 
     def error_500(self, error: Exception) -> Response:
         return self.error_result(500, self._i18n.trans('http.500'), error)
