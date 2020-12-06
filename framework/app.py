@@ -4,6 +4,7 @@ from typing import Callable, Optional, Type, TypeVar
 from framework.api.api import Api
 from framework.data.config import Config
 from framework.i18n.i18n import I18n
+from framework.lang.cache import Cache
 from framework.lang.di import DI
 
 _T = TypeVar('_T')
@@ -38,6 +39,10 @@ class App:
     @property
     def logger(self) -> Logger:
         return self._di.resolve(Logger)
+
+    @property
+    def cache(self) -> Cache:
+        return self._di.resolve(Cache)
 
     @property
     def api(self) -> Api:

@@ -12,6 +12,9 @@ def config() -> dict:
                     'path': 'example/logs/app.log',
                     'format': '%(asctime)s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',
                 },
+                'prd_handler': {
+                    'dsn': 'https://example.com/xxx@hoge',
+                },
             },
         },
         'response': {
@@ -32,6 +35,18 @@ def config() -> dict:
             'trans': {
                 'path': 'example.config.trans.{}',
                 'module': 'config',
+            },
+        },
+        'cache': {
+            'module': os.environ.get('CACHE_MODULE', 'dev_cache'),
+            'modules': {
+                'dev_cache': {},
+                'prd_cache': {
+                    'host': 'xxx.xxx.xxx.xxx',
+                    'port': 1234,
+                    'user': 'hoge',
+                    'password': 'fuga',
+                },
             },
         },
     }
