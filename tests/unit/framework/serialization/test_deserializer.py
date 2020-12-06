@@ -3,42 +3,8 @@ from enum import IntEnum
 from typing import Dict, List, Optional, Union
 from unittest import TestCase
 
-from framework.lang.serialize import DictDeserializer, DictSerializer
+from framework.serialization.deserializer import DictDeserializer
 from framework.test.helper import data_provider
-
-
-@dataclass
-class DataA:
-    a: int = 0
-    b: str = ''
-    c: bool = False
-    d: float = 0.0
-    e: Dict[str, int] = field(default_factory=dict)
-    f: List[int] = field(default_factory=list)
-    g: Union[int, str] = 0
-
-    @property
-    def prop_a(self) -> str:
-        return 'prop'
-
-    def method_a(self) -> int:
-        return 100
-
-
-class TestSerialize(TestCase):
-    def test_dict_serializer(self):
-        data = DataA(10, 'hoge', True, 1.0, {'a': 1}, [1, 2, 3], 'fuga')
-        serializer = DictSerializer()
-        expected = {
-            'a': 10,
-            'b': 'hoge',
-            'c': True,
-            'd': 1.0,
-            'e': {'a': 1},
-            'f': [1, 2, 3],
-            'g': 'fuga',
-        }
-        self.assertEqual(serializer.serialize(data), expected)
 
 
 class EnumA(IntEnum):
@@ -66,7 +32,7 @@ class ClassB:
     i: Union[int, str, ClassA] = 0
 
 
-class TestDeserialize(TestCase):
+class TestDeserializer(TestCase):
     @data_provider([
         (
             {
