@@ -1,12 +1,14 @@
 from typing import Callable, List, Type, Tuple
 
 from framework.api.data import ErrorBody, Request, Response
+from framework.api.errors import BadRequestError
 from framework.api.path import capture_params
 from framework.i18n.i18n import I18n
 from framework.lang.annotation import FunctionAnnotation
-from framework.lang.error import stacktrace
-from framework.lang.serialize import DictDeserializer
+from framework.lang.error import raises, stacktrace
 from framework.lang.sequence import first, flatten
+from framework.serialization.deserializer import DictDeserializer
+from framework.serialization.errors import DeserializeError
 from framework.task.result import Result
 from framework.task.runner import Runner
 
@@ -103,6 +105,7 @@ class Api:
             >>>     print(f'{params.__dict__}')
             {'a': 100, 'b': 'hoge', 'c': None}
         """
+        @raises(BadRequestError, DeserializeError)
         def wrapper(*args, **kwargs) -> Result:
             func_anno = FunctionAnnotation(runner)
             deserializer = DictDeserializer()
@@ -126,6 +129,7 @@ class Api:
             id: 1234, type: <class 'int'>
         """
         def decorator(runner: Runner) -> Runner:
+            @raises(BadRequestError, KeyError)
             def wrapper(*args, **kwargs) -> Result:
                 func_anno = FunctionAnnotation(runner)
                 params = capture_params(self.request.path, path_spec)

@@ -1,7 +1,8 @@
 import re
+from typing import Dict, Union
 
 
-def capture_params(path: str, path_spec: str) -> dict:
+def capture_params(path: str, path_spec: str) -> Dict[str, Union[int, str]]:
     routes = []
     param_keys = []
     for route in path_spec.split('/'):

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any
 
-from framework.lang.serialize import DictSerializer, Serializer
+from framework.serialization.serializer import DictSerializer, Serializer
 
 
 @dataclass

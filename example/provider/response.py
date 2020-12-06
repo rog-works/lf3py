@@ -1,9 +1,9 @@
 from typing import Any
 
-from framework.lang.serialize import DictSerializer
 from framework.api.data import Response
 from framework.data.config import Config
 from framework.lang.module import load_module
+from framework.serialization.serializer import DictSerializer
 
 
 def make_response(config: Config) -> Response:
