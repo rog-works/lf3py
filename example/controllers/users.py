@@ -1,13 +1,14 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from example.models.user import User
 from framework.api.api import ErrorDefinition
 from framework.api.data import Response
 from framework.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizeError
-from framework.app import App
 from framework.serialization.serializer import DictSerializer
 from framework.task.result import Result
+
+from example.app import App
+from example.models.user import User
 
 app = App.get()
 
