@@ -1,11 +1,11 @@
 from typing import Callable, List, Type, Tuple
 
-from framework.api.data import ErrorBody, Request, Response
+from framework.api.data import Request, Response
 from framework.api.errors import BadRequestError
 from framework.api.path import capture_params
 from framework.i18n.i18n import I18n
 from framework.lang.annotation import FunctionAnnotation
-from framework.lang.error import raises, stacktrace
+from framework.lang.error import raises
 from framework.lang.sequence import first, flatten
 from framework.serialization.deserializer import DictDeserializer
 from framework.serialization.errors import DeserializeError
@@ -13,13 +13,16 @@ from framework.task.result import Result
 from framework.task.runner import Runner
 
 ErrorDefinition = Tuple[int, str, Tuple[Type[Exception], ...]]
+ErrorHandler = Callable[[int, str, Exception], Result]
+RunnerDecorator = Callable[[Runner], Runner]
 
 
 class Api:
-    def __init__(self, request: Request, response: Response, i18n: I18n) -> None:
+    def __init__(self, request: Request, response: Response, i18n: I18n, error_handler: ErrorHandler) -> None:
         self._request = request
         self._response = response
         self._i18n = i18n
+        self._error_handler = error_handler
 
     @property
     def request(self) -> Request:
@@ -33,16 +36,16 @@ class Api:
         return self.http_result(status, body)
 
     def http_result(self, status: int, body: Result) -> Response:
-        return Response(status=status, headers=self.response.headers, body=body, _serializer=self.response._serializer)
+        return Response(status=status, headers=self.response.headers, body=body)
 
     def error_500(self, error: Exception) -> Response:
         return self.error_result(500, self._i18n.trans('http.500'), error)
 
     def error_result(self, status: int, message: str, error: Exception) -> Response:
-        body = ErrorBody(message=message, stacktrace=stacktrace(error))
+        body = self._error_handler(status, message, error)
         return self.http_result(status, body)
 
-    def error(self, status: int, message: str, *handle_errors: Type[Exception]) -> Callable[[Runner], Runner]:
+    def error(self, status: int, message: str, *handle_errors: Type[Exception]) -> RunnerDecorator:
         """
         Examples:
             >>> @app.api.error(400, app.18n.trans('http.400'), ValidationError)
@@ -54,7 +57,7 @@ class Api:
         """
         return self.errors([(status, message, handle_errors)])
 
-    def custom_error(self, wrapper_func: Callable[..., List[ErrorDefinition]]) -> Callable[..., Callable[[Runner], Runner]]:
+    def custom_error(self, wrapper_func: Callable[..., List[ErrorDefinition]]) -> Callable[..., RunnerDecorator]:
         """
         Examples:
             >>> @app.api.custom_error
@@ -72,12 +75,12 @@ class Api:
             >>> action().serialize()
             {'status': 400, 'headers': {...}, 'body': {'message': '401 Unauthorized', 'stacktrace': [...]}
         """
-        def wrapper(*args, **kwargs) -> Callable[[Runner], Runner]:
+        def wrapper(*args, **kwargs) -> RunnerDecorator:
             return self.errors(wrapper_func(*args, **kwargs))
 
         return wrapper
 
-    def errors(self, error_defs: List[ErrorDefinition]) -> Callable[[Runner], Runner]:
+    def errors(self, error_defs: List[ErrorDefinition]) -> RunnerDecorator:
         def decorator(runner: Runner) -> Runner:
             def wrapper(*args, **kwargs) -> Result:
                 handle_errors = tuple(flatten([errors for _, _, errors in error_defs]))
@@ -120,7 +123,7 @@ class Api:
 
         return wrapper
 
-    def path_params(self, path_spec: str):
+    def path_params(self, path_spec: str) -> RunnerDecorator:
         """
         Examples:
             >>> @app.api.path_params('/models/{id}')

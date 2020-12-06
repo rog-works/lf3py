@@ -18,15 +18,7 @@ def config() -> dict:
             },
         },
         'response': {
-            'module': os.environ.get('RESPONSE_MODULE', 'dev_response'),
-            'modules': {
-                'dev_response': {
-                    'headers': {'Content-Type': 'application/json'},
-                },
-                'prd_response': {
-                    'headers': {'Content-Type': 'application/json'},
-                },
-            },
+            'headers': {'Content-Type': 'application/json'},
         },
         'i18n': {
             'locale': {
@@ -35,6 +27,19 @@ def config() -> dict:
             'trans': {
                 'path': 'example.config.trans.{}',
                 'module': 'config',
+            },
+        },
+        'error_handler': {
+            'module': os.environ.get('ERROR_HANDLER_MODULE', 'dev_handler'),
+            'modules': {
+                'dev_handler': {
+                    'path': 'example.api.error_handler',
+                    'module': 'dev_handler',
+                },
+                'prd_handler': {
+                    'path': 'example.api.error_handler',
+                    'module': 'prd_handler',
+                },
             },
         },
         'cache': {

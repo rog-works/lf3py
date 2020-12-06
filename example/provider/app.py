@@ -1,6 +1,6 @@
 from logging import Logger
 
-from framework.api.api import Api
+from framework.api.api import Api, ErrorHandler
 from framework.api.data import Request, Response
 from framework.aws.aws_lambda.decode import decode_request
 from framework.data.config import Config
@@ -19,6 +19,7 @@ def aws_app(event: dict, _: object) -> App:
     di.register(Api, Api)
     di.register(Cache, load_module('example.provider.cache', 'make_cache'))
     di.register(Config, load_module('example.config.config', 'config'))
+    di.register(ErrorHandler, load_module('example.provider.error_handler', 'make_error_handler'))
     di.register(I18n, load_module('example.provider.i18n', 'make_i18n'))
     di.register(Logger, load_module('example.provider.logger', 'make_logger'))
     di.register(Request, lambda: decode_request(event))

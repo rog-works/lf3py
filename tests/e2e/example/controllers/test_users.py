@@ -96,7 +96,7 @@ class TestUsers(TestCase):
         ),
         (
             {
-                'RESPONSE_MODULE': 'prd_response',
+                'ERROR_HANDLER_MODULE': 'prd_handler',
             },
             {
                 'path': '/users',

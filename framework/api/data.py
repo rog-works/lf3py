@@ -20,6 +20,11 @@ class Response(Result):
 
 
 @dataclass
+class MessageBody(Result):
+    message: str = ''
+
+
+@dataclass
 class ErrorBody(Result):
     message: str = ''
     stacktrace: List[str] = field(default_factory=list)
