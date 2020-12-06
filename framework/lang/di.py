@@ -3,7 +3,6 @@ from typing import Any, Callable, Dict, Type, TypeVar, Union
 
 from framework.lang.annotation import FunctionAnnotation
 
-
 _T = TypeVar('_T')
 
 
@@ -17,7 +16,7 @@ class DI:
 
     def resolve(self, symbol: Type[_T]) -> _T:
         if symbol not in self._injectors:
-            raise ValueError()
+            raise ModuleNotFoundError(f'Unresolved symbol. symbol = {symbol}')
 
         if symbol in self._instances:
             return self._instances[symbol]
