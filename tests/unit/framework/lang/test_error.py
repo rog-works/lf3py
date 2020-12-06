@@ -1,22 +1,23 @@
 import os
 from unittest import TestCase
 
-from framework.lang.error import stacktrace
+from framework.errors import Error
+from framework.lang.error import raises, stacktrace
 
 
 class TestError(TestCase):
     def test_stacktrace(self):
         expected = [
             'Traceback (most recent call last):\n',
-            f'  File "{os.getcwd()}/tests/unit/framework/lang/test_error.py", line 25, in test_stacktrace\n    raise TypeError(\'hogehoge\')\n',
+            f'  File "{os.getcwd()}/tests/unit/framework/lang/test_error.py", line 26, in test_stacktrace\n    raise TypeError(\'hogehoge\')\n',
             'TypeError: hogehoge\n',
             '\nThe above exception was the direct cause of the following exception:\n\n',
             'Traceback (most recent call last):\n',
-            f'  File "{os.getcwd()}/tests/unit/framework/lang/test_error.py", line 27, in test_stacktrace\n    raise ValueError(\'fugafuga\') from e\n',
+            f'  File "{os.getcwd()}/tests/unit/framework/lang/test_error.py", line 28, in test_stacktrace\n    raise ValueError(\'fugafuga\') from e\n',
             'ValueError: fugafuga\n',
             '\nThe above exception was the direct cause of the following exception:\n\n',
             'Traceback (most recent call last):\n',
-            f'  File "{os.getcwd()}/tests/unit/framework/lang/test_error.py", line 29, in test_stacktrace\n    raise Exception(\'piyopiyo\') from e\n',
+            f'  File "{os.getcwd()}/tests/unit/framework/lang/test_error.py", line 30, in test_stacktrace\n    raise Exception(\'piyopiyo\') from e\n',
             'Exception: piyopiyo\n',
         ]
         try:
@@ -29,3 +30,11 @@ class TestError(TestCase):
                 raise Exception('piyopiyo') from e
         except Exception as e:
             self.assertEqual(stacktrace(e), expected)
+
+    def test_raises(self):
+        @raises(Error, TypeError)
+        def raised():
+            raise TypeError()
+
+        with self.assertRaises(Error):
+            raised()
