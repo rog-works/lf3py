@@ -2,12 +2,23 @@ from dataclasses import dataclass, field
 from typing import List
 
 from example.models.user import User
+from framework.api.api import ErrorDefinition
 from framework.api.data import Response
+from framework.api.errors import ServiceUnavailableError, UnauthorizeError
 from framework.app import App
 from framework.lang.serialize import DictSerializer
 from framework.task.result import Result
 
 app = App.get()
+
+
+@app.api.custom_error
+def errors_with(*statuses: int) -> List[ErrorDefinition]:
+    defs = [
+        (401, app.i18n.trans('http.401'), (ServiceUnavailableError,)),
+        (503, app.i18n.trans('http.503'), (UnauthorizeError,)),
+    ]
+    return [(status, message, errors) for status, message, errors in defs if status in statuses]
 
 
 @dataclass
@@ -30,6 +41,7 @@ class CreateParams:
 CreateBody = ShowBody
 
 
+@errors_with(401, 503)
 def index() -> Response:
     app.logger.info('index')
 

@@ -57,11 +57,11 @@ class Api:
         Examples:
             >>> @app.api.custom_error
             >>> def errors_with(*statuses: int) -> List[ErrorDefinition]:
-            >>>     defs = {
-            >>>         [401, app.i18n.trans('http.401'), (UnauthorizedError,)],
-            >>>         [503, app.i18n.trans('http.503'), (ServiceUnavailableError,)],
-            >>>     }
-            >>>     return [(status, *remain_args) for status, *remain_args in defs if status in statuses)]
+            >>>     defs = [
+            >>>         (401, app.i18n.trans('http.401'), (UnauthorizeError,)),
+            >>>         (503, app.i18n.trans('http.503'), (ServiceUnavailableError,)),
+            >>>     ]
+            >>>     return [(status, message, errors) for status, message, errors in defs if status in statuses)]
 
             >>> @errors_with(401, 503)
             >>> def action() -> Response:
