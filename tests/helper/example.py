@@ -3,7 +3,7 @@ from framework.lang.module import unload_module
 from framework.task.runner import Runner
 
 from example.config.routes import routes
-from example.provider.app import aws_app
+from example.provider.aws_app import aws_app
 
 
 def perform_api(event: dict) -> dict:

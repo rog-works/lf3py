@@ -3,10 +3,11 @@ from typing import Optional
 
 from framework.api.api import Api
 from framework.app import App as BaseApp
-from framework.data.config import Config
 from framework.i18n.i18n import I18n
 from framework.lang.cache import Cache
 from framework.lang.di import DI
+from framework.task.result import Result
+from framework.task.runner import Runner
 
 
 class App(BaseApp):
@@ -25,10 +26,6 @@ class App(BaseApp):
         return cls.__instance
 
     @property
-    def config(self) -> Config:
-        return self._di.resolve(Config)
-
-    @property
     def i18n(self) -> I18n:
         return self._di.resolve(I18n)
 
@@ -43,3 +40,6 @@ class App(BaseApp):
     @property
     def api(self) -> Api:
         return self._di.resolve(Api)
+
+    def run(self) -> Result:
+        return self.perform(Runner)
