@@ -1,3 +1,5 @@
+import example.preprocess  # noqa: F401
+
 import json
 import os
 from unittest import TestCase, mock
