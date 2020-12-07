@@ -1,4 +1,5 @@
-/example/logs
+/example/logs/
+/example/vendor/
 /docker/app/.ssh/
-/lambda_fw.egg-info
+/lambda_fw.egg-info/
 /.coverage
