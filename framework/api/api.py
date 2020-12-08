@@ -3,7 +3,6 @@ from typing import Callable, List, Type, Tuple
 from framework.api.data import Request, Response
 from framework.api.errors import BadRequestError
 from framework.api.path import capture_params
-from framework.i18n.i18n import I18n
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.error import raises
 from framework.lang.sequence import first, flatten
@@ -18,10 +17,9 @@ RunnerDecorator = Callable[[Runner], Runner]
 
 
 class Api:
-    def __init__(self, request: Request, response: Response, i18n: I18n, error_handler: ErrorHandler) -> None:
+    def __init__(self, request: Request, response: Response, error_handler: ErrorHandler) -> None:
         self._request = request
         self._response = response
-        self._i18n = i18n
         self._error_handler = error_handler
 
     @property
@@ -39,7 +37,7 @@ class Api:
         return Response(statusCode=status, headers=self.response.headers, body=body)
 
     def error_500(self, error: Exception) -> Response:
-        return self.error_result(500, self._i18n.trans('http.500'), error)
+        return self.error_result(500, '500 Internal Server Error', error)
 
     def error_result(self, status: int, message: str, error: Exception) -> Response:
         body = self._error_handler(status, message, error)
