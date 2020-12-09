@@ -23,16 +23,6 @@ def config() -> dict:
                 'module': 'config',
             },
         },
-        'error_handler': {
-            'dev_handler': {
-                'path': 'example.api.error_handler',
-                'module': 'dev_handler',
-            },
-            'prd_handler': {
-                'path': 'example.api.error_handler',
-                'module': 'prd_handler',
-            },
-        },
         'cache': {
             'dev_cache': {},
             'prd_cache': {

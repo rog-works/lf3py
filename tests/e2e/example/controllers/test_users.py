@@ -98,7 +98,7 @@ class TestUsers(TestCase):
         ),
         (
             {
-                'ERROR_HANDLER_MODULE': 'prd_handler',
+                'MODULES_ERROR_HANDLER': 'example.provider.error_handler.make_prd_handler',
             },
             {
                 'path': '/users',

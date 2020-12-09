@@ -1,10 +1,15 @@
 import example.preprocess  # noqa: F401
 
-from example.provider.aws_app import aws_app
+from framework.provider import app_provider
+
+from example.app import App
+from example.config.modules import modules
+
+app = app_provider(App, modules=modules())
 
 
+@app.webapi
 def handler(event: dict, context: object) -> dict:
-    app = aws_app(event, context)
     try:
         return app.run().serialize()
     except Exception as e:
