@@ -1,13 +1,17 @@
 from logging import Logger
-from typing import Optional
+from typing import Callable, Optional
 
 from framework.api.api import Api
+from framework.api.data import Request
 from framework.app import App as BaseApp
+from framework.aws.aws_lambda.decode import decode_request
 from framework.i18n.i18n import I18n
 from framework.lang.cache import Cache
 from framework.lang.di import DI
 from framework.task.result import Result
 from framework.task.runner import Runner
+
+LambdaHandler = Callable[[dict, object], dict]
 
 
 class App(BaseApp):
@@ -20,10 +24,9 @@ class App(BaseApp):
 
         return cls.__instance
 
-    @classmethod
-    def create(cls, di: DI) -> 'App':
-        cls.__instance = cls(di)
-        return cls.__instance
+    def __init__(self, di: DI) -> None:
+        super(App, self).__init__(di)
+        App.__instance = self
 
     @property
     def i18n(self) -> I18n:
@@ -43,3 +46,10 @@ class App(BaseApp):
 
     def run(self) -> Result:
         return self.perform(Runner)
+
+    def webapi(self, handler: LambdaHandler) -> LambdaHandler:
+        def wrapper(event: dict, context: object) -> dict:
+            self._di.register(Request, lambda: decode_request(event))
+            return handler(event, context)
+
+        return wrapper
