@@ -3,9 +3,9 @@ from lf2.lang.module import unload_module
 from lf2.provider import app_provider
 from lf2.task.router import Router, Routes
 
-from example.app import App
-from example.config.routes import routes
-from example.config.modules import modules
+from example.webapi.app import App
+from example.webapi.config.routes import routes
+from example.webapi.config.modules import modules
 
 
 def perform_api(event: dict) -> dict:

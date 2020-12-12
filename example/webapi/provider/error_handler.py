@@ -1,6 +1,6 @@
 from lf2.api.types import ErrorHandler
 
-from example.api.error_handler import dev_handler, prd_handler
+from example.webapi.api.error_handler import dev_handler, prd_handler
 
 
 def make_dev_handler() -> ErrorHandler:

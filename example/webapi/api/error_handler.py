@@ -1,7 +1,7 @@
 from lf2.api.data import ErrorBody, MessageBody, Result
 from lf2.lang.error import stacktrace
 
-from example.app import App
+from example.webapi.app import App
 
 
 def dev_handler(status: int, message: str, error: Exception) -> Result:

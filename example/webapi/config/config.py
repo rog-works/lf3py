@@ -7,7 +7,7 @@ def config() -> dict:
         'logger': {
             'dev_handler': {
                 'level': 'DEBUG',
-                'path': 'example/logs/app.log',
+                'path': 'example/webapi/logs/app.log',
                 'format': '%(asctime)s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',
             },
         },
@@ -19,7 +19,7 @@ def config() -> dict:
                 'default': 'ja',
             },
             'trans': {
-                'path': 'example.config.trans.{}',
+                'path': 'example.webapi.config.trans.{}',
                 'module': 'config',
             },
         },

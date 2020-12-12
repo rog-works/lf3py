@@ -1,4 +1,4 @@
-import example.preprocess  # noqa: F401
+import example.webapi.preprocess  # noqa: F401
 
 import json
 import os
@@ -32,7 +32,7 @@ class TestUsers(TestCase):
         ),
     ])
     def test_index(self, event: dict, expected: dict):
-        with mock.patch('example.repos.user_repo.UserRepo.find_all') as p:
+        with mock.patch('example.webapi.repos.user_repo.UserRepo.find_all') as p:
             p.return_value = [
                 {'id': 1, 'name': 'hoge'},
                 {'id': 2, 'name': 'fuga'},
@@ -55,7 +55,7 @@ class TestUsers(TestCase):
         ),
     ])
     def test_show(self, event: dict, expected: dict):
-        with mock.patch('example.repos.user_repo.UserRepo.find') as p:
+        with mock.patch('example.webapi.repos.user_repo.UserRepo.find') as p:
             p.return_value = {'id': 1234, 'name': 'hoge'}
             self.assertEqual(perform_api(event), expected)
 
@@ -76,7 +76,7 @@ class TestUsers(TestCase):
         ),
     ])
     def test_create(self, event: dict, expected: dict):
-        with mock.patch('example.repos.user_repo.UserRepo.create') as p:
+        with mock.patch('example.webapi.repos.user_repo.UserRepo.create') as p:
             p.return_value = {'id': 100, 'name': 'piyo'}
             self.assertEqual(perform_api(event), expected)
 
@@ -98,7 +98,7 @@ class TestUsers(TestCase):
         ),
         (
             {
-                'MODULES_ERROR_HANDLER': 'example.provider.error_handler.make_prd_handler',
+                'MODULES_ERROR_HANDLER': 'example.webapi.provider.error_handler.make_prd_handler',
             },
             {
                 'path': '/users',
