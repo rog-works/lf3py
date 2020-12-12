@@ -1,4 +1,4 @@
-from framework.api.api import ErrorHandler
+from framework.api.types import ErrorHandler
 
 from example.api.error_handler import dev_handler, prd_handler
 

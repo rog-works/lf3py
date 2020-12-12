@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from framework.api.api import ErrorDefinition
+from framework.api.types import ErrorDefinition
 from framework.api.data import Response
 from framework.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizeError
 from framework.serialization.serializer import DictSerializer
@@ -43,6 +43,7 @@ CreateBody = ShowBody
 
 
 @errors_with(401, 503)
+@app.api.route('GET', '/users')
 def index() -> Response:
     app.logger.info('index')
 
@@ -50,7 +51,7 @@ def index() -> Response:
     return app.api.success(body=IndexBody(users=users))
 
 
-@app.api.path_params('/users/{user_id}')
+@app.api.route('GET', '/users/{user_id}')
 def show(user_id: int) -> Response:
     app.logger.info(f'show: {app.api.request.params}')
 
@@ -59,7 +60,7 @@ def show(user_id: int) -> Response:
 
 
 @app.api.error(400, app.i18n.trans('http.400'), BadRequestError)
-@app.api.params
+@app.api.route('POST', '/users')
 def create(params: CreateParams) -> Response:
     app.logger.info(f'create: {app.api.request.params}')
 

@@ -1,22 +1,38 @@
+from typing import List
 from unittest import TestCase
 
-from framework.api.path import capture_params
+from framework.api.path import PathDSN
 from framework.test.helper import data_provider
 
 
-class TestPath(TestCase):
+class TestPathDSN(TestCase):
+    @data_provider([
+        (['GET', '/models/1234'], 'GET /models/1234'),
+        (['GET', '/models/1234/attrs/name'], 'GET /models/1234/attrs/name'),
+    ])
+    def test_format(self, elems: List[str], expected: bool):
+        self.assertEqual(PathDSN.format(*elems), expected)
+
+    @data_provider([
+        ('GET /models/1234', 'GET /models/{model_id}', True),
+        ('GET /models/1234/attrs/name', 'GET /models/{model_id}/attrs/{attr}', True),
+    ])
+    def test_like(self, path: str, path_spec: str, expected: bool):
+        dsn = PathDSN(path)
+        self.assertEqual(dsn.like(path_spec), expected)
+
     @data_provider([
         (
-            '/models/1234',
-            '/models/{model_id}',
+            'GET /models/1234',
+            'GET /models/{model_id}',
             {'model_id': '1234'},
         ),
         (
-            '/models/1234/attrs/name',
-            '/models/{model_id}/attrs/{attr}',
+            'GET /models/1234/attrs/name',
+            'GET /models/{model_id}/attrs/{attr}',
             {'model_id': '1234', 'attr': 'name'},
         ),
     ])
-    def test_capture_params(self, path: str, path_spec: str, expected: dict):
-        actual = capture_params(path, path_spec)
-        self.assertEqual(actual, expected)
+    def test_capture(self, path: str, path_spec: str, expected: dict):
+        dsn = PathDSN(path)
+        self.assertEqual(dsn.capture(path_spec), expected)

@@ -1,25 +1,23 @@
-from typing import Callable, List, Type, Tuple
+from typing import Callable, List, Type
 
 from framework.api.data import Request, Response
 from framework.api.errors import BadRequestError
-from framework.api.path import capture_params
+from framework.api.types import ErrorHandler, ErrorDefinition
 from framework.lang.annotation import FunctionAnnotation
 from framework.lang.error import raises
 from framework.lang.sequence import first, flatten
 from framework.serialization.deserializer import DictDeserializer
 from framework.serialization.errors import DeserializeError
 from framework.task.result import Result
-from framework.task.runner import Runner
-
-ErrorDefinition = Tuple[int, str, Tuple[Type[Exception], ...]]
-ErrorHandler = Callable[[int, str, Exception], Result]
-RunnerDecorator = Callable[[Runner], Runner]
+from framework.task.router import Router
+from framework.task.runner import Runner, RunnerDecorator
 
 
 class Api:
-    def __init__(self, request: Request, response: Response, error_handler: ErrorHandler) -> None:
+    def __init__(self, request: Request, response: Response, router: Router, error_handler: ErrorHandler) -> None:
         self._request = request
         self._response = response
+        self._router = router
         self._error_handler = error_handler
 
     @property
@@ -92,56 +90,53 @@ class Api:
 
         return decorator
 
-    def params(self, runner: Runner) -> Runner:
+    def route(self, method: str, path_spec: str) -> RunnerDecorator:
         """
         Examples:
-            >>> @dataclass
-            >>> class Params:
-            >>>     a: int = 0
-            >>>     b: str = ''
-            >>>     c: Optional[int] = None
+            >>> @app.api.route('GET', '/models')
+            >>> def index() -> Response:
+            >>>     return app.api.success(body=IndexBody(Model.find_all()))
 
-            >>> @app.api.params
-            >>> def action(params: Params) -> Result:
-            >>>     print(f'{params.__dict__}')
-            {'a': 100, 'b': 'hoge', 'c': None}
-        """
-        @raises(BadRequestError, DeserializeError)
-        def wrapper(*args, **kwargs) -> Result:
-            func_anno = FunctionAnnotation(runner)
-            deserializer = DictDeserializer()
-            assigned_kwargs = {
-                key: deserializer.deserialize(arg_anno.origin, self.request.params)
-                for key, arg_anno in func_anno.args.items()
-            }
-            if func_anno.is_method:
-                return runner(*(args[0]), **assigned_kwargs)
-            else:
-                return runner(**assigned_kwargs)
+            >>> @app.api.route('GET', '/models/{id}')
+            >>> def show(id: int) -> Response:
+            >>>     return app.api.success(body=ShowBody(Model.find(id)))
 
-        return wrapper
+            >>> @app.api.route('POST', '/models')
+            >>> def create(params: CreateParams) -> Response:
+            >>>     return app.api.success(body=ShowBody(Model.create(params)))
 
-    def path_params(self, path_spec: str) -> RunnerDecorator:
-        """
-        Examples:
-            >>> @app.api.path_params('/models/{id}')
-            >>> def action(id: int) -> Result:
-            >>>     print(f'id: {id}, type: {type(id)}')
-            id: 1234, type: <class 'int'>
+            >>> @app.api.route('DELETE', '/models/{id}')
+            >>> def delete(id: int) -> Response:
+            >>>     Models.find(id).delete()
+            >>>     return app.api.success()
         """
         def decorator(runner: Runner) -> Runner:
-            @raises(BadRequestError, KeyError)
+            self._router.register(runner, method, path_spec)
+
+            @raises(BadRequestError, DeserializeError, KeyError, ValueError)
             def wrapper(*args, **kwargs) -> Result:
+                dsn = self._router.dsnize(self.request.method, self.request.path)
                 func_anno = FunctionAnnotation(runner)
-                params = capture_params(self.request.path, path_spec)
-                assigned_kwargs = {
-                    key: int(params[key]) if arg_anno.origin is int else params[key]
+
+                path_args = dsn.capture(dsn.format(method, path_spec))
+                path_args = {
+                    key: int(path_args[key]) if arg_anno.origin is int else path_args[key]
                     for key, arg_anno in func_anno.args.items()
+                    if key in path_args
                 }
+
+                deserializer = DictDeserializer()
+                body_args = {
+                    key: deserializer.deserialize(arg_anno.origin, self.request.params)
+                    for key, arg_anno in func_anno.args.items()
+                    if key not in path_args
+                }
+
+                inject_kwargs = {**path_args, **body_args}
                 if func_anno.is_method:
-                    return runner(*(args[0]), **assigned_kwargs)
+                    return runner(*(args[0]), **inject_kwargs)
                 else:
-                    return runner(**assigned_kwargs)
+                    return runner(**inject_kwargs)
 
             return wrapper
 
