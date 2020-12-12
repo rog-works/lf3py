@@ -1,5 +1,5 @@
-from framework.api.data import ErrorBody, MessageBody, Result
-from framework.lang.error import stacktrace
+from lf2.api.data import ErrorBody, MessageBody, Result
+from lf2.lang.error import stacktrace
 
 from example.app import App
 

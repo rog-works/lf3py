@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from framework.api.types import ErrorDefinition
-from framework.api.data import Response
-from framework.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizeError
-from framework.serialization.serializer import DictSerializer
-from framework.task.result import Result
+from lf2.api.types import ErrorDefinition
+from lf2.api.data import Response
+from lf2.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizeError
+from lf2.serialization.serializer import DictSerializer
+from lf2.task.result import Result
 
 from example.app import App
 from example.models.user import User

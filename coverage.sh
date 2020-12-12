@@ -1,3 +1,3 @@
 #!/bin/bash
 
-coverage run --source framework/ -m unittest discover tests/
+coverage run --source lf2/ -m unittest discover tests/

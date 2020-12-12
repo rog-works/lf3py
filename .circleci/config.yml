@@ -18,5 +18,5 @@ jobs:
       - run:
           name: run test and coverage report
           command: |
-            coverage run --source framework/ -m unittest discover tests/
+            coverage run --source lf2/ -m unittest discover tests/
             coveralls

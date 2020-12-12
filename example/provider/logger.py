@@ -1,6 +1,6 @@
 import logging
 
-from framework.data.config import Config
+from lf2.data.config import Config
 
 
 def dev_logger(config: Config) -> logging.Logger:

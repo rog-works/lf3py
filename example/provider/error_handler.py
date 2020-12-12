@@ -1,4 +1,4 @@
-from framework.api.types import ErrorHandler
+from lf2.api.types import ErrorHandler
 
 from example.api.error_handler import dev_handler, prd_handler
 

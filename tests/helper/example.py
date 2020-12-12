@@ -1,7 +1,7 @@
-from framework.api.path import PathDSN
-from framework.lang.module import unload_module
-from framework.provider import app_provider
-from framework.task.router import Router, Routes
+from lf2.api.path import PathDSN
+from lf2.lang.module import unload_module
+from lf2.provider import app_provider
+from lf2.task.router import Router, Routes
 
 from example.app import App
 from example.config.routes import routes

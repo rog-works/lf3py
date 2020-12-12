@@ -1,6 +1,6 @@
 import example.preprocess  # noqa: F401
 
-from framework.provider import app_provider
+from lf2.provider import app_provider
 
 from example.app import App
 from example.config.modules import modules

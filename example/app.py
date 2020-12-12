@@ -1,15 +1,15 @@
 from logging import Logger
 from typing import Callable, Optional
 
-from framework.api.api import Api
-from framework.api.data import Request
-from framework.app import App as BaseApp
-from framework.aws.aws_lambda.decode import decode_request
-from framework.i18n.i18n import I18n
-from framework.lang.cache import Cache
-from framework.lang.di import DI
-from framework.task.result import Result
-from framework.task.runner import Runner
+from lf2.api.api import Api
+from lf2.api.data import Request
+from lf2.app import App as BaseApp
+from lf2.aws.aws_lambda.decode import decode_request
+from lf2.i18n.i18n import I18n
+from lf2.lang.cache import Cache
+from lf2.lang.di import DI
+from lf2.task.result import Result
+from lf2.task.runner import Runner
 
 LambdaHandler = Callable[[dict, object], dict]
 

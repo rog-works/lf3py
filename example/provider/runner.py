@@ -1,6 +1,6 @@
-from framework.api.data import Request
-from framework.task.router import Router
-from framework.task.runner import Runner
+from lf2.api.data import Request
+from lf2.task.router import Router
+from lf2.task.runner import Runner
 
 
 def resolve(router: Router, request: Request) -> Runner:

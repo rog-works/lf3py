@@ -1,5 +1,5 @@
-from framework.api.path import PathDSN
-from framework.task.router import Router, Routes
+from lf2.api.path import PathDSN
+from lf2.task.router import Router, Routes
 
 
 def make_router(routes: Routes) -> Router:
