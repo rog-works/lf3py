@@ -13,4 +13,4 @@ def handler(event: dict, context: object) -> dict:
     try:
         return app.run().serialize()
     except Exception as e:
-        return app.api.error_500(e).serialize()
+        return app.error(e).serialize()

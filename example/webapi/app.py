@@ -1,8 +1,9 @@
 from logging import Logger
 from typing import Callable, Optional
 
-from lf2.api.api import Api
+from lf2.api.presenter import ApiErrorPresenter, ApiOkPresenter
 from lf2.api.data import Request
+from lf2.api.route import ApiRoute
 from lf2.app import App as BaseApp
 from lf2.aws.aws_lambda.decode import decode_request
 from lf2.i18n.i18n import I18n
@@ -41,8 +42,16 @@ class App(BaseApp):
         return self._di.resolve(Cache)
 
     @property
-    def api(self) -> Api:
-        return self._di.resolve(Api)
+    def route(self) -> ApiRoute:
+        return self._di.resolve(ApiRoute)
+
+    @property
+    def ok(self) -> ApiOkPresenter:
+        return self._di.resolve(ApiOkPresenter)
+
+    @property
+    def error(self) -> ApiErrorPresenter:
+        return self._di.resolve(ApiErrorPresenter)
 
     def run(self) -> Result:
         return self.perform(Runner)

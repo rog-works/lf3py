@@ -13,3 +13,25 @@
 2020-12-12 10:43:13,302 users.py:56 [INFO] show: {'locale': 'ja'}
 2020-12-12 10:43:13,302 users.py:56 [INFO] show: {'locale': 'ja'}
 2020-12-12 10:43:13,302 users.py:56 [INFO] show: {'locale': 'ja'}
+2020-12-13 04:21:59,276 users.py:65 [INFO] create: params = CreateParams(name='piyo')
+2020-12-13 04:21:59,283 users.py:65 [INFO] create: params = CreateParams(name='piyo')
+2020-12-13 04:21:59,298 users.py:48 [INFO] index
+2020-12-13 04:21:59,302 users.py:56 [INFO] show: user_id = 0
+2020-12-13 04:24:35,426 users.py:65 [INFO] create: params = CreateParams(name='piyo')
+2020-12-13 04:24:35,462 users.py:48 [INFO] index
+2020-12-13 04:24:35,462 users.py:48 [INFO] index
+2020-12-13 04:24:35,472 users.py:56 [INFO] show: user_id = 1234
+2020-12-13 04:24:35,472 users.py:56 [INFO] show: user_id = 1234
+2020-12-13 04:24:35,472 users.py:56 [INFO] show: user_id = 1234
+2020-12-13 04:57:02,365 users.py:65 [INFO] create: params = CreateParams(name='piyo')
+2020-12-13 04:57:02,411 users.py:48 [INFO] index
+2020-12-13 04:57:02,411 users.py:48 [INFO] index
+2020-12-13 04:57:02,422 users.py:56 [INFO] show: user_id = 1234
+2020-12-13 04:57:02,422 users.py:56 [INFO] show: user_id = 1234
+2020-12-13 04:57:02,422 users.py:56 [INFO] show: user_id = 1234
+2020-12-13 04:57:53,215 users.py:65 [INFO] create: params = CreateParams(name='piyo')
+2020-12-13 04:57:53,258 users.py:48 [INFO] index
+2020-12-13 04:57:53,258 users.py:48 [INFO] index
+2020-12-13 04:57:53,271 users.py:56 [INFO] show: user_id = 1234
+2020-12-13 04:57:53,271 users.py:56 [INFO] show: user_id = 1234
+2020-12-13 04:57:53,271 users.py:56 [INFO] show: user_id = 1234
