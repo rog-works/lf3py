@@ -98,7 +98,7 @@ class TestUsers(TestCase):
         ),
         (
             {
-                'MODULES_ERROR_HANDLER': 'example.webapi.provider.error_handler.make_prd_handler',
+                'MODULES_ERROR': 'example.webapi.api.error.SafeApiErrorPresenter',
             },
             {
                 'path': '/users',

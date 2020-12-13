@@ -1,6 +1,8 @@
 from lf2.errors import Error
 
 
-class BadRequestError(Error): pass  # noqa: E701
-class UnauthorizeError(Error): pass  # noqa: E701
-class ServiceUnavailableError(Error): pass  # noqa: E701
+class HTTPError(Error): pass  # noqa: E701
+class BadRequestError(HTTPError): pass  # noqa: E701
+class UnauthorizedError(HTTPError): pass  # noqa: E701
+class InternalServerError(HTTPError): pass  # noqa: E701
+class ServiceUnavailableError(HTTPError): pass  # noqa: E701

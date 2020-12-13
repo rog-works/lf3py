@@ -1,5 +1,5 @@
-/example/logs/
-/example/vendor/
+/example/webapi/logs/
+/example/webapi/vendor/
 /docker/app/.ssh/
 /lambda_fw.egg-info/
 /.coverage
