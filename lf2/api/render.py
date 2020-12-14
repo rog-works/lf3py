@@ -6,15 +6,15 @@ from lf2.view.render import Render
 
 
 class TypedResponse(Response):
-    def json(self) -> Response:
+    def json(self) -> 'TypedResponse':
         self.headers['Content-Type'] = 'application/json'
         return self
 
-    def html(self) -> Response:
+    def html(self) -> 'TypedResponse':
         self.headers['Content-Type'] = 'text/html'
         return self
 
-    def text(self) -> Response:
+    def text(self) -> 'TypedResponse':
         self.headers['Content-Type'] = 'text/plain'
         return self
 

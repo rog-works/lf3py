@@ -13,4 +13,4 @@ def handler(event: dict, context: object) -> dict:
     try:
         return app.run().serialize()
     except Exception as e:
-        return app.render.fail(e).serialize()
+        return app.render.fail(e).json().serialize()
