@@ -1,13 +1,12 @@
-from dataclasses import dataclass, field
 from typing import List
 
 from lf2.api.types import ErrorDefinition
 from lf2.api.data import Response
 from lf2.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizedError
 from lf2.serialization.serializer import DictSerializer
-from lf2.task.result import Result
 
 from example.webapi.app import MyApp
+from example.webapi.api.users_defs import IndexBody, ShowBody, CreateParams
 from example.webapi.models.user import User
 
 app = MyApp.get()
@@ -22,33 +21,13 @@ def errors_with(*statuses: int) -> List[ErrorDefinition]:
     return [(status, message, errors) for status, message, errors in defs if status in statuses]
 
 
-@dataclass
-class IndexBody(Result):
-    success: bool = True
-    users: List[User] = field(default_factory=list)
-
-
-@dataclass
-class ShowBody(Result):
-    success: bool = True
-    user: User = field(default_factory=User)
-
-
-@dataclass
-class CreateParams:
-    name: str = ''
-
-
-CreateBody = ShowBody
-
-
 @errors_with(401, 503)
 @app.route('GET', '/users')
 def index() -> Response:
     app.logger.info('index')
 
     users = User.find_all()
-    return app.render.ok(body=IndexBody(users=users))
+    return app.render.ok(body=IndexBody(users=users)).json()
 
 
 @app.route('GET', '/users/{user_id}')
@@ -56,7 +35,7 @@ def show(user_id: int) -> Response:
     app.logger.info(f'show: user_id = {user_id}')
 
     user = User.find(user_id)
-    return app.render.ok(body=ShowBody(user=user))
+    return app.render.ok(body=ShowBody(user=user)).json()
 
 
 @app.error(400, app.i18n.trans('http.400'), BadRequestError)
@@ -66,4 +45,4 @@ def create(params: CreateParams) -> Response:
 
     serializer = DictSerializer()
     user = User.create(**serializer.serialize(params))
-    return app.render.ok(body=CreateBody(user=user))
+    return app.render.ok(body=ShowBody(user=user)).json()

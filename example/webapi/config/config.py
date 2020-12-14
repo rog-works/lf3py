@@ -11,9 +11,6 @@ def config() -> dict:
                 'format': '%(asctime)s %(filename)s:%(lineno)d [%(levelname)s] %(message)s',
             },
         },
-        'response': {
-            'headers': {'Content-Type': 'application/json'},
-        },
         'i18n': {
             'locale': {
                 'default': 'ja',
