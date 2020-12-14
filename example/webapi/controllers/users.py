@@ -48,7 +48,7 @@ def index() -> Response:
     app.logger.info('index')
 
     users = User.find_all()
-    return app.ok(body=IndexBody(users=users))
+    return app.render.ok(body=IndexBody(users=users))
 
 
 @app.route('GET', '/users/{user_id}')
@@ -56,14 +56,14 @@ def show(user_id: int) -> Response:
     app.logger.info(f'show: user_id = {user_id}')
 
     user = User.find(user_id)
-    return app.ok(body=ShowBody(user=user))
+    return app.render.ok(body=ShowBody(user=user))
 
 
-@app.error.handle(400, app.i18n.trans('http.400'), BadRequestError)
+@app.error(400, app.i18n.trans('http.400'), BadRequestError)
 @app.route('POST', '/users')
 def create(params: CreateParams) -> Response:
     app.logger.info(f'create: params = {params}')
 
     serializer = DictSerializer()
     user = User.create(**serializer.serialize(params))
-    return app.ok(body=CreateBody(user=user))
+    return app.render.ok(body=CreateBody(user=user))

@@ -4,8 +4,8 @@ import os
 def modules() -> dict:
     return {
         'lf2.api.data.Response': 'example.webapi.provider.response.make_response',
-        'lf2.api.presenter.ApiOkPresenter': 'lf2.api.presenter.ApiOkPresenter',
-        'lf2.api.presenter.ApiErrorPresenter': os.environ.get('MODULES_ERROR', 'lf2.api.presenter.ApiErrorPresenter'),
+        'lf2.api.error.ApiErrorHandler': 'lf2.api.error.ApiErrorHandler',
+        'lf2.api.render.ApiRender': os.environ.get('MODULES_ERROR', 'lf2.api.render.ApiRender'),
         'lf2.api.route.ApiRoute': 'lf2.api.route.ApiRoute',
         'lf2.data.config.Config': 'example.webapi.config.config.config',
         'lf2.lang.cache.Cache': 'lf2.lang.cache.Cache',

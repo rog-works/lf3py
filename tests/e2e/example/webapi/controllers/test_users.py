@@ -4,6 +4,7 @@ import json
 import os
 from unittest import TestCase, mock
 
+from lf2.api.errors import ApiError
 from lf2.test.helper import data_provider
 
 from tests.helper.example.webapi import perform_api
@@ -91,14 +92,13 @@ class TestUsers(TestCase):
                 'body': json.dumps({'unknown': 'piyo'}),
             },
             {
-                'statusCode': 400,
-                'headers': {'Content-Type': 'application/json'},
-                'body': {'message': '400 Bad Request', 'stacktrace': list},
+                'raise': ApiError,
+                'message': '400 Bad Request',
             },
         ),
         (
             {
-                'MODULES_ERROR': 'example.webapi.api.error.SafeApiErrorPresenter',
+                'MODULES_ERROR': 'example.webapi.api.error.SafeApiRender',
             },
             {
                 'path': '/users',
@@ -108,16 +108,12 @@ class TestUsers(TestCase):
                 'body': json.dumps({'unknown': 'piyo'}),
             },
             {
-                'statusCode': 400,
-                'headers': {'Content-Type': 'application/json'},
-                'body': {'message': '400 Bad Request', 'stacktrace': type(None)},
+                'raise': ApiError,
+                'message': '400 Bad Request',
             },
         ),
     ])
     def test_error(self, environ: dict, event: dict, expected: dict):
         with mock.patch.dict(os.environ, environ):
-            actual = perform_api(event)
-            self.assertEqual(actual['statusCode'], expected['statusCode'])
-            self.assertEqual(actual['headers'], expected['headers'])
-            self.assertEqual(actual['body']['message'], expected['body']['message'])
-            self.assertTrue(type(actual['body'].get('stacktrace')) is expected['body']['stacktrace'])
+            with self.assertRaisesRegex(expected['raise'], expected['message']):
+                perform_api(event)

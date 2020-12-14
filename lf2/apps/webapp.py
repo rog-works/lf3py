@@ -1,5 +1,6 @@
-from lf2.api.presenter import ApiErrorPresenter, ApiOkPresenter
 from lf2.api.data import Request
+from lf2.api.error import ApiErrorHandler
+from lf2.api.render import ApiRender
 from lf2.api.route import ApiRoute
 from lf2.apps.app import App
 from lf2.apps.definitions import webapi_modules
@@ -19,12 +20,12 @@ class WebApp(App):
         return self._di.resolve(ApiRoute)
 
     @property
-    def ok(self) -> ApiOkPresenter:
-        return self._di.resolve(ApiOkPresenter)
+    def render(self) -> ApiRender:
+        return self._di.resolve(ApiRender)
 
     @property
-    def error(self) -> ApiErrorPresenter:
-        return self._di.resolve(ApiErrorPresenter)
+    def error(self) -> ApiErrorHandler:
+        return self._di.resolve(ApiErrorHandler)
 
     def run(self) -> Result:
         return self.perform(Runner)

@@ -19,20 +19,20 @@ class ApiRoute:
         Examples:
             >>> @app.route('GET', '/models')
             >>> def index() -> Response:
-            >>>     return app.ok(body=IndexBody(Model.find_all()))
+            >>>     return app.render.ok(body=IndexBody(Model.find_all()))
 
             >>> @app.route('GET', '/models/{id}')
             >>> def show(id: int) -> Response:
-            >>>     return app.ok(body=ShowBody(Model.find(id)))
+            >>>     return app.render.ok(body=ShowBody(Model.find(id)))
 
             >>> @app.route('POST', '/models')
             >>> def create(params: CreateParams) -> Response:
-            >>>     return app.ok(body=ShowBody(Model.create(params)))
+            >>>     return app.render.ok(body=ShowBody(Model.create(params)))
 
             >>> @app.route('DELETE', '/models/{id}')
             >>> def delete(id: int) -> Response:
             >>>     Models.find(id).delete()
-            >>>     return app.ok()
+            >>>     return app.render.ok()
         """
         def decorator(runner: Runner) -> Runner:
             self._router.register(runner, method, path_spec)

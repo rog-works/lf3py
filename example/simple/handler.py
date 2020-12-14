@@ -27,10 +27,10 @@ class IndexBody(Result):
 
 @app.route('GET', '/models')
 def index() -> Response:
-    return app.ok(body=IndexBody(models=[ShowBody(id=1234)]))
+    return app.render.ok(body=IndexBody(models=[ShowBody(id=1234)]))
 
 
-@app.error.handle(400, '400 BadRequest', BadRequestError)
+@app.error(400, '400 BadRequest', BadRequestError)
 @app.route('GET', '/models/{model_id}')
 def show(model_id: int) -> Response:
-    return app.ok(body=ShowBody(id=model_id))
+    return app.render.ok(body=ShowBody(id=model_id))
