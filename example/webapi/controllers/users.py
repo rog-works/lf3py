@@ -7,10 +7,10 @@ from lf2.api.errors import BadRequestError, ServiceUnavailableError, Unauthorize
 from lf2.serialization.serializer import DictSerializer
 from lf2.task.result import Result
 
-from example.webapi.app import App
+from example.webapi.app import MyApp
 from example.webapi.models.user import User
 
-app = App.get()
+app = MyApp.get()
 
 
 @app.error.custom

@@ -1,0 +1,30 @@
+# from unittest import TestCase
+# 
+# from lf2.test.helper import data_provider
+# 
+# from tests.helper.example.simple import perform_api
+# 
+# 
+# class TestHandler(TestCase):
+#     @data_provider([
+#         (
+#             {
+#                 'path': '/models',
+#                 'httpMethod': 'GET',
+#                 'headers': {},
+#                 'queryStringParameters': {},
+#             },
+#             {
+#                 'statusCode': 200,
+#                 'headers': {'Content-Type': 'application/json'},
+#                 'body': {
+#                     'success': True,
+#                     'models': [
+#                         {'id': 1234},
+#                     ],
+#                 },
+#             },
+#         ),
+#     ])
+#     def test_index(self, event: dict, expected: dict):
+#         self.assertEqual(perform_api(event), expected)

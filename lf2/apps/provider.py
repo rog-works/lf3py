@@ -1,7 +1,7 @@
 import re
 from typing import Dict, Type, TypeVar
 
-from lf2.app import App
+from lf2.apps.app import App
 from lf2.lang.di import DI
 from lf2.lang.module import load_module_path
 

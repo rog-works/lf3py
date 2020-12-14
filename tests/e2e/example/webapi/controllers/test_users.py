@@ -6,7 +6,7 @@ from unittest import TestCase, mock
 
 from lf2.test.helper import data_provider
 
-from tests.helper.example import perform_api
+from tests.helper.example.webapi import perform_api
 
 
 class TestUsers(TestCase):
