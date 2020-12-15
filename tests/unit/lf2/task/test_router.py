@@ -23,5 +23,5 @@ class TestRouter(TestCase):
     def test_resolve(self, spec: str, runner: Runner, dsn: str):
         router = Router(DSN)
         router.register(runner, spec)
-        actual = router.resolve(dsn)
-        self.assertEqual(f'{actual.__module__}.{actual.__name__}', f'{runner.__module__}.{runner.__name__}')
+        _, module_path = router.resolve(dsn)
+        self.assertEqual(module_path, f'{runner.__module__}.{runner.__name__}')
