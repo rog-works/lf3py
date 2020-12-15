@@ -37,31 +37,35 @@ class ApiRoute:
         def decorator(runner: Runner) -> Runner:
             self._router.register(runner, method, path_spec)
 
-            @raises(BadRequestError, DeserializeError, KeyError, ValueError)
             def wrapper(*args, **kwargs) -> Result:
+                spec, _ = self._router.resolve(self._request.method, self._request.path)
                 dsn = self._router.dsnize(self._request.method, self._request.path)
-                func_anno = FunctionAnnotation(runner)
-
-                path_args = dsn.capture(dsn.format(method, path_spec))
-                path_args = {
-                    key: int(path_args[key]) if arg_anno.origin is int else path_args[key]
-                    for key, arg_anno in func_anno.args.items()
-                    if key in path_args
-                }
-
-                deserializer = DictDeserializer()
-                body_args = {
-                    key: deserializer.deserialize(arg_anno.origin, self._request.params)
-                    for key, arg_anno in func_anno.args.items()
-                    if key not in path_args
-                }
-
-                inject_kwargs = {**path_args, **body_args}
-                if func_anno.is_method:
-                    return runner(*(args[0]), **inject_kwargs)
-                else:
-                    return runner(**inject_kwargs)
+                path_params = dsn.capture(spec)
+                return self.__invoke(runner, path_params, self._request.params)
 
             return wrapper
 
         return decorator
+
+    @raises(BadRequestError, DeserializeError, KeyError, ValueError)
+    def __invoke(self, runner: Runner, path_params: dict, params: dict) -> Result:
+        func_anno = FunctionAnnotation(runner)
+
+        path_kwargs = {
+            key: int(path_params[key]) if arg_anno.origin is int else path_params[key]
+            for key, arg_anno in func_anno.args.items()
+            if key in path_params
+        }
+
+        deserializer = DictDeserializer()
+        body_kwargs = {
+            key: deserializer.deserialize(arg_anno.origin, params)
+            for key, arg_anno in func_anno.args.items()
+            if key not in path_kwargs
+        }
+
+        inject_kwargs = {**path_kwargs, **body_kwargs}
+        if func_anno.is_method:
+            return runner(func_anno.receiver, **inject_kwargs)
+        else:
+            return runner(**inject_kwargs)

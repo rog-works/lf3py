@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Callable, Dict, List, Type, Union
+from typing import Any, Callable, Dict, List, Type, Union
 
 
 class ValueAnnotation:
@@ -62,6 +62,10 @@ class FunctionAnnotation:
     @property
     def is_method(self) -> bool:
         return hasattr(self._func, '__self__')
+
+    @property
+    def receiver(self) -> Any:
+        return self._func.__self__
 
     @property
     def args(self) -> Dict[str, ArgAnnotation]:
