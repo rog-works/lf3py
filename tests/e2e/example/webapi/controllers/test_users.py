@@ -113,7 +113,7 @@ class TestUsers(TestCase):
         ),
         (
             {
-                'MODULES_ERROR': 'example.webapi.api.error.SafeApiRender',
+                'MODULES_RENDER': 'example.webapi.api.error.SafeApiRender',
             },
             {
                 'path': '/users',
