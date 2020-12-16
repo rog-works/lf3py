@@ -9,7 +9,7 @@ class Storage(dict):
 
 
 class Cache:
-    def __init__(self, storage: Storage) -> None:
+    def __init__(self, storage: Storage = Storage()) -> None:
         self._storage = storage
 
     def __call__(self, inject_keys: Optional[ContextInjector] = None) -> Callable[[Callable[..., _T]], Callable[..., _T]]:
