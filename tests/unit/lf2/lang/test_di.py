@@ -22,6 +22,10 @@ def injector_c(b: SymbolB) -> SymbolC:
     return SymbolC(b)
 
 
+def injector_b_default(a: SymbolA = SymbolA()) -> SymbolB:
+    return SymbolB(a)
+
+
 class TestDI(TestCase):
     def test_resolve(self):
         di = DI()
@@ -53,3 +57,9 @@ class TestDI(TestCase):
         self.assertEqual(type(di.resolve(SymbolC)), SymbolC)
         self.assertEqual(type(di.resolve(SymbolC).b), SymbolB)
         self.assertEqual(type(di.resolve(SymbolC).b.a), SymbolA)
+        self.assertEqual(type(di.resolve(SymbolC).b.a), SymbolA)
+
+        di = DI()
+        di.register(SymbolB, injector_b_default)
+        self.assertEqual(type(di.resolve(SymbolB)), SymbolB)
+        self.assertEqual(type(di.resolve(SymbolB).a), SymbolA)
