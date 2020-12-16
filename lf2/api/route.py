@@ -38,9 +38,8 @@ class ApiRoute:
             self._router.register(runner, method, path_spec)
 
             def wrapper(*args, **kwargs) -> Result:
-                spec, _ = self._router.resolve(self._request.method, self._request.path)
                 dsn = self._router.dsnize(self._request.method, self._request.path)
-                path_params = dsn.capture(spec)
+                path_params = dsn.capture(dsn.format(method, path_spec))
                 return self.__invoke(runner, path_params, self._request.params)
 
             return wrapper
