@@ -1,8 +1,8 @@
 from unittest import TestCase
 
-from lf2.api.data import Response
 from lf2.api.errors import ApiError
 from lf2.api.render import ApiRender
+from lf2.api.response import Response
 from lf2.test.helper import data_provider
 
 

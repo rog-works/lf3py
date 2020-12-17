@@ -1,5 +1,5 @@
-from lf2.api.data import Request
 from lf2.api.errors import BadRequestError
+from lf2.api.request import Request
 from lf2.lang.annotation import FunctionAnnotation
 from lf2.lang.error import raises
 from lf2.serialization.deserializer import DictDeserializer

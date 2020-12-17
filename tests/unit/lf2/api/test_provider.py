@@ -1,7 +1,8 @@
 from unittest import TestCase
 
-from lf2.api.data import Request
 from lf2.api.provider import api_router, runner
+from lf2.api.request import Request
+from lf2.aws.types import LambdaEvent
 from lf2.task.result import Result
 from lf2.task.router import Router, Routes
 from lf2.test.helper import data_provider
@@ -30,5 +31,7 @@ class TestProvider(TestCase):
             'GET /action/2': f'{__name__}.action_2',
         })
         router = api_router(routes)
-        actual = runner(Request(method=method, path=path), router)
+        event = LambdaEvent(httpMethod=method, path=path, headers={})
+        request = Request(event)
+        actual = runner(request, router)
         self.assertEqual(actual, expected)

@@ -1,6 +1,6 @@
 import uuid
 
-from lf2.api.data import Response
+from lf2.api.response import Response
 
 
 def make_response() -> Response:

@@ -1,4 +1,4 @@
-from lf2.api.data import Request
+from lf2.api.request import Request
 from lf2.data.config import Config
 from lf2.i18n.i18n import I18n
 from lf2.i18n.tzinfo import TZInfo

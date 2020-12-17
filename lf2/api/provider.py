@@ -1,5 +1,5 @@
-from lf2.api.data import Request
 from lf2.api.path import PathDSN
+from lf2.api.request import Request
 from lf2.lang.module import load_module_path
 from lf2.task.router import Router, Routes
 from lf2.task.runner import Runner

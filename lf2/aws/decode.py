@@ -2,17 +2,16 @@ from base64 import b64decode
 import json
 from urllib.parse import parse_qsl
 
-from lf2.api.data import Request
 from lf2.aws.types import LambdaEvent
 
 
-def decode_request(event: LambdaEvent) -> Request:
-    return Request(
-        path=event['path'],
-        method=event['httpMethod'],
-        headers=event['headers'],
-        params={**event.get('queryStringParameters', {}), **__decode_body(event)},
-    )
+def decode_request(event: LambdaEvent) -> dict:
+    return {
+        'path': event['path'],
+        'method': event['httpMethod'],
+        'headers': event['headers'],
+        'params': {**event.get('queryStringParameters', {}), **__decode_body(event)},
+    }
 
 
 def __decode_body(event: LambdaEvent) -> dict:

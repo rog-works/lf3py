@@ -1,15 +1,7 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict, List
+from typing import Dict, List
 
 from lf2.task.result import Result
-
-
-@dataclass
-class Request:
-    path: str = ''
-    method: str = ''
-    headers: Dict[str, str] = field(default_factory=dict)
-    params: Dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -17,6 +9,18 @@ class Response(Result):
     statusCode: int = 200
     headers: Dict[str, str] = field(default_factory=dict)
     body: Result = Result()
+
+    def json(self) -> 'Response':
+        self.headers['Content-Type'] = 'application/json'
+        return self
+
+    def html(self) -> 'Response':
+        self.headers['Content-Type'] = 'text/html'
+        return self
+
+    def text(self) -> 'Response':
+        self.headers['Content-Type'] = 'text/plain'
+        return self
 
 
 @dataclass

@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import List
 
 from lf2.api.errors import BadRequestError
-from lf2.api.data import Response
+from lf2.api.response import Response
 from lf2.apps.provider import app_provider
 from lf2.apps.webapp import WebApp
 from lf2.task.result import Result

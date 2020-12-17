@@ -1,8 +1,8 @@
 from typing import List
 
-from lf2.api.types import ErrorDefinition
-from lf2.api.data import Response
 from lf2.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizedError
+from lf2.api.response import Response
+from lf2.api.types import ErrorDefinition
 from lf2.serialization.serializer import DictSerializer
 
 from example.webapi.app import MyApp

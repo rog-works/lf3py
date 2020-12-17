@@ -1,5 +1,6 @@
-from lf2.api.data import MessageBody, Result
 from lf2.api.render import ApiRender
+from lf2.api.response import MessageBody
+from lf2.task.result import Result
 
 
 class SafeApiRender(ApiRender):

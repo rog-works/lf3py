@@ -3,7 +3,7 @@ import json
 from unittest import TestCase
 import urllib.parse
 
-from lf2.api.decode import decode_request
+from lf2.aws.decode import decode_request
 from lf2.aws.types import LambdaEvent
 from lf2.test.helper import data_provider
 
@@ -61,4 +61,4 @@ class TestDecode(TestCase):
     ])
     def test_decode_request(self, event: LambdaEvent, expected: dict):
         request = decode_request(event)
-        self.assertEqual(request.__dict__, expected)
+        self.assertEqual(request, expected)
