@@ -3,9 +3,10 @@ import json
 from urllib.parse import parse_qsl
 
 from lf2.api.data import Request
+from lf2.aws.types import LambdaEvent
 
 
-def decode_request(event: dict) -> Request:
+def decode_request(event: LambdaEvent) -> Request:
     return Request(
         path=event['path'],
         method=event['httpMethod'],
@@ -14,7 +15,7 @@ def decode_request(event: dict) -> Request:
     )
 
 
-def __decode_body(event: dict) -> dict:
+def __decode_body(event: LambdaEvent) -> dict:
     if 'body' not in event:
         return {}
 

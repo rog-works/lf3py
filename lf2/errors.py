@@ -1,1 +1,1 @@
-class Error(Exception): pass  # noqa: E701
+class Error(Exception): pass

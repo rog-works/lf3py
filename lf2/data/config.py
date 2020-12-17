@@ -1,2 +1,1 @@
-class Config(dict):
-    pass
+class Config(dict): pass

@@ -4,8 +4,7 @@ _T = TypeVar('_T')
 ContextInjector = Callable[[], List[Union[int, str]]]
 
 
-class Storage(dict):
-    pass
+class Storage(dict): pass
 
 
 class Cache:

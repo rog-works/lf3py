@@ -3,8 +3,7 @@ from typing import Callable, Dict, Type, Tuple
 from lf2.lang.dsn import DSN, DSNElement
 
 
-class Routes(Dict[str, str]):
-    pass
+class Routes(Dict[str, str]): pass
 
 
 class Router:

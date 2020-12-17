@@ -7,8 +7,8 @@ class ApiError(Error):
         self.status = status
 
 
-class HTTPError(Error): pass  # noqa: E701
-class BadRequestError(HTTPError): pass  # noqa: E701
-class UnauthorizedError(HTTPError): pass  # noqa: E701
-class InternalServerError(HTTPError): pass  # noqa: E701
-class ServiceUnavailableError(HTTPError): pass  # noqa: E701
+class HTTPError(Error): pass
+class BadRequestError(HTTPError): pass
+class UnauthorizedError(HTTPError): pass
+class InternalServerError(HTTPError): pass
+class ServiceUnavailableError(HTTPError): pass
