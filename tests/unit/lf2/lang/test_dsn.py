@@ -19,7 +19,7 @@ class TestDSN(TestCase):
         ('event.invalid', 'event.(on|off)', False),
     ])
     def test_like(self, dsn: str, spec: str, expected: bool):
-        self.assertEqual(DSN(dsn).like(spec), expected)
+        self.assertEqual(DSN(dsn).contains(spec), expected)
 
     @data_provider([
         ('event.on', 'event.(?P<switch>(on|off))', {'switch': 'on'}),

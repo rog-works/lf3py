@@ -18,7 +18,7 @@ class Router:
     def resolve(self, *elems: DSNElement) -> Tuple[str, str]:
         dsn = self.dsnize(*elems)
         for spec, module_path in self._routes.items():
-            if dsn.like(spec):
+            if dsn.contains(spec):
                 return spec, module_path
 
         raise LookupError(f'Missing route. route = {dsn}')

@@ -18,7 +18,7 @@ class DSN:
     def __str__(self) -> str:
         return self._dsn
 
-    def like(self, spec: str) -> bool:
+    def contains(self, spec: str) -> bool:
         return re.search(f'^{spec}$', self._dsn) is not None
 
     def capture(self, spec: str) -> Dict[str, str]:
