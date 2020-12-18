@@ -1,6 +1,6 @@
 from lf2.api.error import ApiErrorHandler
 from lf2.api.render import ApiRender
-from lf2.api.route import ApiRoute
+from lf2.api.route import Route
 from lf2.apps.app import App
 from lf2.apps.definitions import webapi_modules
 from lf2.aws.hooks.method import hook
@@ -15,8 +15,8 @@ class WebApp(App):
         return webapi_modules()
 
     @property
-    def route(self) -> ApiRoute:
-        return self._di.resolve(ApiRoute)
+    def route(self) -> Route:
+        return self._di.resolve(Route)
 
     @property
     def render(self) -> ApiRender:
