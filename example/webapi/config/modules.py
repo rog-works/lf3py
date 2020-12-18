@@ -3,7 +3,7 @@ import os
 
 def modules() -> dict:
     return {
-        'lf2.api.request.Request': 'lf2.api.request.Request',
+        'lf2.api.request.Request': 'lf2.api.provider.request',
         'lf2.api.response.Response': 'example.webapi.provider.response.make_response',
         'lf2.api.error.ApiErrorHandler': 'lf2.api.error.ApiErrorHandler',
         'lf2.api.render.ApiRender': os.environ.get('MODULES_RENDER', 'lf2.api.render.ApiRender'),

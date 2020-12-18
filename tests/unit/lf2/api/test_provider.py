@@ -38,7 +38,7 @@ class TestProvider(TestCase):
         })
         router = bp_router(routes)
         event = LambdaEvent(httpMethod=method, path=path, headers={})
-        request = Request(event)
+        request = Request.from_event(event)
         route = BpRoute(request, router)
         actual = runner(request, route)
         self.assertEqual(actual, expected)
