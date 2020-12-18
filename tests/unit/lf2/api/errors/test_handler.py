@@ -1,14 +1,14 @@
 from typing import List, Type
 from unittest import TestCase
 
-from lf2.api.error import ApiErrorHandler
 from lf2.api.errors import ApiError, BadRequestError, InternalServerError
-from lf2.api.types import ErrorDefinition
+from lf2.api.errors.handler import ApiErrorHandler
+from lf2.api.errors.types import ErrorDefinition
 from lf2.task.result import Result
 from lf2.test.helper import data_provider
 
 
-class TestErrorHandler(TestCase):
+class TestApiErrorHandler(TestCase):
     @data_provider([
         (400, '400 Bad Request', BadRequestError),
     ])

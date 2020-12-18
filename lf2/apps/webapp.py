@@ -1,4 +1,4 @@
-from lf2.api.error import ApiErrorHandler
+from lf2.api.errors.handler import ApiErrorHandler
 from lf2.api.render import ApiRender
 from lf2.api.route import Route
 from lf2.apps.app import App

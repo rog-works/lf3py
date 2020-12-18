@@ -1,7 +1,7 @@
 from typing import Callable, List, Type
 
 from lf2.api.errors import ApiError
-from lf2.api.types import ErrorDefinition
+from lf2.api.errors.types import ErrorDefinition
 from lf2.lang.sequence import first, flatten
 from lf2.task.result import Result
 from lf2.task.runner import Runner, RunnerDecorator
