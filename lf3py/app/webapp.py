@@ -3,7 +3,8 @@ from lf3py.api.render import ApiRender
 from lf3py.api.request import Request
 from lf3py.api.routers.api import IApiRouter
 from lf3py.app.app import App
-from lf3py.app.definitions import webapp_modules
+from lf3py.app.definitions import flowapi_modules
+from lf3py.app.types import ModuleDefinitions
 from lf3py.aws.hooks.method import hook
 from lf3py.aws.types import LambdaEvent
 from lf3py.task.result import Result
@@ -11,8 +12,8 @@ from lf3py.task.result import Result
 
 class WebApp(App):
     @classmethod
-    def default_modules(cls) -> dict:
-        return webapp_modules()
+    def module_definitions(cls) -> ModuleDefinitions:
+        return flowapi_modules()
 
     @property
     def route(self) -> IApiRouter:

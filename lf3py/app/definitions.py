@@ -1,4 +1,4 @@
-def webapp_modules() -> dict:
+def flowapi_modules() -> dict:
     return {
         'lf3py.api.errors.handler.ApiErrorHandler': 'lf3py.api.errors.handler.ApiErrorHandler',
         'lf3py.api.render.ApiRender': 'lf3py.api.render.ApiRender',

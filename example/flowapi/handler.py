@@ -7,7 +7,7 @@ from lf3py.app.provider import app_provider
 from lf3py.app.webapp import WebApp
 from lf3py.task.result import Result
 
-app = app_provider(WebApp, WebApp.default_modules())
+app = app_provider(WebApp)
 
 
 @dataclass
