@@ -3,8 +3,8 @@ from typing import List
 
 from lf2.api.errors import BadRequestError
 from lf2.api.response import Response
-from lf2.apps.provider import app_provider
-from lf2.apps.webapp import WebApp
+from lf2.app.provider import app_provider
+from lf2.app.webapp import WebApp
 from lf2.task.result import Result
 
 app = app_provider(WebApp, WebApp.default_modules())
@@ -25,7 +25,7 @@ class ShowBody(Result):
     model: Model = Model()
 
 
-@app.webapi
+@app.entry
 def handler(event: dict, context: object) -> dict:
     return app.run().serialize()
 
