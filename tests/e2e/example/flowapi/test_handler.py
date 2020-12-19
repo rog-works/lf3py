@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from lf2.test.helper import data_provider
+from lf3py.test.helper import data_provider
 
 from tests.helper.example.flowapi import perform_api
 

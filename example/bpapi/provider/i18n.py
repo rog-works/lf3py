@@ -1,8 +1,8 @@
-from lf2.api.request import Request
-from lf2.data.config import Config
-from lf2.i18n.i18n import I18n
-from lf2.i18n.tzinfo import TZInfo
-from lf2.lang.module import load_module_path
+from lf3py.api.request import Request
+from lf3py.data.config import Config
+from lf3py.i18n.i18n import I18n
+from lf3py.i18n.tzinfo import TZInfo
+from lf3py.lang.module import load_module_path
 
 
 def make_i18n(config: Config, request: Request) -> I18n:

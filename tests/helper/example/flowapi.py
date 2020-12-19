@@ -1,4 +1,4 @@
-from lf2.lang.module import unload_module
+from lf3py.lang.module import unload_module
 
 from example.flowapi.handler import handler
 

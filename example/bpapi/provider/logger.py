@@ -1,9 +1,9 @@
 import logging
 
-from lf2.data.config import Config
-from lf2.i18n.i18n import I18n
-from lf2.logging.formatter import JsonFormatter
-from lf2.logging.cleaner import clear_handler
+from lf3py.data.config import Config
+from lf3py.i18n.i18n import I18n
+from lf3py.logging.formatter import JsonFormatter
+from lf3py.logging.cleaner import clear_handler
 
 from example.bpapi.data.context import MyContext
 

@@ -1,7 +1,7 @@
-from lf2.api.routers.dsn import RouteDSN
-from lf2.app.provider import app_provider
-from lf2.lang.module import unload_module
-from lf2.task.router import Router, Routes
+from lf3py.api.routers.dsn import RouteDSN
+from lf3py.app.provider import app_provider
+from lf3py.lang.module import unload_module
+from lf3py.task.router import Router, Routes
 
 from example.bpapi.app import MyApp
 from example.bpapi.config.routes import routes

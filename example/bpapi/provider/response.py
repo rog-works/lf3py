@@ -1,4 +1,4 @@
-from lf2.api.response import Response
+from lf3py.api.response import Response
 
 from example.bpapi.data.context import MyContext
 

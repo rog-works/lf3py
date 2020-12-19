@@ -1,10 +1,10 @@
 from logging import Logger
 from typing import Optional
 
-from lf2.app.webapp import WebApp
-from lf2.i18n.i18n import I18n
-from lf2.lang.cache import Cache
-from lf2.lang.di import DI
+from lf3py.app.webapp import WebApp
+from lf3py.i18n.i18n import I18n
+from lf3py.lang.cache import Cache
+from lf3py.lang.di import DI
 
 
 class MyApp(WebApp):

@@ -1,9 +1,9 @@
 from typing import List
 
-from lf2.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizedError
-from lf2.api.errors.types import ApiErrorDefinition
-from lf2.api.response import Response
-from lf2.serialization.serializer import DictSerializer
+from lf3py.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizedError
+from lf3py.api.errors.types import ApiErrorDefinition
+from lf3py.api.response import Response
+from lf3py.serialization.serializer import DictSerializer
 
 from example.bpapi.app import MyApp
 from example.bpapi.api.users_defs import IndexBody, ShowBody, CreateParams

@@ -4,8 +4,8 @@ import json
 import os
 from unittest import TestCase, mock
 
-from lf2.api.errors import ApiError
-from lf2.test.helper import data_provider
+from lf3py.api.errors import ApiError
+from lf3py.test.helper import data_provider
 
 from tests.helper.example.bpapi import perform_api
 

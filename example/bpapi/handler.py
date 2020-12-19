@@ -1,6 +1,6 @@
 import example.bpapi.preprocess  # noqa: F401
 
-from lf2.app.provider import app_provider
+from lf3py.app.provider import app_provider
 
 from example.bpapi.app import MyApp
 from example.bpapi.config.modules import modules

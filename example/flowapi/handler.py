@@ -1,11 +1,11 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from lf2.api.errors import BadRequestError
-from lf2.api.response import Response
-from lf2.app.provider import app_provider
-from lf2.app.webapp import WebApp
-from lf2.task.result import Result
+from lf3py.api.errors import BadRequestError
+from lf3py.api.response import Response
+from lf3py.app.provider import app_provider
+from lf3py.app.webapp import WebApp
+from lf3py.task.result import Result
 
 app = app_provider(WebApp, WebApp.default_modules())
 
