@@ -6,6 +6,10 @@ class DateTime:
     def __init__(self, tz: tzinfo) -> None:
         self._tz = tz
 
+    @property
+    def tz(self) -> tzinfo:
+        return self._tz
+
     def now(self) -> datetime:
         return datetime.now(tz=self._tz)
 
