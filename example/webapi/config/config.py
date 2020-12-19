@@ -8,7 +8,7 @@ def config() -> dict:
             'dev_handler': {
                 'level': 'DEBUG',
                 'path': 'example/webapi/logs/app.log',
-                'keys': ['created', 'filename', 'lineno', 'levelname', 'msg'],
+                'keys': ['created', 'filename', 'lineno', 'levelname', 'context', 'msg'],
             },
         },
         'i18n': {

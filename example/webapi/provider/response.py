@@ -1,7 +1,7 @@
-import uuid
-
 from lf2.api.response import Response
 
+from example.webapi.data.context import MyContext
 
-def make_response() -> Response:
-    return Response(headers={'X-Correlation-Id': str(uuid.uuid4())})
+
+def make_response(context: MyContext) -> Response:
+    return Response(headers={'X-Correlation-Id': context['correlation_id']})
