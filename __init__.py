@@ -1,0 +1,6 @@
+__copyright__ = 'Copyright (C) 2020 rog-works'
+__version__ = '1.0.0'
+__license__ = 'MIT'
+__author__ = 'rog-works'
+__author_email = ''
+__url__ = 'https://github.com/rog-works/lambda-fw'

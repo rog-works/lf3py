@@ -1,5 +1,7 @@
 /example/bpapi/logs/
 /example/bpapi/vendor/
+/dist/
 /docker/app/.ssh/
 /lambda_fw.egg-info/
+/lf3py.egg-info/
 /.coverage

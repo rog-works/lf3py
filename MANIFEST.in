@@ -1,0 +1,6 @@
+exclude docker
+exclude example
+exclude .env
+exclude docker-compose.yml
+exclude pyrightconfig.json
+include setup.cfg
