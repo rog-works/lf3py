@@ -3,7 +3,7 @@
         {
             "root": "./",
             "extraPaths": [
-                "./example/webapi/vendor"
+                "./example/bpapi/vendor"
             ]
         }
     ]

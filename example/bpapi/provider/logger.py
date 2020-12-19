@@ -5,7 +5,7 @@ from lf2.i18n.i18n import I18n
 from lf2.logging.formatter import JsonFormatter
 from lf2.logging.cleaner import clear_handler
 
-from example.webapi.data.context import MyContext
+from example.bpapi.data.context import MyContext
 
 
 def dev_logger(config: Config, i18n: I18n, context: MyContext) -> logging.LoggerAdapter:

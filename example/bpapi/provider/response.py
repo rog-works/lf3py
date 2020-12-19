@@ -1,6 +1,6 @@
 from lf2.api.response import Response
 
-from example.webapi.data.context import MyContext
+from example.bpapi.data.context import MyContext
 
 
 def make_response(context: MyContext) -> Response:

@@ -1,4 +1,4 @@
-import example.webapi.preprocess  # noqa: F401
+import example.bpapi.preprocess  # noqa: F401
 
 import json
 import os
@@ -7,7 +7,7 @@ from unittest import TestCase, mock
 from lf2.api.errors import ApiError
 from lf2.test.helper import data_provider
 
-from tests.helper.example.webapi import perform_api
+from tests.helper.example.bpapi import perform_api
 
 
 class TestUsers(TestCase):
@@ -38,7 +38,7 @@ class TestUsers(TestCase):
     def test_index(self, event: dict, expected: dict):
         with mock.patch('uuid.uuid4') as p:
             p.return_value = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-            with mock.patch('example.webapi.repos.user_repo.UserRepo.find_all') as p2:
+            with mock.patch('example.bpapi.repos.user_repo.UserRepo.find_all') as p2:
                 p2.return_value = [
                     {'id': 1, 'name': 'hoge'},
                     {'id': 2, 'name': 'fuga'},
@@ -66,7 +66,7 @@ class TestUsers(TestCase):
     def test_show(self, event: dict, expected: dict):
         with mock.patch('uuid.uuid4') as p:
             p.return_value = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-            with mock.patch('example.webapi.repos.user_repo.UserRepo.find') as p2:
+            with mock.patch('example.bpapi.repos.user_repo.UserRepo.find') as p2:
                 p2.return_value = {'id': 1234, 'name': 'hoge'}
                 self.assertEqual(perform_api(event), expected)
 
@@ -92,7 +92,7 @@ class TestUsers(TestCase):
     def test_create(self, event: dict, expected: dict):
         with mock.patch('uuid.uuid4') as p:
             p.return_value = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-            with mock.patch('example.webapi.repos.user_repo.UserRepo.create') as p2:
+            with mock.patch('example.bpapi.repos.user_repo.UserRepo.create') as p2:
                 p2.return_value = {'id': 100, 'name': 'piyo'}
                 self.assertEqual(perform_api(event), expected)
 
@@ -113,7 +113,7 @@ class TestUsers(TestCase):
         ),
         (
             {
-                'MODULES_RENDER': 'example.webapi.api.error.SafeApiRender',
+                'MODULES_RENDER': 'example.bpapi.api.error.SafeApiRender',
             },
             {
                 'path': '/users',

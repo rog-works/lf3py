@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List
 
-from example.webapi.repos.user_repo import UserRepo
+from example.bpapi.repos.user_repo import UserRepo
 
 
 @dataclass

@@ -1,9 +1,9 @@
-import example.webapi.preprocess  # noqa: F401
+import example.bpapi.preprocess  # noqa: F401
 
 from lf2.app.provider import app_provider
 
-from example.webapi.app import MyApp
-from example.webapi.config.modules import modules
+from example.bpapi.app import MyApp
+from example.bpapi.config.modules import modules
 
 app = app_provider(MyApp, modules())
 

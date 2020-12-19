@@ -5,9 +5,9 @@ from lf2.api.errors.types import ApiErrorDefinition
 from lf2.api.response import Response
 from lf2.serialization.serializer import DictSerializer
 
-from example.webapi.app import MyApp
-from example.webapi.api.users_defs import IndexBody, ShowBody, CreateParams
-from example.webapi.models.user import User
+from example.bpapi.app import MyApp
+from example.bpapi.api.users_defs import IndexBody, ShowBody, CreateParams
+from example.bpapi.models.user import User
 
 app = MyApp.get()
 

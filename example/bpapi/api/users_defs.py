@@ -3,7 +3,7 @@ from typing import List
 
 from lf2.task.result import Result
 
-from example.webapi.models.user import User
+from example.bpapi.models.user import User
 
 
 @dataclass

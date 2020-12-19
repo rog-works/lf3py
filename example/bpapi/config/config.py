@@ -7,7 +7,7 @@ def config() -> dict:
         'logger': {
             'dev_handler': {
                 'level': 'DEBUG',
-                'path': 'example/webapi/logs/app.log',
+                'path': 'example/bpapi/logs/app.log',
                 'keys': ['created', 'filename', 'lineno', 'levelname', 'context', 'msg'],
             },
         },
@@ -16,7 +16,7 @@ def config() -> dict:
                 'default': 'ja',
             },
             'trans': {
-                'module': 'example.webapi.config.trans.{}.config',
+                'module': 'example.bpapi.config.trans.{}.config',
             },
         },
         'cache': {
