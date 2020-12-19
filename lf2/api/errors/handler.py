@@ -1,7 +1,7 @@
 from typing import Callable, List, Type
 
 from lf2.api.errors import ApiError
-from lf2.api.errors.types import ErrorDefinition
+from lf2.api.errors.types import ApiErrorDefinition
 from lf2.lang.sequence import first, flatten
 from lf2.task.result import Result
 from lf2.task.types import Runner, RunnerDecorator
@@ -20,14 +20,14 @@ class ApiErrorHandler:
         """
         return self.handles([(status, message, handle_errors)])
 
-    def define(self, status: int, message: str, *handle_errors: Type[Exception]) -> ErrorDefinition:
+    def define(self, status: int, message: str, *handle_errors: Type[Exception]) -> ApiErrorDefinition:
         return (status, message, handle_errors)
 
-    def custom(self, wrapper_func: Callable[..., List[ErrorDefinition]]) -> Callable[..., RunnerDecorator]:
+    def custom(self, wrapper_func: Callable[..., List[ApiErrorDefinition]]) -> Callable[..., RunnerDecorator]:
         """
         Examples:
             >>> @app.error.custom
-            >>> def errors_with(*statuses: int) -> List[ErrorDefinition]:
+            >>> def errors_with(*statuses: int) -> List[ApiErrorDefinition]:
             >>>     defs = [
             >>>         app.error.define(401, app.i18n.trans('http.401'), UnauthorizedError),
             >>>         app.error.define(503, app.i18n.trans('http.503'), ServiceUnavailableError),
@@ -46,7 +46,7 @@ class ApiErrorHandler:
 
         return wrapper
 
-    def handles(self, error_defs: List[ErrorDefinition]) -> RunnerDecorator:
+    def handles(self, error_defs: List[ApiErrorDefinition]) -> RunnerDecorator:
         def decorator(runner: Runner) -> Runner:
             def wrapper(*args, **kwargs) -> Result:
                 handle_errors = tuple(flatten([errors for _, _, errors in error_defs]))

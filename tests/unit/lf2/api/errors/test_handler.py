@@ -3,7 +3,7 @@ from unittest import TestCase
 
 from lf2.api.errors import ApiError, BadRequestError, InternalServerError
 from lf2.api.errors.handler import ApiErrorHandler
-from lf2.api.errors.types import ErrorDefinition
+from lf2.api.errors.types import ApiErrorDefinition
 from lf2.task.result import Result
 from lf2.test.helper import data_provider
 
@@ -41,7 +41,7 @@ class TestApiErrorHandler(TestCase):
         error = ApiErrorHandler()
 
         @error.custom
-        def custom_error() -> List[ErrorDefinition]:
+        def custom_error() -> List[ApiErrorDefinition]:
             return [
                 error.define(400, '400 Bad Request', BadRequestError),
                 error.define(500, '500 Internal Server Error', InternalServerError),

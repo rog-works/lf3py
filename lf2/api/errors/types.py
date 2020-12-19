@@ -1,3 +1,3 @@
 from typing import Type, Tuple
 
-ErrorDefinition = Tuple[int, str, Tuple[Type[Exception], ...]]
+ApiErrorDefinition = Tuple[int, str, Tuple[Type[Exception], ...]]

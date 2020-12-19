@@ -1,7 +1,7 @@
 from typing import List
 
 from lf2.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizedError
-from lf2.api.errors.types import ErrorDefinition
+from lf2.api.errors.types import ApiErrorDefinition
 from lf2.api.response import Response
 from lf2.serialization.serializer import DictSerializer
 
@@ -13,7 +13,7 @@ app = MyApp.get()
 
 
 @app.error.custom
-def errors_with(*statuses: int) -> List[ErrorDefinition]:
+def errors_with(*statuses: int) -> List[ApiErrorDefinition]:
     defs = [
         app.error.define(401, app.i18n.trans('http.401'), ServiceUnavailableError),
         app.error.define(503, app.i18n.trans('http.503'), UnauthorizedError),
