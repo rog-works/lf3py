@@ -1,14 +1,14 @@
 from lf2.api.request import Request
-from lf2.api.routers.api import ApiRouter
+from lf2.api.routers.api import IApiRouter
 from lf2.api.routers.args import resolve_args
 from lf2.api.routers.dsn import RouteDSN
 from lf2.lang.module import load_module_path
 from lf2.task.result import Result
-from lf2.task.router import Routes
+from lf2.task.router import Router, Routes
 from lf2.task.types import DSNType, Runner, RunnerDecorator
 
 
-class BpRouter(ApiRouter):
+class BpRouter(Router, IApiRouter):
     def __init__(self, request: Request, routes: Routes, dsn_type: DSNType = RouteDSN) -> None:
         super(BpRouter, self).__init__(dsn_type, routes)
         self._request = request
