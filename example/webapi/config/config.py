@@ -16,8 +16,7 @@ def config() -> dict:
                 'default': 'ja',
             },
             'trans': {
-                'path': 'example.webapi.config.trans.{}',
-                'module': 'config',
+                'module': 'example.webapi.config.trans.{}.config',
             },
         },
         'cache': {
