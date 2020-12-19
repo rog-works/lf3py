@@ -2,7 +2,7 @@
 /dist/
 /example/bpapi/logs/
 /example/bpapi/vendor/
-/docker/app/.ssh/
+/docker/dev/.ssh/
 /lf3py-*/
 /lf3py.egg-info/
 /.coverage
