@@ -3,7 +3,7 @@ services:
   dev:
     container_name: lf3py-dev
     image: lf3py-dev:latest
-    build: ./docker/app
+    build: ./docker/dev
     volumes:
       - ./:/opt/app
     ports:
