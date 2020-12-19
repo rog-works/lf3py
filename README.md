@@ -30,7 +30,7 @@ from lf3py.api.response import Response
 from lf3py.app.provider import app_provider
 from lf3py.app.webapp import WebApp
 
-app = app_provider(WebApp, WebApp.default_modeules())
+app = app_provider(WebApp)
 
 
 @app.entry
