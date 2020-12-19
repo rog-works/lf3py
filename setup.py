@@ -8,9 +8,9 @@ setup(
     license='MIT',
     author='rog-works',
     author_email='',
-    url='https://github.com/rog-works/lambda-fw',
+    url='https://github.com/rog-works/lf3py',
     description='Lambda Function Framework for Python',
-    long_description='GitHub: https://github.com/rog-works/lambda-fw',
+    long_description='GitHub: https://github.com/rog-works/lf3py',
     keywords='AWS, Lambda Function, Framework',
     classifiers=[
         'Development Status :: 5 - Production/Stable',

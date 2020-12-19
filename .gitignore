@@ -3,7 +3,6 @@
 /example/bpapi/logs/
 /example/bpapi/vendor/
 /docker/app/.ssh/
-/lambda_fw.egg-info/
 /lf3py-*/
 /lf3py.egg-info/
 /.coverage
