@@ -1,7 +1,7 @@
 from typing import List
 from unittest import TestCase
 
-from lf2.api.dsn import RouteDSN
+from lf2.api.routers.dsn import RouteDSN
 from lf2.test.helper import data_provider
 
 

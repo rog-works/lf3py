@@ -1,9 +1,9 @@
 from lf2.api.errors.handler import ApiErrorHandler
 from lf2.api.render import ApiRender
 from lf2.api.request import Request
-from lf2.api.route import Route
+from lf2.api.routers.api import ApiRouter
 from lf2.apps.app import App
-from lf2.apps.definitions import webapi_modules
+from lf2.apps.definitions import webapp_modules
 from lf2.aws.hooks.method import hook
 from lf2.aws.types import LambdaEvent
 from lf2.task.result import Result
@@ -12,11 +12,11 @@ from lf2.task.result import Result
 class WebApp(App):
     @classmethod
     def default_modules(cls) -> dict:
-        return webapi_modules()
+        return webapp_modules()
 
     @property
-    def route(self) -> Route:
-        return self._di.resolve(Route)
+    def route(self) -> ApiRouter:
+        return self._di.resolve(ApiRouter)
 
     @property
     def render(self) -> ApiRender:

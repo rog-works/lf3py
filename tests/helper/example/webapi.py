@@ -1,4 +1,4 @@
-from lf2.api.dsn import RouteDSN
+from lf2.api.routers.dsn import RouteDSN
 from lf2.apps.provider import app_provider
 from lf2.lang.module import unload_module
 from lf2.task.router import Router, Routes
