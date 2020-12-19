@@ -5,7 +5,7 @@ from lf2.lang.annotation import FunctionAnnotation
 from lf2.lang.error import raises
 from lf2.serialization.deserializer import DictDeserializer
 from lf2.serialization.errors import DeserializeError
-from lf2.task.runner import Runner
+from lf2.task.types import Runner
 
 
 @raises(BadRequestError, DeserializeError, KeyError, ValueError)

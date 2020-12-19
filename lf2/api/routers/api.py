@@ -2,10 +2,11 @@ from abc import ABCMeta
 
 from lf2.api.request import Request
 from lf2.task.result import Result
-from lf2.task.runner import RunnerDecorator
+from lf2.task.router import Router
+from lf2.task.types import RunnerDecorator
 
 
-class ApiRouter(metaclass=ABCMeta):
+class ApiRouter(Router, metaclass=ABCMeta):
     def __call__(self, method: str, path_spec: str) -> RunnerDecorator:
         """
         Examples:

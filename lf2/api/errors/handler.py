@@ -4,7 +4,7 @@ from lf2.api.errors import ApiError
 from lf2.api.errors.types import ErrorDefinition
 from lf2.lang.sequence import first, flatten
 from lf2.task.result import Result
-from lf2.task.runner import Runner, RunnerDecorator
+from lf2.task.types import Runner, RunnerDecorator
 
 
 class ApiErrorHandler:

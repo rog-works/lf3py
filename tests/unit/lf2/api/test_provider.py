@@ -1,35 +1,28 @@
+import json
 from unittest import TestCase
 
-from lf2.api.provider import api_router, bp_router, request
-from lf2.api.request import Request
+from lf2.api.provider import request
 from lf2.aws.types import LambdaEvent
-from lf2.task.result import Result
-from lf2.task.router import Router, Routes
-
-
-def action_1() -> Result:
-    return Result()
-
-
-def action_2() -> Result:
-    return Result()
+from lf2.test.helper import data_provider
 
 
 class TestProvider(TestCase):
-    def test_request(self):
+    @data_provider([
+        ('GET', '/', {}, {}, {}),
+        ('GET', '/users', {'content-type': 'application/json'}, {'locale': 'jp'}, {}),
+        ('POST', '/users', {'content-type': 'application/json'}, {'locale': 'jp'}, {'name': 'hoge'}),
+    ])
+    def test_request(self, method: str, path: str, headers: dict, query: dict, body: dict):
         event = LambdaEvent(
-            httpMethod='GET',
-            path='/',
-            headers={},
-            queryStringParameters={},
+            httpMethod=method,
+            path=path,
+            headers=headers,
+            queryStringParameters=query,
+            body=json.dumps(body),
         )
-        req = request(event)
-        self.assertEqual(type(req), Request)
+        actual = request(event)
+        self.assertEqual(actual.method, method)
+        self.assertEqual(actual.path, path)
+        self.assertEqual(actual.headers, headers)
+        self.assertEqual(actual.params, {**query, **body})
 
-    def test_bp_router(self):
-        router = bp_router(Routes())
-        self.assertEqual(type(router), Router)
-
-    def test_ap_router(self):
-        router = api_router()
-        self.assertEqual(type(router), Router)

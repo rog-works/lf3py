@@ -3,7 +3,7 @@ from unittest import TestCase
 from lf2.lang.dsn import DSN
 from lf2.task.router import Router
 from lf2.task.result import Result
-from lf2.task.runner import Runner
+from lf2.task.types import Runner
 from lf2.test.helper import data_provider
 
 

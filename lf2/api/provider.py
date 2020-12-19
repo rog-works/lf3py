@@ -1,16 +1,13 @@
 from lf2.api.request import Request
-from lf2.api.routers.dsn import RouteDSN
+from lf2.aws.decode import decode_request
 from lf2.aws.types import LambdaEvent
-from lf2.task.router import Router, Routes
 
 
 def request(event: LambdaEvent) -> Request:
-    return Request.from_event(event)
-
-
-def bp_router(routes: Routes) -> Router:
-    return Router(RouteDSN, routes)
-
-
-def api_router() -> Router:
-    return Router(RouteDSN)
+    decoded = decode_request(event)
+    return Request(
+        path=decoded['path'],
+        method=decoded['method'],
+        headers=decoded['headers'],
+        params=decoded['params'],
+    )

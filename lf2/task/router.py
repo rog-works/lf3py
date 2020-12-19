@@ -1,13 +1,11 @@
-from typing import Callable, Dict, Type, Tuple
+from typing import Callable, Tuple
 
 from lf2.lang.dsn import DSN, DSNElement
-
-
-class Routes(Dict[str, str]): pass
+from lf2.task.types import DSNType, Routes
 
 
 class Router:
-    def __init__(self, dsn_type: Type[DSN], routes: Routes = Routes()) -> None:
+    def __init__(self, dsn_type: DSNType, routes: Routes = Routes()) -> None:
         self._dsn_type = dsn_type
         self._routes = routes
 
