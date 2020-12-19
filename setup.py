@@ -1,16 +1,16 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 
 setup(
     name='lf3py',
-    packages=['lf3py'],
-    version='1.0.0',
+    packages=find_packages(),
+    version='1.0.2',
     license='MIT',
     author='rog-works',
     author_email='',
     url='https://github.com/rog-works/lambda-fw',
     description='Lambda Function Framework for Python',
-    log_description='Lambda Function Framework for Python',
+    long_description='GitHub: https://github.com/rog-works/lambda-fw',
     keywords='AWS, Lambda Function, Framework',
     classifiers=[
         'Development Status :: 5 - Production/Stable',
