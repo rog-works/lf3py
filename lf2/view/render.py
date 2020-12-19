@@ -3,7 +3,7 @@ from abc import ABCMeta
 from lf2.task.result import Result
 
 
-class Render(metaclass=ABCMeta):
+class IRender(metaclass=ABCMeta):
     def ok(self, *args, **kwargs) -> Result:
         raise NotImplementedError()
 

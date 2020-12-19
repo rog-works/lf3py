@@ -2,10 +2,10 @@ from lf2.api.errors import ApiError
 from lf2.api.response import ErrorBody, Response
 from lf2.lang.error import stacktrace
 from lf2.task.result import Result
-from lf2.view.render import Render
+from lf2.view.render import IRender
 
 
-class ApiRender(Render):
+class ApiRender(IRender):
     def __init__(self, response: Response) -> None:
         self._response = response
 
