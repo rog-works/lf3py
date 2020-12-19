@@ -1,7 +1,8 @@
 from typing import Callable, Tuple
 
+from lf3py.config import Routes
 from lf3py.lang.dsn import DSN, DSNElement
-from lf3py.task.types import DSNType, Routes
+from lf3py.task.types import DSNType
 
 
 class Router:

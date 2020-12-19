@@ -2,7 +2,7 @@ import re
 from typing import Optional, Type, TypeVar
 
 from lf3py.app.app import App
-from lf3py.app.types import ModuleDefinitions
+from lf3py.config import ModuleDefinitions
 from lf3py.lang.di import DI
 from lf3py.lang.module import load_module_path
 

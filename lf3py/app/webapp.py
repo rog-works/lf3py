@@ -4,9 +4,9 @@ from lf3py.api.request import Request
 from lf3py.api.routers.api import IApiRouter
 from lf3py.app.app import App
 from lf3py.app.definitions import flowapi_modules
-from lf3py.app.types import ModuleDefinitions
 from lf3py.aws.hooks.method import hook
 from lf3py.aws.types import LambdaEvent
+from lf3py.config import ModuleDefinitions
 from lf3py.task.result import Result
 
 

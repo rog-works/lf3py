@@ -9,9 +9,9 @@ def modules() -> dict:
         'lf3py.api.response.Response': 'example.bpapi.provider.response.make_response',
         'lf3py.api.errors.handler.ApiErrorHandler': 'lf3py.api.errors.handler.ApiErrorHandler',
         'lf3py.api.routers.api.IApiRouter': 'lf3py.api.routers.bp.BpRouter',
-        'lf3py.data.config.Config': 'example.bpapi.config.config.config',
+        'lf3py.config.Config': 'example.bpapi.config.config.config',
+        'lf3py.config.Routes': 'example.bpapi.config.routes.routes',
         'lf3py.lang.cache.Cache': 'lf3py.lang.cache.Cache',
         'lf3py.i18n.i18n.I18n': 'example.bpapi.provider.i18n.make_i18n',
-        'lf3py.task.types.Routes': 'example.bpapi.config.routes.routes',
         'logging.Logger': 'example.bpapi.provider.logger.dev_logger',
     }

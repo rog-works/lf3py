@@ -1,4 +1,4 @@
-from lf3py.app.types import ModuleDefinitions
+from lf3py.config import ModuleDefinitions
 from lf3py.lang.di import DI
 
 
