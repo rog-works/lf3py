@@ -36,7 +36,7 @@ class Route(metaclass=ABCMeta):
         """
         raise NotImplementedError()
 
-    def resolve(self, request: Request) -> Runner:
+    def dispatch(self, request: Request) -> Result:
         raise NotImplementedError()
 
     @raises(BadRequestError, DeserializeError, KeyError, ValueError)
@@ -85,9 +85,10 @@ class BpRoute(Route):
 
         return decorator
 
-    def resolve(self, request: Request) -> Runner:
+    def dispatch(self, request: Request) -> Runner:
         _, module_path = self._router.resolve(request.method, request.path)
-        return load_module_path(module_path)
+        runner = load_module_path(module_path)
+        return runner()
 
 
 class ApiRoute(Route):
@@ -104,7 +105,7 @@ class ApiRoute(Route):
 
         return decorator
 
-    def resolve(self, request: Request) -> Runner:
+    def dispatch(self, request: Request) -> Result:
         spec, module_path = self._router.resolve(request.method, request.path)
         dsn = self._router.dsnize(request.method, request.path)
         path_params = dsn.capture(spec)
@@ -112,6 +113,6 @@ class ApiRoute(Route):
         org_runner = self._org_runners[module_path]
         inject_args = self._resolve_args(org_runner, path_params, request.params)
         if type(inject_args) is tuple:
-            return lambda: runner(inject_args[0], **inject_args[1])
+            return runner(inject_args[0], **inject_args[1])
         else:
-            return lambda: runner(**inject_args)
+            return runner(**inject_args)

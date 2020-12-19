@@ -1,12 +1,12 @@
 from lf2.api.errors.handler import ApiErrorHandler
 from lf2.api.render import ApiRender
+from lf2.api.request import Request
 from lf2.api.route import Route
 from lf2.apps.app import App
 from lf2.apps.definitions import webapi_modules
 from lf2.aws.hooks.method import hook
 from lf2.aws.types import LambdaEvent
 from lf2.task.result import Result
-from lf2.task.runner import Runner
 
 
 class WebApp(App):
@@ -27,7 +27,7 @@ class WebApp(App):
         return self._di.resolve(ApiErrorHandler)
 
     def run(self) -> Result:
-        return self.perform(Runner)
+        return self.route.dispatch(self._di.resolve(Request))
 
     @hook
     def webapi(self, event: dict, context: object):

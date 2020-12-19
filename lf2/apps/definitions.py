@@ -6,5 +6,4 @@ def webapi_modules() -> dict:
         'lf2.api.response.Response': 'lf2.api.response.Response',
         'lf2.api.route.Route': 'lf2.api.route.ApiRoute',
         'lf2.task.router.Router': 'lf2.api.provider.api_router',
-        'lf2.task.runner.Runner': 'lf2.api.provider.runner',
     }
