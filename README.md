@@ -46,7 +46,7 @@ def pong() -> Response:
 # XXX cui testing code
 if __name__ == '__main__':
     event = {
-        'httpMethod': '/GET',
+        'httpMethod': 'GET',
         'path': '/ping',
         'headers': {},
     }
