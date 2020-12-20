@@ -1,6 +1,5 @@
 from lf3py.config import Routes
 from lf3py.lang.dsn import DSNElement
-from lf3py.lang.module import load_module_path
 from lf3py.routing.args import resolve_args
 from lf3py.routing.routers import Router
 from lf3py.task.data import Command, Result
@@ -25,8 +24,3 @@ class BpRouter(Router):
             return wrapper
 
         return decorator
-
-    def dispatch(self, command: Command) -> Runner:
-        _, module_path = self.resolve(str(command.dsn))
-        runner = load_module_path(module_path)
-        return runner()

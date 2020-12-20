@@ -2,6 +2,7 @@ from typing import Callable, Tuple
 
 from lf3py.config import Routes
 from lf3py.lang.dsn import DSN, DSNElement, DSNType
+from lf3py.lang.module import load_module_path
 from lf3py.task.data import Command, Result
 from lf3py.task.types import RunnerDecorator
 
@@ -27,7 +28,9 @@ class Router:
         raise LookupError(f'Missing route. route = {dsn}')
 
     def dispatch(self, command: Command) -> Result:
-        raise NotImplementedError()
+        _, module_path = self.resolve(str(command.dsn))
+        runner = load_module_path(module_path)
+        return runner()
 
     def dsnize(self, *elems: DSNElement) -> DSN:
         return self._dsn_type(*elems)
