@@ -3,7 +3,7 @@ from datetime import tzinfo, timedelta
 
 class TZInfo(tzinfo):
     def __init__(self, hours: int, dst: int, tzname: str) -> None:
-        super(tzinfo, self).__init__()
+        super(TZInfo, self).__init__()
         self._hours = hours
         self._dst = dst
         self._tzname = tzname

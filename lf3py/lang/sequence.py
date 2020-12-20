@@ -1,5 +1,5 @@
 from itertools import chain
-from typing import TypeVar, Sequence
+from typing import Sequence, TypeVar
 
 _T = TypeVar('_T')
 
