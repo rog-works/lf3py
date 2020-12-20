@@ -3,6 +3,7 @@ from typing import Callable, Tuple
 from lf3py.config import Routes
 from lf3py.lang.dsn import DSN, DSNElement, DSNType
 from lf3py.lang.module import load_module_path
+from lf3py.routing.errors import RouteMismatchError
 from lf3py.task.data import Command, Result
 from lf3py.task.types import RunnerDecorator
 
@@ -25,7 +26,7 @@ class Router:
             if dsn.contains(spec):
                 return spec, module_path
 
-        raise LookupError(f'Missing route. route = {dsn}')
+        raise RouteMismatchError(f'Missing route. route = {dsn}')
 
     def dispatch(self, command: Command) -> Result:
         _, module_path = self.resolve(str(command.dsn))
