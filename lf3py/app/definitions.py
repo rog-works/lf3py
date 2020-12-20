@@ -7,3 +7,9 @@ def flowapi_modules() -> dict:
         'lf3py.lang.dsn.DSNType': 'lf3py.api.provider.api_dsn_type',
         'lf3py.task.data.Command': 'lf3py.api.provider.request',
     }
+
+
+def sns_modules() -> dict:
+    return {
+        'lf3py.routing.routers.Router': 'lf3py.routing.routers.flow.FlowRouter',
+    }
