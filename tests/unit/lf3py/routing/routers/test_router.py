@@ -1,8 +1,8 @@
 from unittest import TestCase
 
 from lf3py.lang.dsn import DSN
-from lf3py.task.router import Router
-from lf3py.task.result import Result
+from lf3py.routing.routers import Router
+from lf3py.task.data import Result
 from lf3py.task.types import Runner
 from lf3py.test.helper import data_provider
 

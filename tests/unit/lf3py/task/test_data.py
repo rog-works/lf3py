@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from unittest import TestCase
 
-from lf3py.task.result import Result
+from lf3py.task.data import Result
 
 
 @dataclass
@@ -15,8 +15,8 @@ class ResultA(Result):
         return False
 
 
-class TestDict(TestCase):
-    def test_result(self):
+class TestResult(TestCase):
+    def test_serialize(self):
         result = ResultA(a=1, b='hoge')
         expected = {'a': 1, 'b': 'hoge'}
         self.assertEqual(result.serialize(), expected)

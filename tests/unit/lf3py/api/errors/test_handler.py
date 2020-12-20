@@ -4,7 +4,7 @@ from unittest import TestCase
 from lf3py.api.errors import ApiError, BadRequestError, InternalServerError
 from lf3py.api.errors.handler import ApiErrorHandler
 from lf3py.api.errors.types import ApiErrorDefinition
-from lf3py.task.result import Result
+from lf3py.task.data import Result
 from lf3py.test.helper import data_provider
 
 
