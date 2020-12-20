@@ -1,6 +1,6 @@
 from typing import Optional
 
-from lf3py.lang.dsn import DSNElement, DSNType
+from lf3py.lang.dsn import DSN, DSNElement, DSNType
 from lf3py.routing.args import resolve_args
 from lf3py.routing.errors import UnexpectedDispatchError
 from lf3py.routing.routers import Router
@@ -9,7 +9,7 @@ from lf3py.task.types import Runner, RunnerDecorator
 
 
 class FlowRouter(Router):
-    def __init__(self, dsn_type: DSNType) -> None:
+    def __init__(self, dsn_type: DSNType = DSN) -> None:
         super(FlowRouter, self).__init__(dsn_type)
         self._command: Optional[Command] = None
 
