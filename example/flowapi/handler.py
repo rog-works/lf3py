@@ -4,10 +4,10 @@ from typing import List
 from lf3py.api.errors import BadRequestError
 from lf3py.api.response import Response
 from lf3py.app.provider import app_provider
-from lf3py.app.webapp import WebApp
+from lf3py.app.apiapp import ApiApp
 from lf3py.task.data import Result
 
-app = app_provider(WebApp)
+app = app_provider(ApiApp)
 
 
 @dataclass

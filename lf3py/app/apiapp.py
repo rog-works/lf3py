@@ -9,7 +9,7 @@ from lf3py.config import ModuleDefinitions
 from lf3py.task.data import Command, Result
 
 
-class WebApp(App):
+class ApiApp(App):
     @classmethod
     def module_definitions(cls) -> ModuleDefinitions:
         return flowapi_modules()

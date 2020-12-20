@@ -29,9 +29,9 @@ $ vim lambda_handler.py
 ```python
 from lf3py.api.response import Response
 from lf3py.app.provider import app_provider
-from lf3py.app.webapp import WebApp
+from lf3py.app.apiapp import ApiApp
 
-app = app_provider(WebApp)
+app = app_provider(ApiApp)
 
 
 @app.entry
