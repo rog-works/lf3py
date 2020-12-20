@@ -1,5 +1,5 @@
 import re
-from typing import Dict, Union
+from typing import Dict, Type, Union
 
 DSNElement = Union[int, str]
 
@@ -23,3 +23,6 @@ class DSN:
 
     def capture(self, spec: str) -> Dict[str, str]:
         return re.search(spec, self._dsn).groupdict()
+
+
+DSNType = Type[DSN]

@@ -1,6 +1,6 @@
 from abc import ABCMeta
 
-from lf3py.task.result import Result
+from lf3py.task.data import Result
 
 
 class IRender(metaclass=ABCMeta):

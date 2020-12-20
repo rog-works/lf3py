@@ -2,7 +2,6 @@ from abc import ABCMeta, abstractmethod
 from typing import Any, Type, TypeVar
 
 from lf3py.lang.annotation import ClassAnnotation, PropertyAnnotation
-from lf3py.lang.error import raises
 from lf3py.serialization.errors import DeserializeError
 
 _T = TypeVar('_T')
@@ -15,17 +14,19 @@ class Deserializer(metaclass=ABCMeta):
 
 
 class DictDeserializer(Deserializer):
-    @raises(DeserializeError, TypeError, ValueError)
     def deserialize(self, obj_type: Type[_T], data: dict) -> _T:
-        obj_anno = ClassAnnotation(obj_type)
-        deserialized = (obj_anno.origin)()
-        for key, prop_anno in obj_anno.properties.items():
-            if not prop_anno.is_optional and key not in data:
-                raise TypeError(f'"{key}" is required key. from {obj_type}')
+        try:
+            obj_anno = ClassAnnotation(obj_type)
+            deserialized = (obj_anno.origin)()
+            for key, prop_anno in obj_anno.properties.items():
+                if not prop_anno.is_optional and key not in data:
+                    raise TypeError(f'"{key}" is required key. from {obj_type}')
 
-            setattr(deserialized, key, self.__deserialize_value(prop_anno, data[key]) if key in data else None)
+                setattr(deserialized, key, self.__deserialize_value(prop_anno, data[key]) if key in data else None)
 
-        return deserialized
+            return deserialized
+        except (TypeError, ValueError) as e:
+            raise DeserializeError() from e
 
     def __deserialize_value(self, prop_anno: PropertyAnnotation, value: Any) -> Any:
         if prop_anno.is_primitive:

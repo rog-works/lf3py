@@ -1,8 +1,9 @@
 from typing import List
 
-from lf3py.api.errors import BadRequestError, ServiceUnavailableError, UnauthorizedError
+from lf3py.api.errors import ServiceUnavailableError, UnauthorizedError
 from lf3py.api.errors.types import ApiErrorDefinition
 from lf3py.api.response import Response
+from lf3py.routing.errors import UnresolvedArgumentsError
 from lf3py.serialization.serializer import DictSerializer
 
 from example.bpapi.app import MyApp
@@ -38,7 +39,7 @@ def show(user_id: int) -> Response:
     return app.render.ok(body=ShowBody(user=user)).json()
 
 
-@app.error(400, app.i18n.trans('http.400'), BadRequestError)
+@app.error(400, app.i18n.trans('http.400'), UnresolvedArgumentsError)
 @app.route('POST', '/users')
 def create(params: CreateParams) -> Response:
     app.logger.info(f'create: params = {params}')

@@ -4,7 +4,7 @@ from typing import Dict
 from lf3py.lang.dsn import DSN, DSNElement
 
 
-class RouteDSN(DSN):
+class ApiDSN(DSN):
     @classmethod
     def format(cls, *elems: DSNElement) -> str:
         return ' '.join([str(elem) for elem in elems])

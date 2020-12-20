@@ -1,6 +1,6 @@
 from lf3py.api.render import ApiRender
 from lf3py.api.response import MessageBody
-from lf3py.task.result import Result
+from lf3py.task.data import Result
 
 
 class SafeApiRender(ApiRender):

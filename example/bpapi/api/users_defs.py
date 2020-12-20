@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
-from lf3py.task.result import Result
+from lf3py.task.data import Result
 
 from example.bpapi.models.user import User
 

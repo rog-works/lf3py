@@ -3,7 +3,7 @@ from typing import Callable, List, Type
 from lf3py.api.errors import ApiError
 from lf3py.api.errors.types import ApiErrorDefinition
 from lf3py.lang.sequence import first, flatten
-from lf3py.task.result import Result
+from lf3py.task.data import Result
 from lf3py.task.types import Runner, RunnerDecorator
 
 

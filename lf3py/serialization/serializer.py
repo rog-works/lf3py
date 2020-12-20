@@ -2,7 +2,6 @@ from abc import ABCMeta, abstractmethod
 from typing import Any
 
 from lf3py.lang.annotation import ClassAnnotation, PropertyAnnotation
-from lf3py.lang.error import raises
 from lf3py.serialization.errors import SerializeError
 
 
@@ -13,14 +12,16 @@ class Serializer(metaclass=ABCMeta):
 
 
 class DictSerializer(Serializer):
-    @raises(SerializeError, TypeError)
     def serialize(self, obj: Any) -> dict:
-        obj_anno = ClassAnnotation(type(obj))
-        return {
-            key: self.__serialize_value(prop_anno, getattr(obj, key))
-            for key, prop_anno in obj_anno.properties.items()
-            if not key.startswith('_')
-        }
+        try:
+            obj_anno = ClassAnnotation(type(obj))
+            return {
+                key: self.__serialize_value(prop_anno, getattr(obj, key))
+                for key, prop_anno in obj_anno.properties.items()
+                if not key.startswith('_')
+            }
+        except TypeError as e:
+            raise SerializeError() from e
 
     def __serialize_value(self, prop_anno: PropertyAnnotation, value: Any) -> Any:
         if prop_anno.is_primitive:
