@@ -1,1 +1,1 @@
-from lf3py.routing.routers.router import *
+from lf3py.routing.routers.router import Router  # noqa F401

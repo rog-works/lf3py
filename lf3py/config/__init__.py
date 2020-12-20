@@ -1,1 +1,1 @@
-from lf3py.config.types import *
+from lf3py.config.types import *  # noqa F401

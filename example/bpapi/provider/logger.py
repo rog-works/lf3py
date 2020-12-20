@@ -1,7 +1,7 @@
 import logging
 
 from lf3py.config import Config
-from lf3py.i18n.i18n import I18n
+from lf3py.i18n import I18n
 from lf3py.logging.formatter import JsonFormatter
 from lf3py.logging.cleaner import clear_handler
 
