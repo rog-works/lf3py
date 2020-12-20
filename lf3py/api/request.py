@@ -1,11 +1,9 @@
 from dataclasses import dataclass, field
-from typing import Any, Dict, Type, TypeVar
+from typing import Any, Dict, Type
 
 from lf3py.api.dsn import ApiDSN
 from lf3py.serialization.deserializer import DictDeserializer
-from lf3py.task.data import Command
-
-_T = TypeVar('_T')
+from lf3py.task.data import Command, _T
 
 
 @dataclass
