@@ -1,1 +1,1 @@
-class MyContext(dict): pass  # noqa: E701
+class MyContext(dict): pass
