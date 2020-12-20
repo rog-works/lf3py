@@ -1,28 +1,11 @@
-from dataclasses import dataclass, field
-from typing import List
-
 from lf3py.api.response import Response
 from lf3py.app.apiapp import ApiApp
 from lf3py.app.provider import app_provider
 from lf3py.routing.errors import UnresolvedArgumentsError
-from lf3py.task.data import Result
+
+from example.flowapi.model_defs import IndexBody, Model, ShowBody
 
 app = app_provider(ApiApp)
-
-
-@dataclass
-class Model:
-    id: int = 0
-
-
-@dataclass
-class IndexBody(Result):
-    models: List[Model] = field(default_factory=list)
-
-
-@dataclass
-class ShowBody(Result):
-    model: Model = Model()
 
 
 @app.entry
