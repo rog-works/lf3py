@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from lf3py.lang.cache import Cache, Storage
+from lf3py.cache import Cache, Storage
 
 
 class TestCache(TestCase):

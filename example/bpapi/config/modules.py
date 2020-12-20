@@ -11,7 +11,7 @@ def modules() -> dict:
         'lf3py.config.Config': 'example.bpapi.config.config.config',
         'lf3py.config.Routes': 'example.bpapi.config.routes.routes',
         'lf3py.i18n.I18n': 'example.bpapi.provider.i18n.make_i18n',
-        'lf3py.lang.cache.Cache': 'lf3py.lang.cache.Cache',
+        'lf3py.cache.Cache': 'lf3py.cache.Cache',
         'lf3py.task.data.Command': 'lf3py.api.provider.request',
         'logging.Logger': 'example.bpapi.provider.logger.dev_logger',
     }

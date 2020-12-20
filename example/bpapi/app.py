@@ -2,8 +2,8 @@ from logging import Logger
 from typing import Optional
 
 from lf3py.app.apiapp import ApiApp
+from lf3py.cache import Cache
 from lf3py.i18n import I18n
-from lf3py.lang.cache import Cache
 from lf3py.lang.di import DI
 
 
