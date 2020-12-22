@@ -23,3 +23,6 @@ class Result:
 
     def serialize(self) -> Any:
         return self._serializer.serialize(self)
+
+
+Ok = Result()

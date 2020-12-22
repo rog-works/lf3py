@@ -2,6 +2,7 @@
 /dist/
 /example/bpapi/logs/
 /example/bpapi/vendor/
+/example/sns/vendor/
 /docker/dev/.ssh/
 /lf3py-*/
 /lf3py.egg-info/

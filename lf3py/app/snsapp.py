@@ -1,11 +1,11 @@
 from lf3py.app.app import App
 from lf3py.app.definitions import sns_modules
 from lf3py.aws.hooks.method import hook
-from lf3py.aws.sns.record import SNSRecord
+from lf3py.aws.sns.record import SNSRecords
 from lf3py.aws.types import LambdaEvent
 from lf3py.config import ModuleDefinitions
 from lf3py.routing.routers import Router
-from lf3py.task.data import Result
+from lf3py.task.data import Result, Ok
 
 
 class SNSApp(App):
@@ -18,11 +18,10 @@ class SNSApp(App):
         return self._di.resolve(Router)
 
     def run(self) -> Result:
-        for record in self._di.resolve(LambdaEvent):
-            command = SNSRecord.deserialize(record)
-            self.route.dispatch(command)
+        for record in self._di.resolve(SNSRecords):
+            self.route.dispatch(record)
 
-        return Result()  # XXX unnecessary result
+        return Ok
 
     @hook
     def entry(self, event: dict, context: object):

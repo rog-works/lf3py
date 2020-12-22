@@ -1,12 +1,11 @@
 from lf3py.app.provider import app_provider
-from lf3py.app.snsapp import SNSApp
-from lf3py.task.data import Result
+from lf3py.aws.sns.data import SNSMessage
+from lf3py.task.data import Result, Ok
 
-from example.sns.notice_defs import NoticeMessage, NoticeRecord, PingRecord
-import example.sns.provider as provider
+from example.sns.app import MyApp
+from example.sns.notice_defs import NoticeRecord, PingRecord
 
-app = app_provider(SNSApp)
-firehose = provider.firehose()
+app = app_provider(MyApp)
 
 
 @app.entry
@@ -17,17 +16,17 @@ def handler(event: dict, context: object) -> dict:
 @app.route('(?P<topic>(dev|test)_ping_topic)', 'ping')
 def ping(topic: str) -> Result:
     record = PingRecord(topic=topic, subject='ping', message='pong')
-    firehose.put(record.serialize())
-    return record
+    app.firehose.put(record.serialize())
+    return Ok
 
 
 @app.route('notice_topic', '(?P<subject>([\\w]+))')
-def notice(subject: str, message: NoticeMessage) -> Result:
+def notice(subject: str, message: SNSMessage) -> Result:
     record = NoticeRecord(
         topic='notice_topic',
         subject=subject,
-        message=message.text,
-        attributes=message.attributes,
+        message=message.message,
+        values={key: attr['value'] for key, attr in message.attributes.items()},
     )
-    firehose.put(record.serialize())
-    return record
+    app.firehose.put(record.serialize())
+    return Ok
