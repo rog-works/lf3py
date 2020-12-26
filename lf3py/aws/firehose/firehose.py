@@ -2,8 +2,10 @@ import json
 
 import boto3
 
+from lf3py.aws.symbols import IFireHose
 
-class FireHose:
+
+class FireHose(IFireHose):
     def __init__(self, delivery_stream_name: str) -> None:
         self._delivery_stream_name = delivery_stream_name
         self._client = boto3.client('firehose')
