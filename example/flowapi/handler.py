@@ -1,6 +1,7 @@
 from lf3py.api.response import Response
 from lf3py.app.apiapp import ApiApp
 from lf3py.app.provider import app_provider
+from lf3py.middleware.api.error import unexpected_dispach, within
 
 from example.flowapi.model_defs import IndexBody, Model, ShowBody
 
@@ -18,6 +19,7 @@ def index() -> Response:
     return app.render.ok(body=body).json()
 
 
+@app.behavior(error=(unexpected_dispach, *within(400)))
 @app.route('GET', '/models/{model_id}')
 def show(model_id: int) -> Response:
     body = ShowBody(model=Model(model_id))
