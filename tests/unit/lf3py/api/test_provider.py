@@ -9,8 +9,8 @@ from lf3py.test.helper import data_provider
 class TestProvider(TestCase):
     @data_provider([
         ('GET', '/', {}, {}, {}),
-        ('GET', '/users', {'content-type': 'application/json'}, {'locale': 'jp'}, {}),
-        ('POST', '/users', {'content-type': 'application/json'}, {'locale': 'jp'}, {'name': 'hoge'}),
+        ('GET', '/users', {'Content-Type': 'application/json'}, {'locale': 'jp'}, {}),
+        ('POST', '/users', {'Content-Type': 'application/json'}, {'locale': 'jp'}, {'name': 'hoge'}),
     ])
     def test_request(self, method: str, path: str, headers: dict, query: dict, body: dict):
         event = LambdaEvent(
