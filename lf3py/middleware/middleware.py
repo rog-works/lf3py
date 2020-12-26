@@ -1,4 +1,4 @@
-from typing import Any, Callable
+from typing import Any, Callable, Tuple
 
 from lf3py.lang.annotation import FunctionAnnotation
 from lf3py.lang.di import DI
@@ -33,8 +33,8 @@ def __handle_error(error: Exception, error_handlers: ErrorMiddlewares):
         func_anno = FunctionAnnotation(error_handler)
         arg_anno = first(list(func_anno.args.values()))
         error_types = [arg_anno.origin] if not arg_anno.is_union else [anno.origin for anno in arg_anno.union_values]
-        handled = [error_type for error_type in error_types if isinstance(error, error_type)]
-        if not handled:
+        handlable = [error_type for error_type in error_types if isinstance(error, error_type)]
+        if not handlable:
             continue
 
         try:
