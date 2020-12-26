@@ -12,11 +12,11 @@ class DI:
         self._injectors: Dict[Type, Union[Type, Callable]] = {}
         self._instances: Dict[Type, Any] = {}
 
-    def register(self, symbol: Type, injector: Union[Type, Callable]):
-        self._injectors[symbol] = injector
-
     def has(self, symbol: Type) -> bool:
         return symbol in self._injectors
+
+    def register(self, symbol: Type, injector: Union[Type, Callable]):
+        self._injectors[symbol] = injector
 
     def resolve(self, symbol: Type[_T]) -> _T:
         if symbol not in self._injectors:
@@ -29,6 +29,9 @@ class DI:
         instance = injector(**self._inject_kwargs(injector))
         self._instances[symbol] = instance
         return instance
+
+    def perform(self, func: Callable[..., _T]) -> _T:
+        return func(**self._inject_kwargs(func))
 
     def _inject_kwargs(self, injector: Callable) -> dict:
         func_anno = FunctionAnnotation(injector if isinstance(injector, FunctionType) else injector.__init__)

@@ -1,7 +1,6 @@
 from lf3py.api.response import Response
 from lf3py.app.apiapp import ApiApp
 from lf3py.app.provider import app_provider
-from lf3py.routing.errors import UnresolvedArgumentsError
 
 from example.flowapi.model_defs import IndexBody, Model, ShowBody
 
@@ -19,7 +18,6 @@ def index() -> Response:
     return app.render.ok(body=body).json()
 
 
-@app.error(400, '400 Bad Request', UnresolvedArgumentsError)
 @app.route('GET', '/models/{model_id}')
 def show(model_id: int) -> Response:
     body = ShowBody(model=Model(model_id))
