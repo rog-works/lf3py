@@ -43,7 +43,7 @@ def index() -> Response:
     return app.render.ok(body=IndexBody(users=users)).json()
 
 
-@app.behavior(accept_json, unexpected_dispach, error=within(400, 415))
+@app.behavior(accept_json, error=(unexpected_dispach, *within(400, 415)))
 @app.route('GET', '/users/{user_id}')
 def show(user_id: int) -> Response:
     app.logger.info(f'show: user_id = {user_id}')
@@ -52,7 +52,7 @@ def show(user_id: int) -> Response:
     return app.render.ok(body=ShowBody(user=user)).json()
 
 
-@app.behavior(accept_json, unexpected_dispach, error=within(400, 415))
+@app.behavior(accept_json, error=(unexpected_dispach, *within(400, 415)))
 @app.route('POST', '/users')
 def create(params: CreateParams) -> Response:
     app.logger.info(f'create: params = {params}')

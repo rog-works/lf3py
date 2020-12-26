@@ -16,7 +16,9 @@ class TestUsers(TestCase):
             {
                 'path': '/users',
                 'httpMethod': 'GET',
-                'headers': {},
+                'headers': {
+                    'Accept': 'application/json',
+                },
                 'queryStringParameters': {'locale': 'ja'},
             },
             {
@@ -50,7 +52,9 @@ class TestUsers(TestCase):
             {
                 'path': '/users/1234',
                 'httpMethod': 'GET',
-                'headers': {},
+                'headers': {
+                    'Accept': 'application/json',
+                },
                 'queryStringParameters': {'locale': 'ja'},
             },
             {
@@ -75,7 +79,10 @@ class TestUsers(TestCase):
             {
                 'path': '/users',
                 'httpMethod': 'POST',
-                'headers': {'content-type': 'application/json'},
+                'headers': {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
                 'queryStringParameters': {'locale': 'ja'},
                 'body': json.dumps({'name': 'piyo'}),
             },
@@ -102,7 +109,10 @@ class TestUsers(TestCase):
             {
                 'path': '/users',
                 'httpMethod': 'POST',
-                'headers': {'content-type': 'application/json'},
+                'headers': {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
                 'queryStringParameters': {'locale': 'ja'},
                 'body': json.dumps({'unknown': 'piyo'}),
             },
@@ -118,7 +128,10 @@ class TestUsers(TestCase):
             {
                 'path': '/users',
                 'httpMethod': 'POST',
-                'headers': {'content-type': 'application/json'},
+                'headers': {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                },
                 'queryStringParameters': {'locale': 'ja'},
                 'body': json.dumps({'unknown': 'piyo'}),
             },

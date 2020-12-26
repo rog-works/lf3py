@@ -1,6 +1,7 @@
 from abc import ABCMeta
 
-from lf3py.task.data import Command, Result
+from lf3py.api.request import Request
+from lf3py.task.data import Result
 from lf3py.task.types import RunnerDecorator
 
 
@@ -27,5 +28,5 @@ class IApiRouter(metaclass=ABCMeta):
         """
         raise NotImplementedError()
 
-    def dispatch(self, command: Command) -> Result:
+    def dispatch(self, request: Request) -> Result:
         raise NotImplementedError
