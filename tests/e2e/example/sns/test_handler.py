@@ -2,12 +2,19 @@ import example.sns.preprocess  # noqa F401
 
 from unittest import TestCase, mock
 
+from lf3py.aws.symbols import IFireHose
 from lf3py.test.helper import data_provider
 
 from tests.helper.example.sns import perform_api
 
 
 class TestHandler(TestCase):
+    MODULES = {
+        'lf3py.routing.routers.Router': 'lf3py.routing.routers.flow.FlowRouter',
+        'lf3py.symbols.IFireHose': 'tests.e2e.example.sns.test_handler.MockFireHose',
+        'lf3py.aws.sns.record.SNSRecords': 'lf3py.aws.sns.provider.records',
+    }
+
     @data_provider([
         (
             {
@@ -28,8 +35,8 @@ class TestHandler(TestCase):
         ),
     ])
     def test_ping(self, event: dict, expected: dict):
-        with mock.patch('boto3.client', return_value=object()):
-            with mock.patch('lf3py.aws.firehose.FireHose.put') as p:
+        with mock.patch('example.sns.modules.modules', return_value=self.MODULES):
+            with mock.patch('tests.e2e.example.sns.test_handler.MockFireHose.put') as p:
                 perform_api(event)
                 p.assert_called_with(expected)
 
@@ -59,7 +66,15 @@ class TestHandler(TestCase):
         ),
     ])
     def test_notice(self, event: dict, expected: dict):
-        with mock.patch('boto3.client', return_value=object()):
-            with mock.patch('lf3py.aws.firehose.FireHose.put') as p:
+        with mock.patch('example.sns.modules.modules', return_value=self.MODULES):
+            with mock.patch('tests.e2e.example.sns.test_handler.MockFireHose.put') as p:
                 perform_api(event)
                 p.assert_called_with(expected)
+
+
+class MockFireHose(IFireHose):
+    def __init__(self, delivery_stream_name: str = '') -> None:
+        pass
+
+    def put(self, payload: dict):
+        pass
