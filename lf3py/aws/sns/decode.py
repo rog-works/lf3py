@@ -3,7 +3,7 @@ from lf3py.aws.sns.record import SNSRecord, SNSRecords
 from lf3py.lang.sequence import last
 
 
-def records(event: LambdaEvent) -> SNSRecords:
+def decode_records(event: LambdaEvent) -> SNSRecords:
     return [
         SNSRecord(
             record={

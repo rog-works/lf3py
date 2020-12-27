@@ -3,7 +3,7 @@ import json
 from unittest import TestCase
 import urllib.parse
 
-from lf3py.aws.decode import decode_request
+from lf3py.aws.api.decode import decode_request
 from lf3py.aws.types import LambdaEvent
 from lf3py.test.helper import data_provider
 

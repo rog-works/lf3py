@@ -10,7 +10,7 @@ from tests.helper.example.sns import perform_api
 
 class TestHandler(TestCase):
     MODULES = {
-        'lf3py.aws.sns.record.SNSRecords': 'lf3py.aws.sns.provider.records',
+        'lf3py.aws.sns.record.SNSRecords': 'lf3py.aws.sns.decode.decode_records',
         'lf3py.aws.symbols.IFireHose': 'tests.e2e.example.sns.test_handler.MockFireHose',
         'lf3py.routing.routers.Router': 'lf3py.routing.routers.flow.FlowRouter',
     }
