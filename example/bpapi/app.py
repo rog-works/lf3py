@@ -11,7 +11,7 @@ class MyApp(ApiApp):
     __instance: Optional['MyApp'] = None
 
     @classmethod
-    def get(cls) -> 'MyApp':
+    def instance(cls) -> 'MyApp':
         if cls.__instance is None:
             raise AssertionError()
 

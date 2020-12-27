@@ -13,14 +13,14 @@ def handler(event: dict, context: object) -> dict:
     return app.run().serialize()
 
 
-@app.route('GET', '/models')
+@app.api.get('/models')
 def index() -> Response:
     body = IndexBody(models=[Model(id=1234)])
     return app.render.ok(body=body).json()
 
 
 @app.behavior(error=(unexpected_dispach, *within(400)))
-@app.route('GET', '/models/{model_id}')
+@app.api.get('/models/{model_id}')
 def show(model_id: int) -> Response:
     body = ShowBody(model=Model(model_id))
     return app.render.ok(body=body).json()

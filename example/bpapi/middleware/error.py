@@ -7,7 +7,7 @@ from example.bpapi.app import MyApp
 
 
 def within(*statuses: int) -> ErrorMiddlewares:
-    app = MyApp.get()
+    app = MyApp.instance()
 
     def error_400(error: BadRequestError) -> NoReturn:
         raise ApiError(app.i18n.trans('http.400'), 400) from error

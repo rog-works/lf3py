@@ -8,7 +8,7 @@ def modules() -> dict:
         'lf3py.api.render.ApiRender': os.environ.get('MODULES_RENDER', 'lf3py.api.render.ApiRender'),
         'lf3py.api.request.Request': 'lf3py.api.provider.request',
         'lf3py.api.response.Response': 'example.bpapi.provider.response.make_response',
-        'lf3py.api.router.IApiRouter': 'lf3py.api.provider.bp_router',
+        'lf3py.api.symbols.IApiRouter': 'lf3py.api.provider.api_bp_router',
         'lf3py.cache.Cache': 'lf3py.cache.Cache',
         'lf3py.config.Config': 'example.bpapi.config.config.config',
         'lf3py.config.Routes': 'example.bpapi.config.routes.routes',

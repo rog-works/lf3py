@@ -1,32 +1,31 @@
-from abc import ABCMeta
-
 from lf3py.api.request import Request
+from lf3py.api.symbols import IApiRouter
+from lf3py.routing.routers import Router
 from lf3py.task.data import Result
 from lf3py.task.types import RunnerDecorator
 
 
-class IApiRouter(metaclass=ABCMeta):
-    def __call__(self, method: str, path_spec: str) -> RunnerDecorator:
-        """
-        Examples:
-            >>> @app.route('GET', '/models')
-            >>> def index() -> Response:
-            >>>     return app.render.ok(body=IndexBody(Model.find_all()))
+class ApiRouter(IApiRouter):
+    def __init__(self, router: Router) -> None:
+        self._router = router
 
-            >>> @app.route('GET', '/models/{id}')
-            >>> def show(id: int) -> Response:
-            >>>     return app.render.ok(body=ShowBody(Model.find(id)))
+    def get(self, path_spec: str) -> RunnerDecorator:
+        return self._router('GET', path_spec)
 
-            >>> @app.route('POST', '/models')
-            >>> def create(params: CreateParams) -> Response:
-            >>>     return app.render.ok(body=ShowBody(Model.create(params)))
+    def post(self, path_spec: str) -> RunnerDecorator:
+        return self._router('POST', path_spec)
 
-            >>> @app.route('DELETE', '/models/{id}')
-            >>> def delete(id: int) -> Response:
-            >>>     Models.find(id).delete()
-            >>>     return app.render.ok()
-        """
-        raise NotImplementedError()
+    def put(self, path_spec: str) -> RunnerDecorator:
+        return self._router('PUT', path_spec)
+
+    def delete(self, path_spec: str) -> RunnerDecorator:
+        return self._router('DELETE', path_spec)
+
+    def patch(self, path_spec: str) -> RunnerDecorator:
+        return self._router('PATCH', path_spec)
+
+    def option(self, path_spec: str) -> RunnerDecorator:
+        return self._router('OPTION', path_spec)
 
     def dispatch(self, request: Request) -> Result:
-        raise NotImplementedError
+        return self._router.dispatch(request)

@@ -16,10 +16,6 @@ class ApiApp(App):
         return flowapi_modules()
 
     @property
-    def route(self) -> IApiRouter:
-        return self._di.resolve(IApiRouter)
-
-    @property
     def render(self) -> ApiRender:
         return self._di.resolve(ApiRender)
 
@@ -27,8 +23,12 @@ class ApiApp(App):
     def error(self) -> ApiErrorHandler:
         return self._di.resolve(ApiErrorHandler)
 
+    @property
+    def api(self) -> IApiRouter:
+        return self._di.resolve(IApiRouter)
+
     def run(self) -> Result:
-        return self.route.dispatch(self._di.resolve(Request))
+        return self.api.dispatch(self._di.resolve(Request))
 
     @hook
     def entry(self, event: dict, context: object):
