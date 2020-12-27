@@ -27,5 +27,8 @@ class ApiRouter(IApiRouter):
     def option(self, path_spec: str) -> RunnerDecorator:
         return self._router('OPTION', path_spec)
 
+    def head(self, path_spec: str) -> RunnerDecorator:
+        return self._router('HEAD', path_spec)
+
     def dispatch(self, request: Request) -> Result:
         return self._router.dispatch(request)

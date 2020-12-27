@@ -80,5 +80,14 @@ class IApiRouter(metaclass=ABCMeta):
         """
         raise NotImplementedError()
 
+    def head(self, path_spec: str) -> RunnerDecorator:
+        """
+        Examples:
+            >>> @app.api.head('/')
+            >>> def head() -> Response:
+            >>>     return app.render.ok().json()
+        """
+        raise NotImplementedError()
+
     def dispatch(self, request: Request) -> Result:
         raise NotImplementedError()
