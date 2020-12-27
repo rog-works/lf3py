@@ -1,8 +1,8 @@
 import example.sns.preprocess  # noqa F401
 
 from lf3py.app.snsapp import SNSApp
+from lf3py.aws.symbols import IFireHose
 from lf3py.config.types import ModuleDefinitions
-from lf3py.symbols import IFireHose
 
 from example.sns.modules import modules
 
