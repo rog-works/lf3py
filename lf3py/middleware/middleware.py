@@ -36,7 +36,7 @@ def __handle_error(error: Exception, di: DI, error_handlers: ErrorMiddlewares):
             continue
 
         try:
-            curried = di.carrying(error_handler)
+            curried = di.currying(error_handler)
             curried(error)
         except Exception as e:
             __handle_error(e, di, error_handlers[index + 1:])

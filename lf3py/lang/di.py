@@ -37,7 +37,7 @@ class DI:
         }
         return func(**inject_kwargs)
 
-    def carrying(self, func: Callable[..., _T]) -> Callable[..., _T]:
+    def currying(self, func: Callable[..., _T]) -> Callable[..., _T]:
         func_anno, defaults = FunctionAnnotation(func), default_args(func)
         inject_kwargs = {
             key: self.__resolve_arg(key, arg_anno.org_type, defaults)
