@@ -63,3 +63,22 @@ class TestDI(TestCase):
         di.register(SymbolB, injector_b_default)
         self.assertEqual(type(di.resolve(SymbolB)), SymbolB)
         self.assertEqual(type(di.resolve(SymbolB).a), SymbolA)
+
+    def test_invoke(self):
+        di = DI()
+        di.register(SymbolA, SymbolA)
+        di.register(SymbolB, SymbolB)
+        self.assertEqual(type(di.invoke(injector_c)), SymbolC)
+
+    def test_currying(self):
+        di = DI()
+        di.register(SymbolA, SymbolA)
+
+        def hoge(fuga: int, a: SymbolA):
+            pass
+
+        try:
+            curried = di.currying(hoge)
+            curried(1)
+        except Exception as e:
+            self.fail(e)
