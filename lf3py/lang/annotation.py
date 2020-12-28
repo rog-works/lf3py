@@ -1,4 +1,5 @@
 from enum import Enum
+from types import FunctionType, MethodType
 from typing import Any, Callable, Dict, List, Type, Union
 
 
@@ -56,8 +57,8 @@ ArgAnnotation = ValueAnnotation
 
 
 class FunctionAnnotation:
-    def __init__(self, func: Callable) -> None:
-        self._func = func
+    def __init__(self, func_or_class: Callable) -> None:
+        self._func = func_or_class if isinstance(func_or_class, (FunctionType, MethodType)) else func_or_class.__init__
 
     @property
     def is_method(self) -> bool:

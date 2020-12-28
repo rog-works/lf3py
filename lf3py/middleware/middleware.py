@@ -13,7 +13,7 @@ def attach(di: DI, *middlewares: Middleware, error: ErrorMiddlewares) -> Callabl
                 __perform_middleware(di, *middlewares)
                 return func(*args, **kwargs)
             except Exception as e:
-                __handle_error(e, error)
+                __handle_error(e, di, error)
                 raise
 
         return wrapper
@@ -23,12 +23,10 @@ def attach(di: DI, *middlewares: Middleware, error: ErrorMiddlewares) -> Callabl
 
 def __perform_middleware(di: DI, *middlewares: Middleware):
     for middleware in middlewares:
-        register = di.perform(middleware)
-        if type(register) is tuple:
-            di.register(*register)
+        di.invoke(middleware)
 
 
-def __handle_error(error: Exception, error_handlers: ErrorMiddlewares):
+def __handle_error(error: Exception, di: DI, error_handlers: ErrorMiddlewares):
     for index, error_handler in enumerate(error_handlers):
         func_anno = FunctionAnnotation(error_handler)
         arg_anno = first(func_anno.args.values())
@@ -38,7 +36,8 @@ def __handle_error(error: Exception, error_handlers: ErrorMiddlewares):
             continue
 
         try:
-            error_handler(error)
+            curried = di.carrying(error_handler)
+            curried(error)
         except Exception as e:
-            __handle_error(e, error_handlers[index + 1:])
+            __handle_error(e, di, error_handlers[index + 1:])
             raise

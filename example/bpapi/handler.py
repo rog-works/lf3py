@@ -10,7 +10,7 @@ app = app_provider(MyApp, modules())
 
 
 @app.entry
-@app.behavior(route_mismatch, error=within(404))
+@app.behavior(error=(route_mismatch, *within(404)))
 def handler(event: dict, context: object) -> dict:
     try:
         return app.run().serialize()

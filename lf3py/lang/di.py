@@ -1,4 +1,3 @@
-from types import FunctionType
 from typing import Any, Callable, Dict, Type, TypeVar, Union
 
 from lf3py.lang.annotation import FunctionAnnotation
@@ -26,21 +25,36 @@ class DI:
             return self._instances[symbol]
 
         injector = self._injectors[symbol]
-        instance = injector(**self._inject_kwargs(injector))
+        instance = self.invoke(injector)
         self._instances[symbol] = instance
         return instance
 
-    def perform(self, func: Callable[..., _T]) -> _T:
-        return func(**self._inject_kwargs(func))
+    def invoke(self, func: Callable[..., _T]) -> _T:
+        func_anno, defaults = FunctionAnnotation(func), default_args(func)
+        inject_kwargs = {
+            key: self.__resolve_arg(key, arg_anno.org_type, defaults)
+            for key, arg_anno in func_anno.args.items()
+        }
+        return func(**inject_kwargs)
 
-    def _inject_kwargs(self, injector: Callable) -> dict:
-        func_anno = FunctionAnnotation(injector if isinstance(injector, FunctionType) else injector.__init__)
-        defaults = default_args(injector)
-        kwargs = {}
-        for key, arg_anno in func_anno.args.items():
-            if not self.has(arg_anno.org_type) and key in defaults:
-                kwargs[key] = defaults[key]
-            else:
-                kwargs[key] = self.resolve(arg_anno.org_type)
+    def carrying(self, func: Callable[..., _T]) -> Callable[..., _T]:
+        func_anno, defaults = FunctionAnnotation(func), default_args(func)
+        inject_kwargs = {
+            key: self.__resolve_arg(key, arg_anno.org_type, defaults)
+            for key, arg_anno in func_anno.args.items()
+            if self.has(arg_anno.org_type) or key in defaults
+        }
 
-        return kwargs
+        def curried_func(*args, **kwargs) -> _T:
+            return func(*args, **{**inject_kwargs, **kwargs})
+
+        return curried_func
+
+    def __resolve_arg(self, key: str, symbol: Type, defaults: Dict[str, Any]) -> bool:
+        if self.__allow_default(key, symbol, defaults):
+            return defaults[key]
+        else:
+            return self.resolve(symbol)
+
+    def __allow_default(self, key: str, symbol: Type, defaults: Dict[str, Any]) -> bool:
+        return not self.has(symbol) and key in defaults

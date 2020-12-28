@@ -1,19 +1,16 @@
 from typing import NoReturn
 
 from lf3py.api.errors import ApiError, BadRequestError, UnsupportedMediaTypeError
+from lf3py.i18n import I18n
 from lf3py.middleware.types import ErrorMiddlewares
-
-from example.bpapi.app import MyApp
 
 
 def within(*statuses: int) -> ErrorMiddlewares:
-    app = MyApp.instance()
+    def error_400(error: BadRequestError, i18n: I18n) -> NoReturn:
+        raise ApiError(i18n.trans('http.400'), 400) from error
 
-    def error_400(error: BadRequestError) -> NoReturn:
-        raise ApiError(app.i18n.trans('http.400'), 400) from error
-
-    def error_415(error: UnsupportedMediaTypeError) -> NoReturn:
-        raise ApiError(app.i18n.trans('http.415'), 415) from error
+    def error_415(error: UnsupportedMediaTypeError, i18n: I18n) -> NoReturn:
+        raise ApiError(i18n.trans('http.415'), 415) from error
 
     handlers = {
         400: error_400,
