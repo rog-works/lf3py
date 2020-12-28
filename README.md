@@ -39,7 +39,7 @@ def handler(event: dict, context: object) -> dict:
     return app.run().serialize()
 
 
-@app.route('GET', '/ping')
+@app.api.get('/ping')
 def pong() -> Response:
     return app.render.ok().json()
 
