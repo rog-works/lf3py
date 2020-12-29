@@ -12,7 +12,7 @@ class TestHandler(TestCase):
     MODULES = {
         'lf3py.aws.sns.record.SNSRecords': 'lf3py.aws.sns.decode.decode_records',
         'lf3py.aws.symbols.IFireHose': 'tests.e2e.example.sns.test_handler.MockFireHose',
-        'lf3py.routing.routers.Router': 'lf3py.routing.routers.flow.FlowRouter',
+        'lf3py.routing.routers.types.IRouter': 'lf3py.routing.routers.flow.FlowRouter',
     }
 
     @data_provider([

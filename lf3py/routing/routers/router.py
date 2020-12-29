@@ -4,11 +4,12 @@ from lf3py.config import Routes
 from lf3py.lang.dsn import DSN, DSNElement, DSNType
 from lf3py.lang.module import load_module_path
 from lf3py.routing.errors import RouteMismatchError
+from lf3py.routing.routers.types import IRouter
 from lf3py.task.data import Command, Result
 from lf3py.task.types import RunnerDecorator
 
 
-class Router:
+class Router(IRouter):
     def __init__(self, dsn_type: DSNType, routes: Routes = Routes()) -> None:
         self._dsn_type = dsn_type
         self._routes = routes

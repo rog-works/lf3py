@@ -7,6 +7,8 @@ from lf3py.app.definitions import flowapi_modules
 from lf3py.aws.hooks.method import hook
 from lf3py.aws.types import LambdaEvent
 from lf3py.config import ModuleDefinitions
+from lf3py.session.session import Session
+from lf3py.session.locator import Locatorify
 from lf3py.task.data import Result
 
 
@@ -28,8 +30,10 @@ class ApiApp(App):
         return self._di.resolve(IApiRouter)
 
     def run(self) -> Result:
-        return self.api.dispatch(self._di.resolve(Request))
+        with self._di.resolve(Session):
+            return self.api.dispatch(self._di.resolve(Request))
 
     @hook
     def entry(self, event: dict, context: object):
+        self._di.register(Session, lambda: Session.push(Locatorify(self._di.resolve)))
         self._di.register(LambdaEvent, lambda: event)

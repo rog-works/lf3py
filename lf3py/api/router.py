@@ -1,12 +1,12 @@
 from lf3py.api.request import Request
 from lf3py.api.symbols import IApiRouter
-from lf3py.routing.routers import Router
+from lf3py.routing.routers.types import IRouter
 from lf3py.task.data import Result
 from lf3py.task.types import RunnerDecorator
 
 
 class ApiRouter(IApiRouter):
-    def __init__(self, router: Router) -> None:
+    def __init__(self, router: IRouter) -> None:
         self._router = router
 
     def get(self, path_spec: str) -> RunnerDecorator:
