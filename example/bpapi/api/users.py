@@ -9,7 +9,7 @@ from example.bpapi.api.users_defs import IndexBody, ShowBody, CreateParams
 from example.bpapi.middleware.error import within
 from example.bpapi.models.user import User
 
-app = MyApp.instance()
+app = MyApp()
 
 
 @app.behavior(preflight_cors)

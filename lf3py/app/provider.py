@@ -5,6 +5,7 @@ from lf3py.app.app import App
 from lf3py.config import ModuleDefinitions
 from lf3py.lang.di import DI
 from lf3py.lang.module import load_module_path
+from lf3py.session import Session
 
 _T = TypeVar('_T', bound=App)
 
@@ -20,4 +21,5 @@ def app_provider(app_type: Type[_T], module_definitions: Optional[ModuleDefiniti
             module = load_module_path(inject_module_path)
             di.register(module, module)
 
-    return app_type(di)
+    Session.push(di)
+    return app_type()

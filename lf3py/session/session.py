@@ -1,7 +1,7 @@
 from types import TracebackType
 from typing import List, Optional, Type
 
-from lf3py.session.locator import ILocator
+from lf3py.locator.types import ILocator
 
 
 class Session:

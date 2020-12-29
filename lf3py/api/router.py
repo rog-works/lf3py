@@ -1,6 +1,6 @@
 from lf3py.api.request import Request
 from lf3py.api.symbols import IApiRouter
-from lf3py.routing.routers.types import IRouter
+from lf3py.routing.symbols import IRouter
 from lf3py.task.data import Result
 from lf3py.task.types import RunnerDecorator
 

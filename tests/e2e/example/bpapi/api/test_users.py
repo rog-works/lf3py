@@ -4,10 +4,19 @@ import json
 import os
 from unittest import TestCase, mock
 
-from lf3py.api.errors import ApiError
 from lf3py.test.helper import data_provider
+from lf3py.lang.module import load_module_path, unload_module
 
-from tests.helper.example.bpapi import perform_api
+
+def perform_api(event: dict) -> dict:
+    handler = load_module_path('example.bpapi.handler.handler')
+    try:
+        result = handler(event, object())
+        unload_module('example.bpapi.handler')
+        return result
+    except Exception:
+        unload_module('example.bpapi.handler')
+        raise
 
 
 class TestUsers(TestCase):
@@ -117,8 +126,12 @@ class TestUsers(TestCase):
                 'body': json.dumps({'unknown': 'piyo'}),
             },
             {
-                'raise': ApiError,
-                'message': '400 Bad Request',
+                'statusCode': 400,
+                'headers': {'Content-Type': 'application/json'},
+                'body': {
+                    'message': '400 Bad Request',
+                    'stacktrace': list,
+                },
             },
         ),
         (
@@ -136,8 +149,12 @@ class TestUsers(TestCase):
                 'body': json.dumps({'unknown': 'piyo'}),
             },
             {
-                'raise': ApiError,
-                'message': '400 Bad Request',
+                'statusCode': 400,
+                'headers': {'Content-Type': 'application/json'},
+                'body': {
+                    'message': '400 Bad Request',
+                    'stacktrace': list,
+                },
             },
         ),
     ])
@@ -145,5 +162,8 @@ class TestUsers(TestCase):
         with mock.patch('uuid.uuid4') as p:
             p.return_value = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
             with mock.patch.dict(os.environ, environ):
-                with self.assertRaisesRegex(expected['raise'], expected['message']):
-                    perform_api(event)
+                result = perform_api(event)
+                self.assertEqual(result['statusCode'], expected['statusCode'])
+                self.assertEqual(result['headers'], expected['headers'])
+                self.assertEqual(result['body']['message'], expected['body']['message'])
+                self.assertEqual(type(result['body']['stacktrace']), expected['body']['stacktrace'])

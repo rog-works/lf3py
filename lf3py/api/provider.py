@@ -6,21 +6,14 @@ from lf3py.aws.types import LambdaEvent
 from lf3py.config.types import Routes
 from lf3py.routing.routers.bp import BpRouter
 from lf3py.routing.routers.flow import FlowRouter
-from lf3py.routing.routers.root import RootRouter
-from lf3py.routing.routers.types import IRouter
-from lf3py.session.session import Session
 
 
-def api_router(session: Session) -> ApiRouter:
-    return ApiRouter(RootRouter(session))
+def api_bp_router(request: Request, routes: Routes) -> ApiRouter:
+    return ApiRouter(BpRouter(request, routes))
 
 
-def bp_router(request: Request, routes: Routes) -> IRouter:
-    return BpRouter(request, routes)
-
-
-def flow_router() -> IRouter:
-    return FlowRouter(ApiDSN)
+def api_flow_router() -> ApiRouter:
+    return ApiRouter(FlowRouter(ApiDSN))
 
 
 def request(event: LambdaEvent) -> Request:
