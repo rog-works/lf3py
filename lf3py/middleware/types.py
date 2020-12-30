@@ -1,6 +1,4 @@
-from typing import Callable, NoReturn, Optional, Type, Tuple, Union
+from typing import Callable, NoReturn
 
-DIRegister = Tuple[Type, Callable]
-Middleware = Callable[..., Union[NoReturn, Optional[DIRegister]]]
+PerformMiddleware = Callable[..., None]
 ErrorMiddleware = Callable[[Exception], NoReturn]
-ErrorMiddlewares = Tuple[ErrorMiddleware, ...]

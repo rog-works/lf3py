@@ -1,13 +1,20 @@
-from lf3py.api.request import Request
+from typing import Tuple
+
 from lf3py.api.symbols import IApiRouter
+from lf3py.lang.dsn import DSNElement
 from lf3py.routing.symbols import IRouter
-from lf3py.task.data import Result
 from lf3py.task.types import RunnerDecorator
 
 
 class ApiRouter(IApiRouter):
     def __init__(self, router: IRouter) -> None:
         self._router = router
+
+    def __call__(self, *elems: DSNElement) -> RunnerDecorator:
+        return self._router(*elems)
+
+    def resolve(self, *elems: DSNElement) -> Tuple[str, str]:
+        return self._router.resolve(*elems)
 
     def get(self, path_spec: str) -> RunnerDecorator:
         return self._router('GET', path_spec)
@@ -29,6 +36,3 @@ class ApiRouter(IApiRouter):
 
     def head(self, path_spec: str) -> RunnerDecorator:
         return self._router('HEAD', path_spec)
-
-    def dispatch(self, request: Request) -> Result:
-        return self._router.dispatch(request)

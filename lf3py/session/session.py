@@ -1,34 +1,13 @@
-from types import TracebackType
-from typing import List, Optional, Type
-
-from lf3py.locator.types import ILocator
+from typing import Any, Dict
 
 
 class Session:
-    __sessions: List['Session'] = []
+    __contexts: Dict[str, Any] = {}
 
     @classmethod
-    def current(cls) -> 'Session':
-        return cls.__sessions[-1]
+    def add_context(cls, name: str, context: Any):
+        cls.__contexts[name] = context
 
     @classmethod
-    def push(cls, locator: ILocator) -> 'Session':
-        peek = Session(locator)
-        cls.__sessions.append(peek)
-        return peek
-
-    def __init__(self, locator: ILocator) -> None:
-        self._locator = locator
-
-    @property
-    def locator(self) -> ILocator:
-        return self._locator
-
-    def close(self):
-        self.__sessions.pop()
-
-    def __enter__(self):
-        self
-
-    def __exit__(self, exc_type: Type[Exception], exc_value: Optional[BaseException], exc_traceback: TracebackType):
-        self.close()
+    def context(cls, name: str) -> Any:
+        return cls.__contexts[name]

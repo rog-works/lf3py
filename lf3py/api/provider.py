@@ -8,8 +8,8 @@ from lf3py.routing.routers.bp import BpRouter
 from lf3py.routing.routers.flow import FlowRouter
 
 
-def api_bp_router(request: Request, routes: Routes) -> ApiRouter:
-    return ApiRouter(BpRouter(request, routes))
+def api_bp_router(routes: Routes) -> ApiRouter:
+    return ApiRouter(BpRouter(ApiDSN, routes))
 
 
 def api_flow_router() -> ApiRouter:

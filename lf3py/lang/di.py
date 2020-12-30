@@ -18,13 +18,15 @@ class DI(ILocator):
         self._injectors[symbol] = injector
 
     def resolve(self, symbol: Type[_T]) -> _T:
-        if symbol not in self._injectors:
+        candidates = [in_symbol for in_symbol in self._injectors.keys() if issubclass(in_symbol, symbol)]
+        if not candidates:
             raise ModuleNotFoundError(f'Unresolved symbol. symbol = {symbol}')
 
-        if symbol in self._instances:
-            return self._instances[symbol]
+        found_symbol = candidates[0]
+        if found_symbol in self._instances:
+            return self._instances[found_symbol]
 
-        injector = self._injectors[symbol]
+        injector = self._injectors[found_symbol]
         instance = invoke(self, injector)
         self._instances[symbol] = instance
         return instance

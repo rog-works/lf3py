@@ -1,7 +1,7 @@
-from typing import NoReturn
+from typing import NoReturn, Tuple
 
 from lf3py.api.errors import ApiError, BadRequestError, DataNotFoundError, UnsupportedMediaTypeError
-from lf3py.middleware.types import ErrorMiddlewares
+from lf3py.middleware.types import ErrorMiddleware
 from lf3py.routing.errors import DispatchError, RouteMismatchError
 
 
@@ -25,7 +25,7 @@ def error_415(error: UnsupportedMediaTypeError) -> NoReturn:
     raise ApiError('415 Unsupported Media Type', 415) from error
 
 
-def within(*statuses: int) -> ErrorMiddlewares:
+def within(*statuses: int) -> Tuple[ErrorMiddleware, ...]:
     handlers = {
         400: error_400,
         404: error_404,

@@ -1,1 +1,1 @@
-from lf3py.middleware.middleware import * # noqa F401
+from lf3py.middleware.middleware import Middleware  # noqa F401

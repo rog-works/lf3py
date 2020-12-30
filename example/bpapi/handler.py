@@ -1,15 +1,10 @@
 import example.bpapi.preprocess  # noqa: F401
 
-from lf3py.app.provider import app_provider
-
 from example.bpapi.app import MyApp
-from example.bpapi.config.modules import modules
-
-app = app_provider(MyApp, modules())
 
 
-@app.entry
 def handler(event: dict, context: object) -> dict:
+    app = MyApp.entry(event)
     try:
         return app.run().serialize()
     except Exception as e:
