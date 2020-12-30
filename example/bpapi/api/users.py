@@ -9,35 +9,40 @@ from example.bpapi.api.users_defs import IndexBody, ShowBody, CreateParams
 from example.bpapi.middleware.error import within
 from example.bpapi.models.user import User
 
-app = MyApp.instance()
+bp = MyApp.blueprint(__name__)
 
 
-@app.behavior(preflight_cors)
-@app.api.option('/')
+@bp.behavior(preflight_cors)
+@bp.api.option('/')
 def preflight() -> Response:
-    return app.render.ok(204).json()
+    return MyApp.get().render.ok(204).json()
 
 
-@app.api.get('/users')
+@bp.api.get('/users')
 def index() -> Response:
+    app = MyApp.get()
     app.logger.info('index')
 
     users = User.find_all()
     return app.render.ok(body=IndexBody(users=users)).json()
 
 
-@app.behavior(accept_json, error=(unexpected_dispach, *within(400, 415)))
-@app.api.get('/users/{user_id}')
+@bp.behavior(accept_json)
+@bp.on_error(*(unexpected_dispach, *within(400, 415)))
+@bp.api.get('/users/{user_id}')
 def show(user_id: int) -> Response:
+    app = MyApp.get()
     app.logger.info(f'show: user_id = {user_id}')
 
     user = User.find(user_id)
     return app.render.ok(body=ShowBody(user=user)).json()
 
 
-@app.behavior(accept_json, error=(unexpected_dispach, *within(400, 415)))
-@app.api.post('/users')
+@bp.behavior(accept_json)
+@bp.on_error(*(unexpected_dispach, *within(400, 415)))
+@bp.api.post('/users')
 def create(params: CreateParams) -> Response:
+    app = MyApp.get()
     app.logger.info(f'create: params = {params}')
 
     serializer = DictSerializer()

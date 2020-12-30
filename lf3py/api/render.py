@@ -1,11 +1,11 @@
 from lf3py.api.errors import ApiError
 from lf3py.api.response import ErrorBody, Response
+from lf3py.api.symbols import IApiRender
 from lf3py.lang.error import stacktrace
 from lf3py.task.data import Result
-from lf3py.view.render import IRender
 
 
-class ApiRender(IRender):
+class ApiRender(IApiRender):
     def __init__(self, response: Response) -> None:
         self._response = response
 

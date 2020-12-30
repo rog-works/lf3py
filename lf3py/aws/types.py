@@ -1,6 +1,6 @@
-from typing import Callable
+from typing import Any, Dict, Callable
 
-LambdaHandler = Callable[[dict, object], dict]
+LambdaHandler = Callable[[dict, object], Dict[str, Any]]
 LambdaHandlerDecorator = Callable[[LambdaHandler], LambdaHandler]
 
 

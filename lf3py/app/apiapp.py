@@ -1,13 +1,10 @@
-from lf3py.api.errors.handler import ApiErrorHandler
-from lf3py.api.render import ApiRender
-from lf3py.api.request import Request
 from lf3py.api.router import IApiRouter
+from lf3py.api.symbols import IApiRender
 from lf3py.app.app import App
 from lf3py.app.definitions import flowapi_modules
-from lf3py.aws.hooks.method import hook
-from lf3py.aws.types import LambdaEvent
 from lf3py.config import ModuleDefinitions
-from lf3py.task.data import Result
+from lf3py.routing.dispatcher import Dispatcher
+from lf3py.task.data import Command, Result
 
 
 class ApiApp(App):
@@ -16,20 +13,16 @@ class ApiApp(App):
         return flowapi_modules()
 
     @property
-    def render(self) -> ApiRender:
-        return self._di.resolve(ApiRender)
-
-    @property
-    def error(self) -> ApiErrorHandler:
-        return self._di.resolve(ApiErrorHandler)
+    def render(self) -> IApiRender:
+        return self._locator.resolve(IApiRender)
 
     @property
     def api(self) -> IApiRouter:
-        return self._di.resolve(IApiRouter)
+        return self._locator.resolve(IApiRouter)
+
+    @property
+    def dispatcher(self) -> Dispatcher:
+        return self._locator.resolve(Dispatcher)
 
     def run(self) -> Result:
-        return self.api.dispatch(self._di.resolve(Request))
-
-    @hook
-    def entry(self, event: dict, context: object):
-        self._di.register(LambdaEvent, lambda: event)
+        return self.dispatcher.dispatch(self._locator.resolve(Command), self.api)

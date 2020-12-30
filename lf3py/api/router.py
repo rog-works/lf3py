@@ -1,34 +1,38 @@
-from lf3py.api.request import Request
+from lf3py.api.dsn import ApiDSN
 from lf3py.api.symbols import IApiRouter
-from lf3py.routing.routers import Router
-from lf3py.task.data import Result
+from lf3py.config.types import Routes
+from lf3py.routing.router import BpRouter, FlowRouter
 from lf3py.task.types import RunnerDecorator
 
 
-class ApiRouter(IApiRouter):
-    def __init__(self, router: Router) -> None:
-        self._router = router
-
+class ImplApiRouter(IApiRouter):
     def get(self, path_spec: str) -> RunnerDecorator:
-        return self._router('GET', path_spec)
+        return self('GET', path_spec)
 
     def post(self, path_spec: str) -> RunnerDecorator:
-        return self._router('POST', path_spec)
+        return self('POST', path_spec)
 
     def put(self, path_spec: str) -> RunnerDecorator:
-        return self._router('PUT', path_spec)
+        return self('PUT', path_spec)
 
     def delete(self, path_spec: str) -> RunnerDecorator:
-        return self._router('DELETE', path_spec)
+        return self('DELETE', path_spec)
 
     def patch(self, path_spec: str) -> RunnerDecorator:
-        return self._router('PATCH', path_spec)
+        return self('PATCH', path_spec)
 
     def option(self, path_spec: str) -> RunnerDecorator:
-        return self._router('OPTION', path_spec)
+        return self('OPTION', path_spec)
 
     def head(self, path_spec: str) -> RunnerDecorator:
-        return self._router('HEAD', path_spec)
+        return self('HEAD', path_spec)
 
-    def dispatch(self, request: Request) -> Result:
-        return self._router.dispatch(request)
+
+class BpApiRouter(BpRouter, ImplApiRouter):
+    def __init__(self, routes: Routes) -> None:
+        super(BpApiRouter, self).__init__(ApiDSN, routes)
+
+
+class FlowApiRouter(FlowRouter, ImplApiRouter):
+    def __init__(self) -> None:
+        super(FlowApiRouter, self).__init__(ApiDSN)

@@ -1,11 +1,19 @@
-from abc import ABCMeta
-
-from lf3py.api.request import Request
+from lf3py.api.response import Response
+from lf3py.routing.symbols import IRouter
 from lf3py.task.data import Result
 from lf3py.task.types import RunnerDecorator
+from lf3py.view.symbols import IRender
 
 
-class IApiRouter(metaclass=ABCMeta):
+class IApiRender(IRender):
+    def ok(self, status: int = 200, body: Result = Result()) -> Response:
+        raise NotImplementedError()
+
+    def fail(self, error: Exception) -> Response:
+        raise NotImplementedError()
+
+
+class IApiRouter(IRouter):
     def get(self, path_spec: str) -> RunnerDecorator:
         """
         Examples:
@@ -87,7 +95,4 @@ class IApiRouter(metaclass=ABCMeta):
             >>> def head() -> Response:
             >>>     return app.render.ok().json()
         """
-        raise NotImplementedError()
-
-    def dispatch(self, request: Request) -> Result:
         raise NotImplementedError()

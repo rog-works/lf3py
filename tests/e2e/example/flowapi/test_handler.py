@@ -1,9 +1,8 @@
 from unittest import TestCase
 
-from lf3py.api.errors.errors import ApiError
 from lf3py.test.helper import data_provider
 
-from tests.helper.example.flowapi import perform_api
+from example.flowapi.handler import handler
 
 
 class TestHandler(TestCase):
@@ -27,7 +26,7 @@ class TestHandler(TestCase):
         ),
     ])
     def test_index(self, event: dict, expected: dict):
-        self.assertEqual(perform_api(event), expected)
+        self.assertEqual(handler(event, object()), expected)
 
     @data_provider([
         (
@@ -47,7 +46,7 @@ class TestHandler(TestCase):
         ),
     ])
     def test_show(self, event: dict, expected: dict):
-        self.assertEqual(perform_api(event), expected)
+        self.assertEqual(handler(event, object()), expected)
 
     @data_provider([
         (
@@ -58,11 +57,18 @@ class TestHandler(TestCase):
                 'queryStringParameters': {},
             },
             {
-                'raise': ApiError,
-                'message': '400 Bad Request',
+                'statusCode': 400,
+                'headers': {'Content-Type': 'application/json'},
+                'body': {
+                    'message': '400 Bad Request',
+                    'stacktrace': list,
+                },
             },
         ),
     ])
     def test_error(self, event: dict, expected: dict):
-        with self.assertRaisesRegex(expected['raise'], expected['message']):
-            perform_api(event)
+        result = handler(event, object())
+        self.assertEqual(result['statusCode'], expected['statusCode'])
+        self.assertEqual(result['headers'], expected['headers'])
+        self.assertEqual(result['body']['message'], expected['body']['message'])
+        self.assertEqual(type(result['body']['stacktrace']), expected['body']['stacktrace'])

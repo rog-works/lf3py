@@ -1,11 +1,11 @@
-from typing import NoReturn
+from typing import NoReturn, Tuple
 
 from lf3py.api.errors import ApiError, BadRequestError, UnsupportedMediaTypeError
 from lf3py.i18n import I18n
-from lf3py.middleware.types import ErrorMiddlewares
+from lf3py.middleware.types import ErrorMiddleware
 
 
-def within(*statuses: int) -> ErrorMiddlewares:
+def within(*statuses: int) -> Tuple[ErrorMiddleware, ...]:
     def error_400(error: BadRequestError, i18n: I18n) -> NoReturn:
         raise ApiError(i18n.trans('http.400'), 400) from error
 
