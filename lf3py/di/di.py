@@ -8,14 +8,14 @@ _T = TypeVar('_T')
 
 class DI(ILocator):
     def __init__(self) -> None:
-        self._injectors: Dict[Type, Union[Type, Callable]] = {}
+        self._injectors: Dict[Type, Callable] = {}
         self._instances: Dict[Type, Any] = {}
 
     def can_resolve(self, symbol: Type) -> bool:
         return symbol in self._injectors
 
     def register(self, symbol: Type, injector: Union[Type, Callable]):
-        self._injectors[symbol] = injector
+        self._injectors[symbol] = lambda: injector
 
     def resolve(self, symbol: Type[_T]) -> _T:
         found_symbol = self.__resolve_symbol(symbol)
@@ -23,7 +23,7 @@ class DI(ILocator):
             return self._instances[found_symbol]
 
         injector = self._injectors[found_symbol]
-        instance = invoke(self, injector)
+        instance = invoke(self, injector())
         self._instances[symbol] = instance
         return instance
 
