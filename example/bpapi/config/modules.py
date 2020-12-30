@@ -4,7 +4,6 @@ import os
 def modules() -> dict:
     return {
         'example.bpapi.data.context.MyContext': 'example.bpapi.provider.context.make_context',
-        'lf3py.api.errors.handler.ApiErrorHandler': 'lf3py.api.errors.handler.ApiErrorHandler',
         'lf3py.api.request.Request': 'lf3py.api.provider.request',
         'lf3py.api.response.Response': 'example.bpapi.provider.response.make_response',
         'lf3py.api.symbols.IApiRender': os.environ.get('MODULES_RENDER', 'lf3py.api.render.ApiRender'),

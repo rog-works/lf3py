@@ -23,7 +23,7 @@ class TestRender(TestCase):
                 'headers': {'Content-Type': 'application/json'},
                 'body': {
                     'message': '400 Bad Request',
-                    'stacktrace': ['lf3py.api.errors.errors.ApiError: 400 Bad Request\n'],
+                    'stacktrace': ['lf3py.api.errors.ApiError: 400 Bad Request\n'],
                 },
             }
         ),

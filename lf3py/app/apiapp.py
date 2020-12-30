@@ -1,4 +1,3 @@
-from lf3py.api.errors.handler import ApiErrorHandler
 from lf3py.api.router import IApiRouter
 from lf3py.api.symbols import IApiRender
 from lf3py.app.app import App
@@ -16,10 +15,6 @@ class ApiApp(App):
     @property
     def render(self) -> IApiRender:
         return self._locator.resolve(IApiRender)
-
-    @property
-    def error(self) -> ApiErrorHandler:
-        return self._locator.resolve(ApiErrorHandler)
 
     @property
     def api(self) -> IApiRouter:
