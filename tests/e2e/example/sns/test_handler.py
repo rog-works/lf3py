@@ -5,14 +5,14 @@ from unittest import TestCase, mock
 from lf3py.aws.symbols import IFireHose
 from lf3py.test.helper import data_provider
 
-from tests.helper.example.sns import perform_api
-
 
 class TestHandler(TestCase):
     MODULES = {
         'lf3py.aws.sns.record.SNSRecords': 'lf3py.aws.sns.decode.decode_records',
         'lf3py.aws.symbols.IFireHose': 'tests.e2e.example.sns.test_handler.MockFireHose',
+        'lf3py.middleware.Middleware': 'lf3py.middleware.Middleware',
         'lf3py.routing.symbols.IRouter': 'lf3py.routing.router.FlowRouter',
+        'lf3py.routing.dispatcher.Dispatcher': 'lf3py.routing.dispatcher.FlowDispatcher',
     }
 
     @data_provider([
@@ -37,7 +37,9 @@ class TestHandler(TestCase):
     def test_ping(self, event: dict, expected: dict):
         with mock.patch('example.sns.modules.modules', return_value=self.MODULES):
             with mock.patch('tests.e2e.example.sns.test_handler.MockFireHose.put') as p:
-                perform_api(event)
+                from example.sns.handler import handler
+
+                handler(event, object())
                 p.assert_called_with(expected)
 
     @data_provider([
@@ -68,7 +70,9 @@ class TestHandler(TestCase):
     def test_notice(self, event: dict, expected: dict):
         with mock.patch('example.sns.modules.modules', return_value=self.MODULES):
             with mock.patch('tests.e2e.example.sns.test_handler.MockFireHose.put') as p:
-                perform_api(event)
+                from example.sns.handler import handler
+
+                handler(event, object())
                 p.assert_called_with(expected)
 
 

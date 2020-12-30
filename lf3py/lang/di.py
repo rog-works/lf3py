@@ -18,11 +18,7 @@ class DI(ILocator):
         self._injectors[symbol] = injector
 
     def resolve(self, symbol: Type[_T]) -> _T:
-        candidates = [in_symbol for in_symbol in self._injectors.keys() if issubclass(in_symbol, symbol)]
-        if not candidates:
-            raise ModuleNotFoundError(f'Unresolved symbol. symbol = {symbol}')
-
-        found_symbol = candidates[0]
+        found_symbol = self.__resolve_symbol(symbol)
         if found_symbol in self._instances:
             return self._instances[found_symbol]
 
@@ -30,3 +26,18 @@ class DI(ILocator):
         instance = invoke(self, injector)
         self._instances[symbol] = instance
         return instance
+
+    def __resolve_symbol(self, symbol: Type) -> Type:
+        for in_symbol in self._injectors.keys():
+            if in_symbol == symbol:
+                return in_symbol
+            elif hasattr(in_symbol, '__origin__'):
+                try:
+                    if issubclass(in_symbol.__origin__, symbol):
+                        return in_symbol
+                except TypeError as e:
+                    raise e
+            elif issubclass(in_symbol, symbol):
+                return in_symbol
+
+        raise ModuleNotFoundError(f'Unresolved symbol. symbol = {symbol}')
