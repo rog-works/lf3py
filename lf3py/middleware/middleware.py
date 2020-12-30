@@ -1,6 +1,6 @@
 from typing import Dict, Tuple
 
-from lf3py.di.function import invoke, currying
+from lf3py.di.invoker import invoke, currying
 from lf3py.lang.annotation import FunctionAnnotation
 from lf3py.lang.sequence import first
 from lf3py.lang.locator import ILocator

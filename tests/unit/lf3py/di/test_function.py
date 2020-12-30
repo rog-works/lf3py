@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from lf3py.di import DI
-from lf3py.di.function import invoke, currying
+from lf3py.di.invoker import invoke, currying
 
 
 class SymbolA:

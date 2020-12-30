@@ -1,6 +1,6 @@
 from typing import Any, Callable, Dict, Type, TypeVar, Union
 
-from lf3py.di.function import invoke
+from lf3py.di.invoker import invoke
 from lf3py.lang.locator import ILocator
 
 _T = TypeVar('_T')
