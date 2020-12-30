@@ -28,20 +28,20 @@ $ vim lambda_handler.py
 
 ```python
 from lf3py.api.response import Response
-from lf3py.app.provider import app_provider
 from lf3py.app.apiapp import ApiApp
 
-app = app_provider(ApiApp)
 
-
-@app.entry
 def handler(event: dict, context: object) -> dict:
-    return app.run().serialize()
+    app = ApiApp.entry(event)
 
+    def run() -> dict:
+        return app.run().serialize()
 
-@app.api.get('/ping')
-def pong() -> Response:
-    return app.render.ok().json()
+    @app.api.get('/ping')
+    def pong() -> Response:
+        return app.render.ok().json()
+
+    return run()
 
 
 # XXX cui testing code
