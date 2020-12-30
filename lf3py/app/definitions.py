@@ -5,7 +5,7 @@ def flowapi_modules() -> dict:
         'lf3py.api.router.IApiRouter': 'lf3py.api.router.FlowApiRouter',
         'lf3py.api.symbols.IApiRender': 'lf3py.api.render.ApiRender',
         'lf3py.middleware.Middleware': 'lf3py.middleware.Middleware',
-        'lf3py.routing.dispatcher.Dispatcher': 'lf3py.routing.dispatcher.FlowDispatcher',
+        'lf3py.routing.symbols.IDispatcher': 'lf3py.routing.dispatcher.FlowDispatcher',
     }
 
 
@@ -14,5 +14,5 @@ def sns_modules() -> dict:
         'lf3py.aws.sns.record.SNSRecords': 'lf3py.aws.sns.decode.decode_records',
         'lf3py.middleware.Middleware': 'lf3py.middleware.Middleware',
         'lf3py.routing.symbols.IRouter': 'lf3py.routing.router.FlowRouter',
-        'lf3py.routing.dispatcher.Dispatcher': 'lf3py.routing.dispatcher.FlowDispatcher',
+        'lf3py.routing.symbols.IDispatcher': 'lf3py.routing.dispatcher.FlowDispatcher',
     }

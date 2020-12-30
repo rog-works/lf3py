@@ -2,8 +2,7 @@ from lf3py.app.app import App
 from lf3py.app.definitions import sns_modules
 from lf3py.aws.sns.record import SNSRecords
 from lf3py.config import ModuleDefinitions
-from lf3py.routing.dispatcher import Dispatcher
-from lf3py.routing.symbols import IRouter
+from lf3py.routing.symbols import IDispatcher, IRouter
 from lf3py.task.data import Result, Ok
 
 
@@ -17,8 +16,8 @@ class SNSApp(App):
         return self._locator.resolve(IRouter)
 
     @property
-    def dispatcher(self) -> Dispatcher:
-        return self._locator.resolve(Dispatcher)
+    def dispatcher(self) -> IDispatcher:
+        return self._locator.resolve(IDispatcher)
 
     def run(self) -> Result:
         for record in self._locator.resolve(SNSRecords):

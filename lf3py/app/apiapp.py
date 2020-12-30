@@ -3,7 +3,7 @@ from lf3py.api.symbols import IApiRender
 from lf3py.app.app import App
 from lf3py.app.definitions import flowapi_modules
 from lf3py.config import ModuleDefinitions
-from lf3py.routing.dispatcher import Dispatcher
+from lf3py.routing.symbols import IDispatcher
 from lf3py.task.data import Command, Result
 
 
@@ -21,8 +21,8 @@ class ApiApp(App):
         return self._locator.resolve(IApiRouter)
 
     @property
-    def dispatcher(self) -> Dispatcher:
-        return self._locator.resolve(Dispatcher)
+    def dispatcher(self) -> IDispatcher:
+        return self._locator.resolve(IDispatcher)
 
     def run(self) -> Result:
         return self.dispatcher.dispatch(self._locator.resolve(Command), self.api)

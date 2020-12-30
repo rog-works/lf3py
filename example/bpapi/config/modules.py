@@ -13,6 +13,6 @@ def modules() -> dict:
         'lf3py.config.Routes': 'example.bpapi.config.routes.routes',
         'lf3py.i18n.I18n': 'example.bpapi.provider.i18n.make_i18n',
         'lf3py.middleware.Middleware': 'lf3py.middleware.Middleware',
-        'lf3py.routing.dispatcher.Dispatcher': 'lf3py.routing.dispatcher.BpDispatcher',
+        'lf3py.routing.symbols.IDispatcher': 'lf3py.routing.dispatcher.BpDispatcher',
         'logging.Logger': 'example.bpapi.provider.logger.dev_logger',
     }
