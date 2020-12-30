@@ -1,7 +1,7 @@
 from typing import Any, Callable, Dict, Type, TypeVar, Union
 
 from lf3py.di.function import invoke
-from lf3py.locator.types import ILocator
+from lf3py.lang.locator import ILocator
 
 _T = TypeVar('_T')
 
@@ -32,11 +32,8 @@ class DI(ILocator):
             if in_symbol == symbol:
                 return in_symbol
             elif hasattr(in_symbol, '__origin__'):
-                try:
-                    if issubclass(in_symbol.__origin__, symbol):
-                        return in_symbol
-                except TypeError as e:
-                    raise e
+                if issubclass(in_symbol.__origin__, symbol):
+                    return in_symbol
             elif issubclass(in_symbol, symbol):
                 return in_symbol
 

@@ -1,4 +1,4 @@
-from lf3py.locator.types import ILocator
+from lf3py.lang.locator import ILocator
 from typing import Type, TypeVar
 
 from lf3py.app.provider import locator

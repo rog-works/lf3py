@@ -1,7 +1,7 @@
 import re
 
 from lf3py.config import ModuleDefinitions
-from lf3py.lang.di import DI
+from lf3py.di import DI
 from lf3py.lang.module import load_module_path
 
 

@@ -2,7 +2,7 @@ from typing import Any, Callable, Dict, Type, TypeVar
 
 from lf3py.lang.annotation import FunctionAnnotation
 from lf3py.lang.inspect import default_args
-from lf3py.locator.types import ILocator
+from lf3py.lang.locator import ILocator
 
 _T = TypeVar('_T')
 
