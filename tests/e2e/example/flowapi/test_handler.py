@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from lf3py.test.helper import data_provider
 
-from example.bpapi.handler import handler
+from example.flowapi.handler import handler
 
 
 class TestHandler(TestCase):

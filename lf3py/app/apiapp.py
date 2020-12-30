@@ -5,7 +5,7 @@ from lf3py.app.app import App
 from lf3py.app.definitions import flowapi_modules
 from lf3py.config import ModuleDefinitions
 from lf3py.di.function import invoke
-from lf3py.routing.dispatcher import dispatch
+from lf3py.routing.dispatcher import Dispatcher
 from lf3py.task.data import Result
 
 
@@ -27,4 +27,4 @@ class ApiApp(App):
         return self._locator.resolve(IApiRouter)
 
     def run(self) -> Result:
-        return invoke(self.locator, dispatch)
+        return invoke(self.locator, self._locator.resolve(Dispatcher).dispatch)
