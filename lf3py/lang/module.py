@@ -1,5 +1,4 @@
 from importlib import import_module
-import sys
 from typing import Any
 
 
@@ -12,10 +11,3 @@ def load_module_path(module_path: str) -> Any:
     path = '.'.join(elems[:-1])
     module = elems[-1]
     return load_module(path, module)
-
-
-def unload_module(path: str):
-    if path not in sys.modules:
-        raise ModuleNotFoundError()
-
-    del sys.modules[path]
