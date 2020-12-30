@@ -20,7 +20,7 @@ class Middleware:
 
         return decorator
 
-    def error(self, *error_handlers: ErrorMiddleware) -> RunnerDecorator:
+    def catch(self, *error_handlers: ErrorMiddleware) -> RunnerDecorator:
         def decorator(runner: Runner) -> Runner:
             self.error_handler_register(runner, *error_handlers)
             return runner

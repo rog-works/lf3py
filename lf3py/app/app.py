@@ -47,4 +47,4 @@ class App:
         return self.middleware.attach(*perform_middlewares)
 
     def on_error(self, *error_handlers: ErrorMiddleware) -> RunnerDecorator:
-        return self.middleware.error(*error_handlers)
+        return self.middleware.catch(*error_handlers)
