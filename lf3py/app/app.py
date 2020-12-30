@@ -1,9 +1,9 @@
-from lf3py.lang.locator import ILocator
 from typing import Type, TypeVar
 
 from lf3py.app.provider import locator
 from lf3py.aws.types import LambdaEvent
 from lf3py.config import ModuleDefinitions
+from lf3py.lang.locator import ILocator
 from lf3py.middleware.middleware import ErrorMiddleware, Middleware, PerformMiddleware
 from lf3py.task.types import RunnerDecorator
 from lf3py.session import Session
