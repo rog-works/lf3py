@@ -3,8 +3,8 @@ from typing import Dict, Tuple
 from lf3py.config import Routes
 from lf3py.lang.dsn import DSN, DSNElement, DSNType
 from lf3py.lang.module import load_module_path
-from lf3py.routing.args import resolve_args
 from lf3py.routing.errors import RouteMismatchError
+from lf3py.routing.invoker import invoke
 from lf3py.routing.symbols import IRouter
 from lf3py.task.data import Command, Result
 from lf3py.task.types import Runner, RunnerDecorator
@@ -39,8 +39,7 @@ class Router(IRouter):
 
     def dispatch(self, command: Command) -> Result:
         spec, runner = self.resolve(str(command.dsn))
-        kwargs = resolve_args(runner, command, spec)
-        return runner(**kwargs)
+        return invoke(runner, command, spec)
 
 
 class BpRouter(Router):

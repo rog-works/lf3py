@@ -3,8 +3,13 @@ from typing import Any, Tuple, Union
 from lf3py.lang.annotation import FunctionAnnotation
 from lf3py.routing.errors import UnresolvedArgumentsError
 from lf3py.serialization.errors import DeserializeError
-from lf3py.task.data import Command
+from lf3py.task.data import Command, Result
 from lf3py.task.types import Runner
+
+
+def invoke(runner: Runner, command: Command, dsn_spec: str) -> Result:
+    kwargs = resolve_args(runner, command, dsn_spec)
+    return runner(**kwargs)
 
 
 def resolve_args(runner: Runner, command: Command, dsn_spec: str) -> Union[Tuple[Any, dict], dict]:
