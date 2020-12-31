@@ -31,8 +31,7 @@ class DI:
             if in_symbol == symbol:
                 return in_symbol
             elif hasattr(in_symbol, '__origin__'):
-                if issubclass(in_symbol.__origin__, symbol):
-                    return in_symbol
+                pass  # XXX in_symbol is typing type
             elif issubclass(in_symbol, symbol):
                 return in_symbol
 
