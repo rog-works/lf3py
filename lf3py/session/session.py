@@ -31,10 +31,13 @@ class Session:
         return self
 
     def __exit__(self, exc_type: Type[Exception], exc_value: Optional[BaseException], exc_traceback: TracebackType):
-        del self.__sessions[self.thread_id()]
+        self.close()
 
     def __call__(self, symbol: Type[_T]) -> _T:
         return self.resolve(symbol)
+
+    def close(self):
+        del self.__sessions[self.thread_id()]
 
     def can_resolve(self, symbol: Type) -> bool:
         return self._locator.can_resolve(symbol)
