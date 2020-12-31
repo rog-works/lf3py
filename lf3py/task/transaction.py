@@ -26,9 +26,8 @@ def transaction(error_handler: ErrorHandler) -> Transaction:
 
         >>> def rollback(error: BaseException, context: dict):
         >>>     print(error)
+        >>>     print(context)
         ValueError
-
-        >>> print(context)
         {'publish_id': 100}
     """
     return Transaction(error_handler=error_handler)
