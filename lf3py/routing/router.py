@@ -2,8 +2,11 @@ from typing import Dict, Tuple
 
 from lf3py.config import Routes
 from lf3py.lang.dsn import DSN, DSNElement, DSNType
+from lf3py.lang.module import load_module_path
+from lf3py.routing.args import resolve_args
 from lf3py.routing.errors import RouteMismatchError
 from lf3py.routing.symbols import IRouter
+from lf3py.task.data import Command, Result
 from lf3py.task.types import Runner, RunnerDecorator
 
 
@@ -23,7 +26,7 @@ class Router(IRouter):
         spec = self._dsn_type.format(*elems)
         self._routes[spec] = f'{runner.__module__}.{runner.__name__}'
 
-    def resolve(self, *elems: DSNElement) -> Tuple[str, str]:
+    def _resolve_spec_path(self, *elems: DSNElement) -> Tuple[str, str]:
         dsn = self.dsnize(*elems)
         for spec, module_path in self._routes.items():
             if dsn.contains(spec):
@@ -34,10 +37,19 @@ class Router(IRouter):
     def dsnize(self, *elems: DSNElement) -> DSN:
         return self._dsn_type(*elems)
 
+    def dispatch(self, command: Command) -> Result:
+        spec, runner = self.resolve(str(command.dsn))
+        kwargs = resolve_args(runner, command, spec)
+        return runner(**kwargs)
+
 
 class BpRouter(Router):
     def __init__(self, dsn_type: DSNType, routes: Routes) -> None:
         super(BpRouter, self).__init__(dsn_type, routes)
+
+    def resolve(self, *elems: DSNElement) -> Tuple[str, Runner]:
+        spec, module_path = self._resolve_spec_path(*elems)
+        return spec, load_module_path(module_path)
 
 
 class FlowRouter(Router):
@@ -45,15 +57,11 @@ class FlowRouter(Router):
         super(FlowRouter, self).__init__(dsn_type)
         self._runners: Dict[str, Runner] = {}
 
-    def __call__(self, *spec_elems: DSNElement) -> RunnerDecorator:
-        def decorator(runner: Runner) -> Runner:
-            self.register(runner, *spec_elems)
-            spec = self._dsn_type.format(*spec_elems)
-            self._runners[spec] = runner
-            return runner
+    def register(self, runner: Runner, *elems: DSNElement):
+        super(FlowRouter, self).register(runner, *elems)
+        spec = self._dsn_type.format(*elems)
+        self._runners[spec] = runner
 
-        return decorator
-
-    def resolve_runner(self, *elems: DSNElement) -> Tuple[str, Runner]:
-        spec, _ = self.resolve(*elems)
+    def resolve(self, *elems: DSNElement) -> Tuple[str, Runner]:
+        spec, _ = self._resolve_spec_path(*elems)
         return spec, self._runners[spec]

@@ -9,13 +9,14 @@ from example.bpapi.api.users_defs import IndexBody, ShowBody, CreateParams
 from example.bpapi.middleware.error import within
 from example.bpapi.models.user import User
 
-bp = MyApp.blueprint(__name__)
+bp = MyApp.blueprint()
 
 
 @bp.behavior(preflight_cors)
 @bp.api.option('/')
 def preflight() -> Response:
-    return MyApp.get().render.ok(204).json()
+    app = MyApp.get()
+    return app.render.ok(204).json()
 
 
 @bp.api.get('/users')

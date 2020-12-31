@@ -1,10 +1,14 @@
-from typing import Dict, Tuple
+from types import TracebackType
+from typing import Dict, Optional, Type, Tuple
 
 from lf3py.di.invoker import invoke, currying
 from lf3py.lang.annotation import FunctionAnnotation
-from lf3py.lang.sequence import first
 from lf3py.lang.locator import ILocator
+from lf3py.lang.module import import_module
+from lf3py.lang.sequence import first
 from lf3py.middleware.types import ErrorMiddleware, PerformMiddleware
+from lf3py.routing.symbols import IRouter
+from lf3py.task.data import Command
 from lf3py.task.types import Runner, RunnerDecorator
 
 
@@ -13,7 +17,7 @@ class Middleware:
         self._performers: Dict[Runner, Tuple[PerformMiddleware]] = {}
         self._error_handlers: Dict[Runner, Tuple[ErrorMiddleware]] = {}
 
-    def attach(self, *performers: PerformMiddleware) -> RunnerDecorator:
+    def effect(self, *performers: PerformMiddleware) -> RunnerDecorator:
         def decorator(runner: Runner) -> Runner:
             self.performer_register(runner, *performers)
             return runner
@@ -33,8 +37,22 @@ class Middleware:
     def error_handler_register(self, runner: Runner, *error_handlers: ErrorMiddleware):
         self._error_handlers[runner] = error_handlers
 
-    def build_performer(self, runner: Runner, locator: ILocator) -> 'Performer':
-        return Performer(locator, self._performers.get(runner, ()), self._error_handlers.get(runner, ()))
+    def attach(self, locator: ILocator, router: IRouter, command: Command) -> 'Performer':
+        _, runner = router.resolve(str(command.dsn))
+        middleware = self.__dirty_resolve_middleware(runner)
+        return Performer(
+            locator,
+            middleware._performers.get(runner, ()),
+            middleware._error_handlers.get(runner, ())
+        )
+
+    def __dirty_resolve_middleware(self, runner: Runner) -> 'Middleware':
+        modules = import_module(runner.__module__)
+        for module in modules.__dict__.values():
+            if hasattr(module, 'middleware') and type(module.middleware) == Middleware:
+                return module.middleware
+
+        return self
 
 
 class Performer:
@@ -43,14 +61,21 @@ class Performer:
         self._performers = performers
         self._error_handlers = error_handlers
 
+    def __enter__(self):
+        self.perform()
+
+    def __exit__(self, exc_type: Type[Exception], exc_value: Optional[BaseException], exc_traceback: TracebackType):
+        if exc_value is not None:
+            self.handle_error(exc_value)
+
     def perform(self):
         for performer in self._performers:
             invoke(self._locator, performer)
 
-    def handle_error(self, error: Exception):
+    def handle_error(self, error: BaseException):
         self.__handle_error(error, *self._error_handlers)
 
-    def __handle_error(self, error: Exception, *error_handlers: ErrorMiddleware):
+    def __handle_error(self, error: BaseException, *error_handlers: ErrorMiddleware):
         for index, error_handler in enumerate(error_handlers):
             func_anno = FunctionAnnotation(error_handler)
             arg_anno = first(func_anno.args.values())
