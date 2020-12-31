@@ -16,8 +16,9 @@ class SNSApp(App):
         return self._locator.resolve(IRouter)
 
     def run(self) -> Result:
-        for record in self._locator.resolve(SNSRecords):
-            with self.middleware.attach(self._locator, self.route, record):
-                self.route.dispatch(record)
+        with self.start() as session:
+            for record in session(SNSRecords):
+                with self.middleware.attach(session, self.route, record):
+                    self.route.dispatch(record)
 
         return Ok

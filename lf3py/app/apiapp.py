@@ -20,6 +20,7 @@ class ApiApp(App):
         return self._locator.resolve(IApiRouter)
 
     def run(self) -> Result:
-        command = self._locator.resolve(Command)
-        with self.middleware.attach(self._locator, self.api, command):
-            return self.api.dispatch(command)
+        with self.start() as session:
+            command = session(Command)
+            with self.middleware.attach(session, self.api, command):
+                return self.api.dispatch(command)

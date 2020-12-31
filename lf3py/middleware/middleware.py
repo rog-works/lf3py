@@ -2,10 +2,10 @@ from types import TracebackType
 from typing import Dict, List, Optional, Type
 
 from lf3py.di.invoker import invoke, currying
-from lf3py.lang.locator import Locator
 from lf3py.lang.module import import_module
 from lf3py.middleware.types import ErrorMiddleware, PerformMiddleware
 from lf3py.routing.symbols import IRouter
+from lf3py.session import Session
 from lf3py.task.data import Command
 from lf3py.task.types import Runner, RunnerDecorator
 
@@ -35,11 +35,11 @@ class Middleware:
     def error_handler_register(self, runner: Runner, *error_handlers: ErrorMiddleware):
         self._error_handlers[runner] = list(error_handlers)
 
-    def attach(self, locator: Locator, router: IRouter, command: Command) -> 'Performer':
+    def attach(self, session: Session, router: IRouter, command: Command) -> 'Performer':
         _, runner = router.resolve(str(command.dsn))
         middleware = self.__dirty_resolve_middleware(runner)
         return Performer(
-            locator,
+            session,
             middleware._performers.get(runner, []),
             middleware._error_handlers.get(runner, [])
         )
@@ -54,8 +54,8 @@ class Middleware:
 
 
 class Performer:
-    def __init__(self, locator: Locator, performers: List[PerformMiddleware], error_handlers: List[ErrorMiddleware]) -> None:
-        self._locator = locator
+    def __init__(self, session: Session, performers: List[PerformMiddleware], error_handlers: List[ErrorMiddleware]) -> None:
+        self._session = session
         self._performers = performers
         self._error_handlers = error_handlers
 
@@ -68,7 +68,7 @@ class Performer:
 
     def perform(self):
         for performer in self._performers:
-            invoke(self._locator, performer)
+            invoke(self._session, performer)
 
     def handle_error(self, error: BaseException):
         self.__handle_error(error, *self._error_handlers)
@@ -76,7 +76,7 @@ class Performer:
     def __handle_error(self, error: BaseException, *error_handlers: ErrorMiddleware):
         for index, error_handler in enumerate(error_handlers):
             try:
-                curried = currying(self._locator, error_handler)
+                curried = currying(self._session, error_handler)
                 curried(error)
             except Exception as e:
                 self.__handle_error(e, *error_handlers[index + 1:])

@@ -1,37 +1,38 @@
-from typing import Any, Type, TypeVar
+from typing import Type, TypeVar
 
-from lf3py.app.provider import locator
+from lf3py.app.provider import di_container
 from lf3py.aws.types import LambdaEvent
 from lf3py.config import ModuleDefinitions
+from lf3py.lang.locator import Locator
 from lf3py.middleware.middleware import ErrorMiddleware, Middleware, PerformMiddleware
+from lf3py.session.session import Session
 from lf3py.task.types import RunnerDecorator
 
 _T = TypeVar('_T', bound='App')
 
 
 class App:
-    __root: Any
-
-    @classmethod
-    def get(cls: Type[_T]) -> _T:
-        return cls.__root
-
     @classmethod
     def entry(cls: Type[_T], event: dict) -> _T:
-        cls.__root = cls()
-        cls.__root._locator.register(LambdaEvent, lambda: event)
-        return cls.__root
+        di = di_container(cls.module_definitions())
+        di.register(LambdaEvent, lambda: event)
+        app = cls(di)
+        return app
 
     @classmethod
     def blueprint(cls: Type[_T]) -> _T:
-        return cls()
+        di = di_container(cls.module_definitions())
+        return cls(di)
 
     @classmethod
     def module_definitions(cls) -> ModuleDefinitions:
         raise NotImplementedError()
 
-    def __init__(self) -> None:
-        self._locator = locator(self.module_definitions())
+    def __init__(self, locator: Locator) -> None:
+        self._locator = locator
+
+    def start(self) -> Session:
+        return Session.start(self._locator)
 
     @property
     def middleware(self) -> Middleware:
