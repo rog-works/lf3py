@@ -52,13 +52,13 @@ class BpRouter(Router):
         return spec, load_module_path(module_path)
 
 
-class FlowRouter(Router):
+class InlineRouter(Router):
     def __init__(self, dsn_type: DSNType = DSN) -> None:
-        super(FlowRouter, self).__init__(dsn_type)
+        super(InlineRouter, self).__init__(dsn_type)
         self._runners: Dict[str, Runner] = {}
 
     def register(self, runner: Runner, *elems: DSNElement):
-        super(FlowRouter, self).register(runner, *elems)
+        super(InlineRouter, self).register(runner, *elems)
         spec = self._dsn_type.format(*elems)
         self._runners[spec] = runner
 

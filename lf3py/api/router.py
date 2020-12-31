@@ -1,7 +1,7 @@
 from lf3py.api.dsn import ApiDSN
 from lf3py.api.symbols import IApiRouter
 from lf3py.config.types import Routes
-from lf3py.routing.router import BpRouter, FlowRouter
+from lf3py.routing.router import BpRouter, InlineRouter
 from lf3py.task.types import RunnerDecorator
 
 
@@ -33,6 +33,6 @@ class BpApiRouter(BpRouter, ImplApiRouter):
         super(BpApiRouter, self).__init__(ApiDSN, routes)
 
 
-class FlowApiRouter(FlowRouter, ImplApiRouter):
+class InlineApiRouter(InlineRouter, ImplApiRouter):
     def __init__(self) -> None:
-        super(FlowApiRouter, self).__init__(ApiDSN)
+        super(InlineApiRouter, self).__init__(ApiDSN)

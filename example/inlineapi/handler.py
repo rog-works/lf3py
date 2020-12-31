@@ -2,7 +2,7 @@ from lf3py.api.response import Response
 from lf3py.app.apiapp import ApiApp
 from lf3py.middleware.api.error import unexpected_dispach, within
 
-from example.flowapi.model_defs import IndexBody, Model, ShowBody
+from example.inlineapi.model_defs import IndexBody, Model, ShowBody
 
 
 def handler(event: dict, context: object) -> dict:

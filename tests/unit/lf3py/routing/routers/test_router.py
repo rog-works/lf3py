@@ -2,7 +2,7 @@ from unittest import TestCase
 
 from lf3py.config.types import Routes
 from lf3py.lang.dsn import DSN
-from lf3py.routing.router import BpRouter, FlowRouter
+from lf3py.routing.router import BpRouter, InlineRouter
 from lf3py.task.data import Result
 from lf3py.task.types import Runner
 from lf3py.test.helper import data_provider
@@ -37,7 +37,7 @@ class TestFlowRouter(TestCase):
         ('GET /models/\\d+', runner_b, 'GET /models/1234'),
     ])
     def test_resolve(self, spec: str, runner: Runner, dsn: str):
-        router = FlowRouter(DSN)
+        router = InlineRouter(DSN)
         router.register(runner, spec)
         _, actual = router.resolve(dsn)
         self.assertEqual(runner, actual)

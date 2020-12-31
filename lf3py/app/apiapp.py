@@ -1,7 +1,7 @@
 from lf3py.api.router import IApiRouter
 from lf3py.api.symbols import IApiRender
 from lf3py.app.app import App
-from lf3py.app.definitions import flowapi_modules
+from lf3py.app.definitions import inlineapi_modules
 from lf3py.config import ModuleDefinitions
 from lf3py.task.data import Command, Result
 
@@ -9,7 +9,7 @@ from lf3py.task.data import Command, Result
 class ApiApp(App):
     @classmethod
     def module_definitions(cls) -> ModuleDefinitions:
-        return flowapi_modules()
+        return inlineapi_modules()
 
     @property
     def render(self) -> IApiRender:
