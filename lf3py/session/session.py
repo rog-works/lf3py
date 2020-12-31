@@ -1,10 +1,8 @@
 import threading
 from types import TracebackType
-from typing import Dict, Optional, Type, TypeVar
+from typing import Dict, Optional, Type
 
-from lf3py.lang.locator import Locator
-
-_T = TypeVar('_T')
+from lf3py.lang.locator import Locator, T_INST
 
 
 class Session:
@@ -33,7 +31,7 @@ class Session:
     def __exit__(self, exc_type: Type[Exception], exc_value: Optional[BaseException], exc_traceback: TracebackType):
         self.close()
 
-    def __call__(self, symbol: Type[_T]) -> _T:
+    def __call__(self, symbol: Type[T_INST]) -> T_INST:
         return self.resolve(symbol)
 
     def close(self):
@@ -42,9 +40,9 @@ class Session:
     def can_resolve(self, symbol: Type) -> bool:
         return self._locator.can_resolve(symbol)
 
-    def resolve(self, symbol: Type[_T]) -> _T:
+    def resolve(self, symbol: Type[T_INST]) -> T_INST:
         return self._locator.resolve(symbol)
 
 
-def context(symbol: Type[_T]) -> _T:
+def context(symbol: Type[T_INST]) -> T_INST:
     return Session.current()(symbol)

@@ -5,7 +5,7 @@ from typing import Any, Type, TypeVar
 from lf3py.lang.dsn import DSN
 from lf3py.serialization.serializer import DictSerializer, Serializer
 
-_T = TypeVar('_T')
+T_OBJ = TypeVar('T_OBJ')
 
 
 class Command(metaclass=ABCMeta):
@@ -13,7 +13,7 @@ class Command(metaclass=ABCMeta):
     def dsn(self) -> DSN:
         raise NotImplementedError()
 
-    def data(self, data_type: Type[_T]) -> _T:
+    def data(self, data_type: Type[T_OBJ]) -> T_OBJ:
         raise NotImplementedError()
 
 

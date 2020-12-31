@@ -4,7 +4,7 @@ from typing import Any, Type, TypeVar
 from lf3py.lang.annotation import ClassAnnotation, PropertyAnnotation
 from lf3py.serialization.errors import DeserializeError
 
-_T = TypeVar('_T')
+T_OBJ = TypeVar('T_OBJ')
 
 
 class Deserializer(metaclass=ABCMeta):
@@ -14,7 +14,7 @@ class Deserializer(metaclass=ABCMeta):
 
 
 class DictDeserializer(Deserializer):
-    def deserialize(self, obj_type: Type[_T], data: dict) -> _T:
+    def deserialize(self, obj_type: Type[T_OBJ], data: dict) -> T_OBJ:
         try:
             obj_anno = ClassAnnotation(obj_type)
             deserialized = (obj_anno.origin)()

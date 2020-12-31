@@ -2,7 +2,7 @@ from typing import Any, Callable, Dict, Type, TypeVar, Union
 
 from lf3py.di.invoker import invoke
 
-_T = TypeVar('_T')
+T_INST = TypeVar('T_INST')
 
 
 class DI:
@@ -16,7 +16,7 @@ class DI:
     def register(self, symbol: Type, injector: Union[Type, Callable]):
         self._injectors[symbol] = lambda: injector
 
-    def resolve(self, symbol: Type[_T]) -> _T:
+    def resolve(self, symbol: Type[T_INST]) -> T_INST:
         found_symbol = self.__resolve_symbol(symbol)
         if found_symbol in self._instances:
             return self._instances[found_symbol]

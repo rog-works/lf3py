@@ -4,10 +4,10 @@ from lf3py.lang.annotation import FunctionAnnotation
 from lf3py.lang.inspect import default_args
 from lf3py.lang.locator import Locator
 
-_T = TypeVar('_T')
+T_RET = TypeVar('T_RET')
 
 
-def invoke(locator: Locator, func: Callable[..., _T]) -> _T:
+def invoke(locator: Locator, func: Callable[..., T_RET]) -> T_RET:
     func_anno, defaults = FunctionAnnotation(func), default_args(func)
     inject_kwargs = {
         key: __resolve_arg(locator, key, arg_anno.org_type, defaults)
@@ -16,7 +16,7 @@ def invoke(locator: Locator, func: Callable[..., _T]) -> _T:
     return func(**inject_kwargs)
 
 
-def currying(locator: Locator, func: Callable[..., _T]) -> Callable[..., _T]:
+def currying(locator: Locator, func: Callable[..., T_RET]) -> Callable[..., T_RET]:
     func_anno, defaults = FunctionAnnotation(func), default_args(func)
     inject_kwargs = {
         key: __resolve_arg(locator, key, arg_anno.org_type, defaults)
@@ -24,7 +24,7 @@ def currying(locator: Locator, func: Callable[..., _T]) -> Callable[..., _T]:
         if locator.can_resolve(arg_anno.org_type) or key in defaults
     }
 
-    def curried_func(*args, **kwargs) -> _T:
+    def curried_func(*args, **kwargs) -> T_RET:
         return func(*args, **{**inject_kwargs, **kwargs})
 
     return curried_func

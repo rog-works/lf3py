@@ -8,19 +8,19 @@ from lf3py.middleware.middleware import ErrorMiddleware, Middleware, PerformMidd
 from lf3py.session.session import Session
 from lf3py.task.types import RunnerDecorator
 
-_T = TypeVar('_T', bound='App')
+T_APP = TypeVar('T_APP', bound='App')
 
 
 class App:
     @classmethod
-    def entry(cls: Type[_T], event: dict) -> _T:
+    def entry(cls: Type[T_APP], event: dict) -> T_APP:
         di = di_container(cls.module_definitions())
         di.register(LambdaEvent, lambda: event)
         app = cls(di)
         return app
 
     @classmethod
-    def blueprint(cls: Type[_T]) -> _T:
+    def blueprint(cls: Type[T_APP]) -> T_APP:
         di = di_container(cls.module_definitions())
         return cls(di)
 

@@ -3,7 +3,7 @@ from typing import Any, Dict, Type
 
 from lf3py.api.dsn import ApiDSN
 from lf3py.serialization.deserializer import DictDeserializer
-from lf3py.task.data import Command, _T
+from lf3py.task.data import Command, T_OBJ
 
 
 @dataclass
@@ -17,5 +17,5 @@ class Request(Command):
     def dsn(self) -> ApiDSN:
         return ApiDSN(self.method, self.path)
 
-    def data(self, data_type: Type[_T]) -> _T:
+    def data(self, data_type: Type[T_OBJ]) -> T_OBJ:
         return DictDeserializer().deserialize(data_type, self.params)

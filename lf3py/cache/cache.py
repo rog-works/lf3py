@@ -1,25 +1,26 @@
 from typing import Callable, List, Optional, TypeVar, Union
 
-_T = TypeVar('_T')
+T_DATA = TypeVar('T_DATA')
 ContextInjector = Callable[[], List[Union[int, str]]]
 
 
-class Storage(dict): pass
+class Storage(dict):
+    pass
 
 
 class Cache:
     def __init__(self, storage: Storage = Storage()) -> None:
         self._storage = storage
 
-    def __call__(self, inject_keys: Optional[ContextInjector] = None) -> Callable[[Callable[..., _T]], Callable[..., _T]]:
+    def __call__(self, inject_keys: Optional[ContextInjector] = None) -> Callable[[Callable[..., T_DATA]], Callable[..., T_DATA]]:
         """
         Examples:
-            >>> @app.cache(inject_keys=lambda: [self.id])
+            >>> @session.cache(inject_keys=lambda: [self.id])
             >>> def get_slow_content(self, cached: bool) -> dict:
             >>>     return requests.get(f'https://example.com/models/{self.id}/content').json()
         """
-        def decorator(wrapper_func: Callable[..., _T]) -> Callable[..., _T]:
-            def wrapper(*args, **kwargs) -> _T:
+        def decorator(wrapper_func: Callable[..., T_DATA]) -> Callable[..., T_DATA]:
+            def wrapper(*args, **kwargs) -> T_DATA:
                 context = inject_keys() if inject_keys is not None else []
                 cache_key = self.__calc_cache_key(wrapper_func, context, *args, **kwargs)
                 force = 'cached' in kwargs and not kwargs['cached']
