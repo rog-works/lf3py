@@ -29,7 +29,7 @@ def index() -> Response:
 
 
 @bp.behavior(accept_json)
-@bp.on_error(*(unexpected_dispach, *within(400, 415)))
+@bp.on_error(unexpected_dispach, *within(400, 415))
 @bp.api.get('/users/{user_id}')
 def show(user_id: int) -> Response:
     app = MyApp.get()
@@ -40,7 +40,7 @@ def show(user_id: int) -> Response:
 
 
 @bp.behavior(accept_json)
-@bp.on_error(*(unexpected_dispach, *within(400, 415)))
+@bp.on_error(unexpected_dispach, *within(400, 415))
 @bp.api.post('/users')
 def create(params: CreateParams) -> Response:
     app = MyApp.get()

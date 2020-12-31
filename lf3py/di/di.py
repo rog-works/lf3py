@@ -1,12 +1,11 @@
 from typing import Any, Callable, Dict, Type, TypeVar, Union
 
 from lf3py.di.invoker import invoke
-from lf3py.lang.locator import ILocator
 
 _T = TypeVar('_T')
 
 
-class DI(ILocator):
+class DI:
     def __init__(self) -> None:
         self._injectors: Dict[Type, Callable] = {}
         self._instances: Dict[Type, Any] = {}

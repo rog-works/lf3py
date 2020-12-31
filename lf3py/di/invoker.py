@@ -2,12 +2,12 @@ from typing import Any, Callable, Dict, Type, TypeVar
 
 from lf3py.lang.annotation import FunctionAnnotation
 from lf3py.lang.inspect import default_args
-from lf3py.lang.locator import ILocator
+from lf3py.lang.locator import Locator
 
 _T = TypeVar('_T')
 
 
-def invoke(locator: ILocator, func: Callable[..., _T]) -> _T:
+def invoke(locator: Locator, func: Callable[..., _T]) -> _T:
     func_anno, defaults = FunctionAnnotation(func), default_args(func)
     inject_kwargs = {
         key: __resolve_arg(locator, key, arg_anno.org_type, defaults)
@@ -16,7 +16,7 @@ def invoke(locator: ILocator, func: Callable[..., _T]) -> _T:
     return func(**inject_kwargs)
 
 
-def currying(locator: ILocator, func: Callable[..., _T]) -> Callable[..., _T]:
+def currying(locator: Locator, func: Callable[..., _T]) -> Callable[..., _T]:
     func_anno, defaults = FunctionAnnotation(func), default_args(func)
     inject_kwargs = {
         key: __resolve_arg(locator, key, arg_anno.org_type, defaults)
@@ -30,12 +30,12 @@ def currying(locator: ILocator, func: Callable[..., _T]) -> Callable[..., _T]:
     return curried_func
 
 
-def __resolve_arg(locator: ILocator, key: str, symbol: Type, defaults: Dict[str, Any]) -> bool:
+def __resolve_arg(locator: Locator, key: str, symbol: Type, defaults: Dict[str, Any]) -> bool:
     if __allow_default(locator, key, symbol, defaults):
         return defaults[key]
     else:
         return locator.resolve(symbol)
 
 
-def __allow_default(locator: ILocator, key: str, symbol: Type, defaults: Dict[str, Any]) -> bool:
+def __allow_default(locator: Locator, key: str, symbol: Type, defaults: Dict[str, Any]) -> bool:
     return not locator.can_resolve(symbol) and key in defaults
