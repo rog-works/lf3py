@@ -20,7 +20,7 @@ def decode_request(event: LambdaEvent) -> dict:
 
 def __decode_headers(headers: Dict[str, str]) -> dict:
     def camelize(key: str) -> str:
-        return '-'.join(map(lambda k: k[0].upper() + k[1:], key.split('-')))
+        return '-'.join(map(lambda word: word[0].upper() + word[1:], key.split('-')))
 
     return {camelize(key): value for key, value in headers.items()}
 
