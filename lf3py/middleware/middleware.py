@@ -36,7 +36,7 @@ class Middleware:
         self._error_handlers[runner] = list(error_handlers)
 
     def attach(self, session: Session, router: IRouter, command: Command) -> 'Performer':
-        _, runner = router.resolve(str(command.dsn))
+        _, runner = router.resolve(command.dsn.to_str())
         middleware = self.__dirty_resolve_middleware(runner)
         return Performer(
             session,

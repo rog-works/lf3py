@@ -38,7 +38,7 @@ class Router(IRouter):
         return self._dsn_type(*elems)
 
     def dispatch(self, command: Command) -> Result:
-        spec, runner = self.resolve(str(command.dsn))
+        spec, runner = self.resolve(command.dsn.to_str())
         return invoke(runner, command, spec)
 
 

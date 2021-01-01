@@ -5,7 +5,7 @@ from lf3py.api.dsn import ApiDSN
 from lf3py.test.helper import data_provider
 
 
-class TestRouteDSN(TestCase):
+class TestApiDSN(TestCase):
     @data_provider([
         (['GET', '/models/1234'], 'GET /models/1234'),
         (['GET', '/models/1234/attrs/name'], 'GET /models/1234/attrs/name'),
@@ -40,3 +40,4 @@ class TestRouteDSN(TestCase):
     def test_to_str(self):
         dsn = ApiDSN('GET', '/ping')
         self.assertEqual(str(dsn), 'GET /ping')
+        self.assertEqual(dsn.to_str(), 'GET /ping')

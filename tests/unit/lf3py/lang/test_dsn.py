@@ -27,3 +27,8 @@ class TestDSN(TestCase):
     ])
     def test_capture(self, dsn: str, spec: str, expected: bool):
         self.assertEqual(DSN(dsn).capture(spec), expected)
+
+    def test_to_str(self):
+        dsn = DSN('event', 'on')
+        self.assertEqual(str(dsn), 'event.on')
+        self.assertEqual(dsn.to_str(), 'event.on')

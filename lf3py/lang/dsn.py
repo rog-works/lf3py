@@ -12,9 +12,6 @@ class DSN:
     def __init__(self, *elems: DSNElement) -> None:
         self._dsn = self.format(*elems)
 
-    def __eq__(self, dsn: Union['DSN', str]) -> bool:
-        return self._dsn == (dsn._dsn if type(dsn) is DSN else dsn)
-
     def __str__(self) -> str:
         return self._dsn
 
@@ -23,6 +20,9 @@ class DSN:
 
     def capture(self, spec: str) -> Dict[str, str]:
         return re.search(spec, self._dsn).groupdict()
+
+    def to_str(self) -> str:
+        return str(self)
 
 
 DSNType = Type[DSN]
