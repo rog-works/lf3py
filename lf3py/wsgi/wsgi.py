@@ -54,14 +54,18 @@ class RequestDecoder:
             'Content-Type': environ.get('CONTENT_TYPE', ''),
             'Content-Length': int(environ['CONTENT_LENGTH'] if environ.get('CONTENT_LENGTH', '') != '' else 0),
         }
-        matcher = re.compile(r'^HTTP_([\w\d-])$')
+        matcher = re.compile(r'^HTTP_([\w\d]+)$')
         for key, value in environ.items():
             matches = matcher.match(key)
             if matches:
-                header_key = matches.group(1)
+                header_key = cls.__kebab_camelize(matches.group(1))
                 headers[header_key] = value
 
         return headers
+
+    @classmethod
+    def __kebab_camelize(cls, org_header_key: str) -> str:
+        return '-'.join(map(lambda word: word[0].upper() + word[1:].lower(), org_header_key.split('_')))
 
     @classmethod
     def __parse_query_string(cls, query_string: str) -> dict:
