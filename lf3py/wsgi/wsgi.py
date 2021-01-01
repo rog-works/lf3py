@@ -43,8 +43,8 @@ class RequestDecoder:
         return {
             'httpMethod': environ['REQUEST_METHOD'],
             'path': environ['PATH_INFO'],
-            'queryStringParameters': query_params,
             'headers': headers,
+            'queryStringParameters': query_params,
             'body': body,
         }
 
