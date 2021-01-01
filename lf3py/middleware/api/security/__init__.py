@@ -1,1 +1,1 @@
-from lf3py.middleware.api.security.jwt import jwt  # noqa F401
+from lf3py.middleware.api.security.jwt import jwt, JWTSecret  # noqa F401

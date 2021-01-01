@@ -20,7 +20,7 @@ def jwt(request: Request, secret: JWTSecret):
     try:
         matches = re.match(r'^Bearer\s+([\w\d]+)\.([\w\d]+)\.([\w\d]+)$', jwt_value)
         enc_head, enc_payload, org_sign = matches.groups()
-        head = json.loads(base64.urlsafe_b64decode(enc_head))
+        head = json.loads(base64.urlsafe_b64decode(enc_head + '==='))
         message = f'{enc_head}.{enc_payload}'.encode('utf-8')
         method = hmac.new(secret.encode('utf-8'), message, head['alg'])
         sign = method.hexdigest()
