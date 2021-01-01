@@ -70,6 +70,6 @@ class Server:
     def __init__(self, handler: Handler):
         self._handler = handler
 
-    def listen(self, host: str, port: int):
+    def listen(self, host: str = 'localhost', port: int = 80):
         with make_server(host, port, self._handler) as httpd:
             httpd.serve_forever()
