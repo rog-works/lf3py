@@ -64,6 +64,8 @@ class TestRequestDecoder(TestCase):
                 'PATH_INFO': '/',
                 'CONTENT_TYPE': 'application/json',
                 'CONTENT_LENGTH': '',
+                'HTTP_ACCEPT': 'application/json',
+                'HTTP_X_CUSTOM_HEADER': 'x_custom_header_value',
                 'QUERY_STRING': 'lang=ja',
                 'wsgi.input': b'',
             },
@@ -73,6 +75,8 @@ class TestRequestDecoder(TestCase):
                 'headers': {
                     'Content-Type': 'application/json',
                     'Content-Length': 0,
+                    'Accept': 'application/json',
+                    'X-Custom-Header': 'x_custom_header_value',
                 },
                 'queryStringParameters': {
                     'lang': 'ja',
