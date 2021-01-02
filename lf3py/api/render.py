@@ -10,7 +10,7 @@ class ApiRender(IApiRender):
         self._response = response
 
     def ok(self, status: int = 200, body: Result = Result()) -> Response:
-        return self.http_result(status, body)
+        return self.http_result(status, {}, body)
 
     def fail(self, error: Exception) -> Response:
         if isinstance(error, ApiError):
@@ -18,11 +18,11 @@ class ApiRender(IApiRender):
         else:
             return self.error_result(500, '500 Internal Server Error', error)
 
-    def http_result(self, status: int = 200, body: Result = Result()) -> Response:
-        return Response(statusCode=status, headers=self._response.headers, body=body)
+    def http_result(self, status: int, headers: dict, body: Result) -> Response:
+        return Response(statusCode=status, headers={**self._response.headers, **headers}, body=body)
 
     def error_result(self, status: int, message: str, error: Exception) -> Response:
-        return self.http_result(status, self.build_error_body(status, message, error))
+        return self.http_result(status, {}, self.build_error_body(status, message, error))
 
     def build_error_body(self, status: int, message: str, error: Exception) -> Result:
         return ErrorBody(message=message, stacktrace=stacktrace(error))
