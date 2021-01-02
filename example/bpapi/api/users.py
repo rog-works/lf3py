@@ -8,9 +8,9 @@ from example.bpapi.app import MyApp
 from example.bpapi.api.users_defs import IndexBody, ShowBody, CreateParams
 from example.bpapi.middleware.error import within
 from example.bpapi.models.user import User
-from example.bpapi.session import Session
+from example.bpapi.session import MySession
 
-session = Session()
+session = MySession()
 bp = MyApp.blueprint()
 
 
