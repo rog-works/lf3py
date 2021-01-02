@@ -6,7 +6,8 @@ from lf3py.lang.module import load_module_path
 from lf3py.routing.errors import RouteMismatchError
 from lf3py.routing.invoker import invoke
 from lf3py.routing.symbols import IRouter
-from lf3py.task.data import Command, Result
+from lf3py.task import Task
+from lf3py.task.data import Command
 from lf3py.task.types import Runner, RunnerDecorator
 
 
@@ -37,9 +38,9 @@ class Router(IRouter):
     def dsnize(self, *elems: DSNElement) -> DSN:
         return self._dsn_type(*elems)
 
-    def dispatch(self, command: Command) -> Result:
+    def dispatch(self, command: Command) -> Task:
         spec, runner = self.resolve(command.dsn.to_str())
-        return invoke(runner, command, spec)
+        return Task(runner, lambda: invoke(runner, command, spec))
 
 
 class BpRouter(Router):

@@ -3,9 +3,12 @@ from typing import Type, TypeVar
 from lf3py.app.provider import di_container
 from lf3py.aws.types import LambdaEvent
 from lf3py.config import ModuleDefinitions
-from lf3py.lang.locator import Locator
+from lf3py.lang.locator import Locator, T_INST
+from lf3py.lang.sequence import last
 from lf3py.middleware.middleware import ErrorMiddleware, Middleware, PerformMiddleware
 from lf3py.session.session import Session
+from lf3py.task import Task, TaskQueue
+from lf3py.task.data import Result
 from lf3py.task.types import RunnerDecorator
 
 T_APP = TypeVar('T_APP', bound='App')
@@ -31,15 +34,23 @@ class App:
     def __init__(self, locator: Locator) -> None:
         self._locator = locator
 
-    def start(self) -> Session:
-        return Session.start(self._locator)
-
-    @property
-    def middleware(self) -> Middleware:
-        return self._locator.resolve(Middleware)
+    def locate(self, symbol: Type[T_INST]) -> T_INST:
+        return self._locator.resolve(symbol)
 
     def behavior(self, *perform_middlewares: PerformMiddleware) -> RunnerDecorator:
-        return self.middleware.effect(*perform_middlewares)
+        return self.locate(Middleware).effect(*perform_middlewares)
 
     def on_error(self, *error_handlers: ErrorMiddleware) -> RunnerDecorator:
-        return self.middleware.catch(*error_handlers)
+        return self.locate(Middleware).catch(*error_handlers)
+
+    def run(self) -> Result:
+        with self.__start() as session:
+            results = [self.__run_task(session, task) for task in session(TaskQueue)]
+            return last(results)
+
+    def __start(self) -> Session:
+        return Session.start(self._locator)
+
+    def __run_task(self, session: Session, task: Task) -> Result:
+        with session(Middleware).attach(session, task):
+            return task.run()

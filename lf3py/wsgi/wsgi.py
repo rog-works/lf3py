@@ -52,7 +52,7 @@ class RequestDecoder:
     def __parse_headers(cls, environ: dict) -> Dict[str, Any]:
         headers = {
             'Content-Type': environ.get('CONTENT_TYPE', ''),
-            'Content-Length': int(environ['CONTENT_LENGTH'] if environ.get('CONTENT_LENGTH', '') != '' else 0),
+            'Content-Length': int(environ['CONTENT_LENGTH']) if environ.get('CONTENT_LENGTH', '') != '' else 0,
         }
         matcher = re.compile(r'^HTTP_([\w\d]+)$')
         for key, value in environ.items():

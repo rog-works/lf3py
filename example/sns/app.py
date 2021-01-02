@@ -15,4 +15,4 @@ class MyApp(SNSApp):
 
     @property
     def firehose(self) -> IFireHose:
-        return self._locator.resolve(IFireHose)
+        return self.locate(IFireHose)
