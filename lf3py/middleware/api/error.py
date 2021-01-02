@@ -1,7 +1,7 @@
 from typing import Dict, List
 
 from lf3py.api.errors import ApiError, BadRequestError, DataNotFoundError, UnsupportedMediaTypeError
-from lf3py.middleware.types import ErrorMiddleware
+from lf3py.middleware.types import CatchMiddleware
 from lf3py.routing.errors import DispatchError, RouteMismatchError
 
 
@@ -30,8 +30,8 @@ def error_415(error: Exception, *args):
         raise ApiError('415 Unsupported Media Type', 415) from error
 
 
-def within(*statuses: int) -> List[ErrorMiddleware]:
-    handlers: Dict[int, ErrorMiddleware] = {
+def within(*statuses: int) -> List[CatchMiddleware]:
+    handlers: Dict[int, CatchMiddleware] = {
         400: error_400,
         404: error_404,
         415: error_415,

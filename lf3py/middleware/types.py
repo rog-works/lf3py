@@ -1,7 +1,7 @@
 from typing import Callable
 from typing_extensions import Protocol
 
-PerformMiddleware = Callable[..., None]
+AttachMiddleware = Callable[..., None]
 """
 Examples:
     >>> # Declaration
@@ -16,7 +16,7 @@ Examples:
 """
 
 
-class ErrorMiddleware(Protocol):
+class CatchMiddleware(Protocol):
     """
     Examples:
         >>> # Declaration

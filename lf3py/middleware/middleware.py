@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Type
 
 from lf3py.di.invoker import invoke, currying
 from lf3py.lang.module import import_module
-from lf3py.middleware.types import ErrorMiddleware, PerformMiddleware
+from lf3py.middleware.types import CatchMiddleware, AttachMiddleware
 from lf3py.session import Session
 from lf3py.task import Task
 from lf3py.task.types import Runner, RunnerDecorator
@@ -11,35 +11,35 @@ from lf3py.task.types import Runner, RunnerDecorator
 
 class Middleware:
     def __init__(self) -> None:
-        self._performers: Dict[Runner, List[PerformMiddleware]] = {}
-        self._error_handlers: Dict[Runner, List[ErrorMiddleware]] = {}
+        self._attaches: Dict[Runner, List[AttachMiddleware]] = {}
+        self._catches: Dict[Runner, List[CatchMiddleware]] = {}
 
-    def effect(self, *performers: PerformMiddleware) -> RunnerDecorator:
+    def attach(self, *attaches: AttachMiddleware) -> RunnerDecorator:
         def decorator(runner: Runner) -> Runner:
-            self.performer_register(runner, *performers)
+            self.attach_register(runner, *attaches)
             return runner
 
         return decorator
 
-    def catch(self, *error_handlers: ErrorMiddleware) -> RunnerDecorator:
+    def catch(self, *catches: CatchMiddleware) -> RunnerDecorator:
         def decorator(runner: Runner) -> Runner:
-            self.error_handler_register(runner, *error_handlers)
+            self.catch_register(runner, *catches)
             return runner
 
         return decorator
 
-    def performer_register(self, runner: Runner, *performers: PerformMiddleware):
-        self._performers[runner] = list(performers)
+    def attach_register(self, runner: Runner, *attaches: AttachMiddleware):
+        self._attaches[runner] = list(attaches)
 
-    def error_handler_register(self, runner: Runner, *error_handlers: ErrorMiddleware):
-        self._error_handlers[runner] = list(error_handlers)
+    def catch_register(self, runner: Runner, *catches: CatchMiddleware):
+        self._catches[runner] = list(catches)
 
-    def attach(self, session: Session, task: Task) -> 'Performer':
+    def perform(self, session: Session, task: Task) -> 'Performer':
         middleware = self.__dirty_resolve_middleware(task.runner)
         return Performer(
             session,
-            middleware._performers.get(task.runner, []),
-            middleware._error_handlers.get(task.runner, [])
+            middleware._attaches.get(task.runner, []),
+            middleware._catches.get(task.runner, [])
         )
 
     def __dirty_resolve_middleware(self, runner: Runner) -> 'Middleware':
@@ -52,10 +52,10 @@ class Middleware:
 
 
 class Performer:
-    def __init__(self, session: Session, performers: List[PerformMiddleware], error_handlers: List[ErrorMiddleware]) -> None:
+    def __init__(self, session: Session, attaches: List[AttachMiddleware], catches: List[CatchMiddleware]) -> None:
         self._session = session
-        self._performers = performers
-        self._error_handlers = error_handlers
+        self._attaches = attaches
+        self._catches = catches
 
     def __enter__(self):
         self.perform()
@@ -65,17 +65,17 @@ class Performer:
             self.handle_error(exc_value)
 
     def perform(self):
-        for performer in self._performers:
-            invoke(self._session, performer)
+        for attach in self._attaches:
+            invoke(self._session, attach)
 
     def handle_error(self, error: BaseException):
-        self.__handle_error(error, *self._error_handlers)
+        self.__handle_error(error, *self._catches)
 
-    def __handle_error(self, error: BaseException, *error_handlers: ErrorMiddleware):
-        for index, error_handler in enumerate(error_handlers):
+    def __handle_error(self, error: BaseException, *catches: CatchMiddleware):
+        for index, catch in enumerate(catches):
             try:
-                curried = currying(self._session, error_handler)
+                curried = currying(self._session, catch)
                 curried(error)
             except Exception as e:
-                self.__handle_error(e, *error_handlers[index + 1:])
+                self.__handle_error(e, *catches[index + 1:])
                 raise

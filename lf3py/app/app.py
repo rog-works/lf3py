@@ -5,7 +5,8 @@ from lf3py.aws.types import LambdaEvent
 from lf3py.config import ModuleDefinitions
 from lf3py.lang.locator import Locator, T_INST
 from lf3py.lang.sequence import last
-from lf3py.middleware.middleware import ErrorMiddleware, Middleware, PerformMiddleware
+from lf3py.middleware import Middleware
+from lf3py.middleware.types import AttachMiddleware, CatchMiddleware
 from lf3py.session.session import Session
 from lf3py.task import Task, TaskQueue
 from lf3py.task.data import Result
@@ -37,11 +38,11 @@ class App:
     def locate(self, symbol: Type[T_INST]) -> T_INST:
         return self._locator.resolve(symbol)
 
-    def behavior(self, *perform_middlewares: PerformMiddleware) -> RunnerDecorator:
-        return self.locate(Middleware).effect(*perform_middlewares)
+    def behavior(self, *attaches: AttachMiddleware) -> RunnerDecorator:
+        return self.locate(Middleware).attach(*attaches)
 
-    def on_error(self, *error_handlers: ErrorMiddleware) -> RunnerDecorator:
-        return self.locate(Middleware).catch(*error_handlers)
+    def on_error(self, *catches: CatchMiddleware) -> RunnerDecorator:
+        return self.locate(Middleware).catch(*catches)
 
     def run(self) -> Result:
         with self.__start() as session:
@@ -52,5 +53,5 @@ class App:
         return Session.start(self._locator)
 
     def __run_task(self, session: Session, task: Task) -> Result:
-        with session(Middleware).attach(session, task):
+        with session(Middleware).perform(session, task):
             return task.run()
