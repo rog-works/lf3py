@@ -16,12 +16,12 @@ class MyApp(ApiApp):
 
     @property
     def i18n(self) -> I18n:
-        return self._locator.resolve(I18n)
+        return self.locate(I18n)
 
     @property
     def logger(self) -> Logger:
-        return self._locator.resolve(Logger)
+        return self.locate(Logger)
 
     @property
     def cache(self) -> Cache:
-        return self._locator.resolve(Cache)
+        return self.locate(Cache)

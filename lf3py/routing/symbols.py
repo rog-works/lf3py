@@ -2,7 +2,8 @@ from abc import ABCMeta
 from typing import Tuple
 
 from lf3py.lang.dsn import DSNElement
-from lf3py.task.data import Command, Result
+from lf3py.task import Task
+from lf3py.task.data import Command
 from lf3py.task.types import Runner, RunnerDecorator
 
 
@@ -13,5 +14,5 @@ class IRouter(metaclass=ABCMeta):
     def resolve(self, *elems: DSNElement) -> Tuple[str, Runner]:
         raise NotImplementedError()
 
-    def dispatch(self, command: Command) -> Result:
+    def dispatch(self, command: Command) -> Task:
         raise NotImplementedError()

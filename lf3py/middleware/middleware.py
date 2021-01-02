@@ -4,9 +4,8 @@ from typing import Dict, List, Optional, Type
 from lf3py.di.invoker import invoke, currying
 from lf3py.lang.module import import_module
 from lf3py.middleware.types import ErrorMiddleware, PerformMiddleware
-from lf3py.routing.symbols import IRouter
 from lf3py.session import Session
-from lf3py.task.data import Command
+from lf3py.task import Task
 from lf3py.task.types import Runner, RunnerDecorator
 
 
@@ -35,20 +34,19 @@ class Middleware:
     def error_handler_register(self, runner: Runner, *error_handlers: ErrorMiddleware):
         self._error_handlers[runner] = list(error_handlers)
 
-    def attach(self, session: Session, router: IRouter, command: Command) -> 'Performer':
-        _, runner = router.resolve(command.dsn.to_str())
-        middleware = self.__dirty_resolve_middleware(runner)
+    def attach(self, session: Session, task: Task) -> 'Performer':
+        middleware = self.__dirty_resolve_middleware(task.runner)
         return Performer(
             session,
-            middleware._performers.get(runner, []),
-            middleware._error_handlers.get(runner, [])
+            middleware._performers.get(task.runner, []),
+            middleware._error_handlers.get(task.runner, [])
         )
 
     def __dirty_resolve_middleware(self, runner: Runner) -> 'Middleware':
         modules = import_module(runner.__module__)
         for module in modules.__dict__.values():
-            if hasattr(module, 'middleware') and type(module.middleware) == Middleware:
-                return module.middleware
+            if hasattr(module, 'locate') and callable(module.locate) and hasattr(module.locate, '__self__'):
+                return module.locate(Middleware)
 
         return self
 
