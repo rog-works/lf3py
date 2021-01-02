@@ -3,6 +3,7 @@ from unittest import TestCase
 from lf3py.api.errors import ApiError
 from lf3py.api.render import ApiRender
 from lf3py.api.response import Response
+from lf3py.routing.errors import RouteMismatchError
 from lf3py.test.helper import data_provider
 
 
@@ -24,6 +25,17 @@ class TestRender(TestCase):
                 'body': {
                     'message': '400 Bad Request',
                     'stacktrace': ['lf3py.api.errors.ApiError: 400 Bad Request\n'],
+                },
+            }
+        ),
+        (
+            RouteMismatchError('Route mismatch'),
+            {
+                'statusCode': 404,
+                'headers': {'Content-Type': 'application/json'},
+                'body': {
+                    'message': '404 Data Not Found',
+                    'stacktrace': ['lf3py.routing.errors.RouteMismatchError: Route mismatch\n'],
                 },
             }
         ),

@@ -2,6 +2,7 @@ from lf3py.api.errors import ApiError
 from lf3py.api.response import ErrorBody, Response
 from lf3py.api.symbols import IApiRender
 from lf3py.lang.error import stacktrace
+from lf3py.routing.errors import RouteMismatchError
 from lf3py.task.data import Result
 
 
@@ -15,6 +16,8 @@ class ApiRender(IApiRender):
     def fail(self, error: Exception) -> Response:
         if isinstance(error, ApiError):
             return self.error_result(error.status, str(error), error)
+        elif isinstance(error, RouteMismatchError):
+            return self.error_result(404, '404 Data Not Found', error)
         else:
             return self.error_result(500, '500 Internal Server Error', error)
 
