@@ -1,4 +1,4 @@
-from lf3py.api.router import IApiRouter
+from lf3py.api import Api
 from lf3py.api.symbols import IApiRender
 from lf3py.app.app import App
 from lf3py.app.definitions import inlineapi_modules
@@ -20,5 +20,5 @@ class ApiApp(App):
         return self.locate(IApiRender)
 
     @property
-    def api(self) -> IApiRouter:
-        return self.locate(IApiRouter)
+    def api(self) -> Api:
+        return self.locate(Api)
