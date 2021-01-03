@@ -1,6 +1,6 @@
 from lf3py.api.response import Response
 from lf3py.app.apiapp import ApiApp
-from lf3py.middleware.api.error import unexpected_dispach, within
+from lf3py.middleware.api import changes, statuses
 
 from example.inlineapi.model_defs import IndexBody, Model, ShowBody
 
@@ -19,7 +19,8 @@ def handler(event: dict, context: object) -> dict:
         body = IndexBody(models=[Model(id=1234)])
         return app.render.ok(body=body).json()
 
-    @app.on_error(unexpected_dispach, *within(400))
+    @app.on_error(changes.fail_dispach_to_400)
+    @app.on_error(statuses.bad_request)
     @app.api.get('/models/{model_id}')
     def show(model_id: int) -> Response:
         body = ShowBody(model=Model(model_id))

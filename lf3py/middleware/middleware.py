@@ -29,10 +29,16 @@ class Middleware:
         return decorator
 
     def attach_register(self, runner: Runner, *attaches: AttachMiddleware):
-        self._attaches[runner] = list(attaches)
+        if runner not in self._attaches:
+            self._attaches[runner] = []
+
+        self._attaches[runner].extend(list(attaches))
 
     def catch_register(self, runner: Runner, *catches: CatchMiddleware):
-        self._catches[runner] = list(catches)
+        if runner not in self._catches:
+            self._catches[runner] = []
+
+        self._catches[runner].extend(list(catches))
 
     def perform(self, session: Session, task: Task) -> 'Performer':
         middleware = self.__dirty_resolve_middleware(task.runner)
@@ -54,8 +60,8 @@ class Middleware:
 class Performer:
     def __init__(self, session: Session, attaches: List[AttachMiddleware], catches: List[CatchMiddleware]) -> None:
         self._session = session
-        self._attaches = attaches
-        self._catches = catches
+        self._attaches = reversed(attaches)
+        self._catches = reversed(catches)
 
     def __enter__(self):
         self.perform()
