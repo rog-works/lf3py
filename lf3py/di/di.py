@@ -23,7 +23,7 @@ class DI:
 
         injector = self._injectors[found_symbol]
         instance = invoke(self, injector())
-        self._instances[symbol] = instance
+        self._instances[found_symbol] = instance
         return instance
 
     def __resolve_symbol(self, symbol: Type) -> Type:
