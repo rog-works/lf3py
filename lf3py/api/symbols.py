@@ -113,20 +113,61 @@ class IApiRouter(IRouter):
 class IApiSchema(metaclass=ABCMeta):
     @abstractmethod
     def consume(self, *attaches: AttachMiddleware) -> RunnerDecorator:
+        """
+        Examples:
+            >>> @app.schema.consume(content_types.json)
+            >>> @app.api.get('/models')
+            >>> def index() -> Response:
+            >>>     body = IndexBody(Model.all())
+            >>>     return app.render.ok(body=body).json()
+        """
         raise NotImplementedError()
 
     @abstractmethod
     def produce(self, *attaches: AttachMiddleware) -> RunnerDecorator:
+        """
+        Examples:
+            >>> @app.schema.produce(accepts.json)
+            >>> @app.api.get('/models')
+            >>> def index() -> Response:
+            >>>     body = IndexBody(Model.all())
+            >>>     return app.render.ok(body=body).json()
+        """
         raise NotImplementedError()
 
     @abstractmethod
     def secutity(self, *attaches: AttachMiddleware) -> RunnerDecorator:
+        """
+        Examples:
+            >>> @app.schema.security(securities.jwt)
+            >>> @app.api.get('/models')
+            >>> def index() -> Response:
+            >>>     body = IndexBody(Model.all())
+            >>>     return app.render.ok(body=body).json()
+        """
         raise NotImplementedError()
 
     @abstractmethod
     def header(self, *attaches: AttachMiddleware) -> RunnerDecorator:
+        """
+        Examples:
+            >>> @app.schema.header(preflights.cors)
+            >>> @app.api.option('/')
+            >>> def preflight() -> Response:
+            >>>     return app.render.ok(status=204).json()
+        """
         raise NotImplementedError()
 
     @abstractmethod
     def error(self, *catches: CatchMiddleware) -> RunnerDecorator:
+        """
+        Examples:
+            >>> @app.on_error(changes.dispatch_error_to_400)
+            >>> @app.schema.error(statuses.bad_request)
+            >>> @app.api.post('/models')
+            >>> def create(params: ModelParams) -> Response:
+            >>>     model = Model.create(params)
+            >>>     body = ShowBody(model)
+            >>>     return app.render.ok(status=201, body=body).json()
+        """
         raise NotImplementedError()
