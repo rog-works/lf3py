@@ -13,3 +13,14 @@ def pluck(node: Node, path: str) -> Node:
         return pluck(node[index], '.'.join(remain))
     else:
         return node
+
+
+def deep_merge(d1: dict, d2: dict) -> dict:
+    merged = d1.copy()
+    for key, value in d2.items():
+        if isinstance(value, dict) and key in merged and isinstance(merged[key], dict):
+            merged[key] = deep_merge(merged[key], value)
+        else:
+            merged[key] = value
+
+    return merged
