@@ -20,8 +20,7 @@ class TaskQueue:
         return len(self._queue) > 0
 
     def enqueue(self, *tasks: Task):
-        for task in tasks:
-            self._queue.append(task)
+        self._queue.extend(tasks)
 
     def __iter__(self) -> 'TaskQueue':
         return self
