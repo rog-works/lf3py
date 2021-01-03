@@ -1,4 +1,4 @@
-from abc import ABCMeta
+from abc import ABCMeta, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Type, TypeVar
 
@@ -10,9 +10,11 @@ T_OBJ = TypeVar('T_OBJ')
 
 class Command(metaclass=ABCMeta):
     @property
+    @abstractmethod
     def dsn(self) -> DSN:
         raise NotImplementedError()
 
+    @abstractmethod
     def data(self, data_type: Type[T_OBJ]) -> T_OBJ:
         raise NotImplementedError()
 

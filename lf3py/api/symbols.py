@@ -1,3 +1,5 @@
+from abc import ABCMeta, abstractmethod
+
 from lf3py.api.response import Response
 from lf3py.middleware.types import AttachMiddleware, CatchMiddleware
 from lf3py.routing.symbols import IRouter
@@ -7,14 +9,17 @@ from lf3py.view.symbols import IRender
 
 
 class IApiRender(IRender):
+    @abstractmethod
     def ok(self, status: int = 200, body: Result = Result()) -> Response:
         raise NotImplementedError()
 
+    @abstractmethod
     def fail(self, error: Exception) -> Response:
         raise NotImplementedError()
 
 
 class IApiRouter(IRouter):
+    @abstractmethod
     def get(self, path_spec: str) -> RunnerDecorator:
         """
         Examples:
@@ -30,6 +35,7 @@ class IApiRouter(IRouter):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def post(self, path_spec: str) -> RunnerDecorator:
         """
         Examples:
@@ -41,6 +47,7 @@ class IApiRouter(IRouter):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def put(self, path_spec: str) -> RunnerDecorator:
         """
         Examples:
@@ -54,6 +61,7 @@ class IApiRouter(IRouter):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def delete(self, path_spec: str) -> RunnerDecorator:
         """
         Examples:
@@ -66,6 +74,7 @@ class IApiRouter(IRouter):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def patch(self, path_spec: str) -> RunnerDecorator:
         """
         Examples:
@@ -79,6 +88,7 @@ class IApiRouter(IRouter):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def option(self, path_spec: str) -> RunnerDecorator:
         """
         Examples:
@@ -89,6 +99,7 @@ class IApiRouter(IRouter):
         """
         raise NotImplementedError()
 
+    @abstractmethod
     def head(self, path_spec: str) -> RunnerDecorator:
         """
         Examples:
@@ -99,18 +110,23 @@ class IApiRouter(IRouter):
         raise NotImplementedError()
 
 
-class IApiSchema:
+class IApiSchema(metaclass=ABCMeta):
+    @abstractmethod
     def consume(self, *attaches: AttachMiddleware) -> RunnerDecorator:
         raise NotImplementedError()
 
+    @abstractmethod
     def produce(self, *attaches: AttachMiddleware) -> RunnerDecorator:
         raise NotImplementedError()
 
+    @abstractmethod
     def secutity(self, *attaches: AttachMiddleware) -> RunnerDecorator:
         raise NotImplementedError()
 
+    @abstractmethod
     def header(self, *attaches: AttachMiddleware) -> RunnerDecorator:
         raise NotImplementedError()
 
+    @abstractmethod
     def error(self, *catches: CatchMiddleware) -> RunnerDecorator:
         raise NotImplementedError()
