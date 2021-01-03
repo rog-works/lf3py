@@ -7,21 +7,21 @@ Decorator = Callable[[Func], Func]
 class Embed:
     def produce(self, media_type: str) -> Decorator:
         def decorator(func: Func) -> Func:
-            func.__openapi__ = {'produce': media_type}
+            func.__openapi__ = {'produce': [media_type]}
             return func
 
         return decorator
 
     def consume(self, media_type: str) -> Decorator:
         def decorator(func: Func) -> Func:
-            func.__openapi__ = {'consume': media_type}
+            func.__openapi__ = {'consume': [media_type]}
             return func
 
         return decorator
 
     def security(self, security: dict) -> Decorator:
         def decorator(func: Func) -> Func:
-            func.__openapi__ = {'security': security}
+            func.__openapi__ = {'security': [security]}
             return func
 
         return decorator
