@@ -1,4 +1,5 @@
 from lf3py.api.response import Response
+from lf3py.middleware.types import AttachMiddleware, CatchMiddleware
 from lf3py.routing.symbols import IRouter
 from lf3py.task.data import Result
 from lf3py.task.types import RunnerDecorator
@@ -95,4 +96,21 @@ class IApiRouter(IRouter):
             >>> def head() -> Response:
             >>>     return app.render.ok().json()
         """
+        raise NotImplementedError()
+
+
+class IApiSchema:
+    def consume(self, *attaches: AttachMiddleware) -> RunnerDecorator:
+        raise NotImplementedError()
+
+    def produce(self, *attaches: AttachMiddleware) -> RunnerDecorator:
+        raise NotImplementedError()
+
+    def secutity(self, *attaches: AttachMiddleware) -> RunnerDecorator:
+        raise NotImplementedError()
+
+    def header(self, *attaches: AttachMiddleware) -> RunnerDecorator:
+        raise NotImplementedError()
+
+    def error(self, *catches: CatchMiddleware) -> RunnerDecorator:
         raise NotImplementedError()

@@ -1,6 +1,6 @@
 from typing_extensions import Protocol
 
-from lf3py.api import Api
+from lf3py.api.symbols import IApiRouter, IApiSchema
 from lf3py.routing.symbols import IRouter
 from lf3py.middleware.types import AttachMiddleware, CatchMiddleware
 from lf3py.task.types import RunnerDecorator
@@ -26,5 +26,9 @@ class IApiBlueprinter(Protocol):
         raise NotImplementedError()
 
     @property
-    def api(self) -> Api:
+    def api(self) -> IApiRouter:
+        raise NotImplementedError()
+
+    @property
+    def schema(self) -> IApiSchema:
         raise NotImplementedError()

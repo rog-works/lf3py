@@ -19,8 +19,8 @@ def handler(event: dict, context: object) -> dict:
         body = IndexBody(models=[Model(id=1234)])
         return app.render.ok(body=body).json()
 
-    @app.on_error(changes.fail_dispach_to_400)
-    @app.api.output(statuses.bad_request)
+    @app.on_error(changes.dispatch_error_to_400)
+    @app.schema.error(statuses.bad_request)
     @app.api.get('/models/{model_id}')
     def show(model_id: int) -> Response:
         body = ShowBody(model=Model(model_id))
