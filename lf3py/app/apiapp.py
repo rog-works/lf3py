@@ -1,13 +1,13 @@
 from lf3py.api.symbols import IApiRender, IApiRouter, IApiSchema
 from lf3py.app.app import App
 from lf3py.app.definitions import inlineapi_modules
-from lf3py.app.types import IApiBlueprinter
+from lf3py.app.types import ApiBlueprint
 from lf3py.config import ModuleDefinitions
 
 
 class ApiApp(App):
     @classmethod
-    def blueprint(cls) -> IApiBlueprinter:
+    def blueprint(cls) -> ApiBlueprint:
         return cls()
 
     @classmethod

@@ -1,7 +1,7 @@
 from typing import Type, TypeVar
 
 from lf3py.app.provider import di_container
-from lf3py.app.types import IBlueprinter
+from lf3py.app.types import Blueprint
 from lf3py.aws.types import LambdaEvent
 from lf3py.config import ModuleDefinitions
 from lf3py.lang.locator import T_INST
@@ -25,7 +25,7 @@ class App:
         return app
 
     @classmethod
-    def blueprint(cls) -> IBlueprinter:
+    def blueprint(cls) -> Blueprint:
         return cls()
 
     @classmethod

@@ -6,7 +6,7 @@ from lf3py.middleware.types import AttachMiddleware, CatchMiddleware
 from lf3py.task.types import RunnerDecorator
 
 
-class IBlueprinter(Protocol):
+class Blueprint(Protocol):
     def behavior(self, *attaches: AttachMiddleware) -> RunnerDecorator:
         raise NotImplementedError()
 
@@ -18,7 +18,7 @@ class IBlueprinter(Protocol):
         raise NotImplementedError()
 
 
-class IApiBlueprinter(Protocol):
+class ApiBlueprint(Protocol):
     def behavior(self, *attaches: AttachMiddleware) -> RunnerDecorator:
         raise NotImplementedError()
 
