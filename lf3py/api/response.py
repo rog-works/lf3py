@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, TypeVar
 
 from lf3py.task.data import Result
+
+T_RES = TypeVar('T_RES', bound='Response')
 
 
 @dataclass
@@ -10,15 +12,15 @@ class Response(Result):
     headers: Dict[str, str] = field(default_factory=dict)
     body: Result = Result()
 
-    def json(self) -> 'Response':
+    def json(self: T_RES) -> T_RES:
         self.headers['Content-Type'] = 'application/json'
         return self
 
-    def html(self) -> 'Response':
+    def html(self: T_RES) -> T_RES:
         self.headers['Content-Type'] = 'text/html'
         return self
 
-    def text(self) -> 'Response':
+    def text(self: T_RES) -> T_RES:
         self.headers['Content-Type'] = 'text/plain'
         return self
 
