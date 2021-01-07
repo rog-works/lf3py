@@ -2,8 +2,7 @@ from typing_extensions import Protocol
 
 from lf3py.api.symbols import IApiRouter, IApiSchema
 from lf3py.routing.symbols import IRouter
-from lf3py.middleware.types import AttachMiddleware, CatchMiddleware
-from lf3py.task.types import RunnerDecorator
+from lf3py.routing.types import AttachMiddleware, CatchMiddleware, RunnerDecorator
 
 
 class Blueprint(Protocol):

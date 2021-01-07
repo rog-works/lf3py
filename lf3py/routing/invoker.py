@@ -2,19 +2,15 @@ from typing import Any, Tuple, Union
 
 from lf3py.lang.annotation import FunctionAnnotation
 from lf3py.routing.errors import UnresolvedArgumentsError
+from lf3py.routing.types import Middleware
+from lf3py.serialization.deserializer import Deserializer
 from lf3py.serialization.errors import DeserializeError
-from lf3py.task.data import Command, Result
-from lf3py.task.types import Runner
+from lf3py.task.data import Command
 
 
-def invoke(runner: Runner, command: Command, dsn_spec: str) -> Result:
-    kwargs = resolve_args(runner, command, dsn_spec)
-    return runner(**kwargs)
-
-
-def resolve_args(runner: Runner, command: Command, dsn_spec: str) -> Union[Tuple[Any, dict], dict]:
+def resolve_args(middleware: Middleware, command: Command, dsn_spec: str) -> Union[Tuple[Any, dict], dict]:
     try:
-        func_anno = FunctionAnnotation(runner)
+        func_anno = FunctionAnnotation(middleware)
 
         dsn_params = command.dsn.capture(dsn_spec)
         dsn_kwargs = {
@@ -26,7 +22,7 @@ def resolve_args(runner: Runner, command: Command, dsn_spec: str) -> Union[Tuple
         body_kwargs = {
             key: command.data(arg_anno.origin)
             for key, arg_anno in func_anno.args.items()
-            if key not in dsn_kwargs
+            if key not in dsn_kwargs and not arg_anno.is_generics and issubclass(arg_anno.origin, Deserializer)
         }
 
         inject_kwargs = {**dsn_kwargs, **body_kwargs}
@@ -35,4 +31,4 @@ def resolve_args(runner: Runner, command: Command, dsn_spec: str) -> Union[Tuple
         else:
             return inject_kwargs
     except (DeserializeError, KeyError, ValueError) as e:
-        raise UnresolvedArgumentsError() from e
+        raise UnresolvedArgumentsError(e) from e

@@ -1,10 +1,9 @@
 from abc import ABCMeta, abstractmethod
 
 from lf3py.api.response import Response
-from lf3py.middleware.types import AttachMiddleware, CatchMiddleware
 from lf3py.routing.symbols import IRouter
+from lf3py.routing.types import AttachMiddleware, CatchMiddleware, RunnerDecorator
 from lf3py.task.data import Result
-from lf3py.task.types import RunnerDecorator
 from lf3py.view.symbols import IRender
 
 

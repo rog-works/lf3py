@@ -26,7 +26,7 @@ class DictDeserializer(Deserializer):
 
             return deserialized
         except (TypeError, ValueError) as e:
-            raise DeserializeError() from e
+            raise DeserializeError(e) from e
 
     def __deserialize_value(self, prop_anno: PropertyAnnotation, value: Any) -> Any:
         if prop_anno.is_primitive:

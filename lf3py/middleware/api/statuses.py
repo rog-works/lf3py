@@ -8,7 +8,7 @@ from lf3py.api.errors import (
     UnsupportedMediaTypeError,
 )
 from lf3py.i18n import I18n
-from lf3py.middleware.types import CatchMiddleware
+from lf3py.routing.types import CatchMiddleware
 from lf3py.openapi.schema import embed
 
 

@@ -16,6 +16,10 @@ class ValueAnnotation:
         return getattr(self._type, '__origin__', type(None)) is Union
 
     @property
+    def is_generics(self) -> bool:
+        return hasattr(self._type, '__origin__')
+
+    @property
     def is_optional(self) -> bool:
         return type(None) in self.types
 
