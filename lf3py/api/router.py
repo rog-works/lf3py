@@ -2,7 +2,7 @@ from lf3py.api.dsn import ApiDSN
 from lf3py.api.symbols import IApiRouter
 from lf3py.config.types import Routes
 from lf3py.routing.router import BpRouter, InlineRouter
-from lf3py.task.types import RunnerDecorator
+from lf3py.routing.types import RunnerDecorator
 
 
 class ImplApiRouter(IApiRouter):

@@ -1,34 +1,20 @@
 from dataclasses import dataclass
-from typing import Callable, List
+from typing import Callable, Union
 
 from lf3py.task.data import Result
-from lf3py.task.types import Runner
 
 
 @dataclass
 class Task:
-    runner: Runner
-    run: Callable[[], Result]
+    _run: Callable[[], Union[Result, None]]
+
+    def __call__(self) -> Union[Result, None]:
+        return self._run()
 
 
-class TaskQueue:
-    def __init__(self) -> None:
-        self._queue: List[Task] = []
+@dataclass
+class Catch:
+    _run: Callable[[Exception], None]
 
-    @property
-    def has_next(self) -> bool:
-        return len(self._queue) > 0
-
-    def enqueue(self, *tasks: Task):
-        self._queue.extend(tasks)
-
-    def __iter__(self) -> 'TaskQueue':
-        return self
-
-    def __next__(self) -> Task:
-        if not self.has_next:
-            raise StopIteration()
-
-        task = self._queue[0]
-        self._queue = self._queue[1:]
-        return task
+    def __call__(self, error: Exception) -> None:
+        return self._run(error)

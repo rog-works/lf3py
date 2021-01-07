@@ -14,7 +14,7 @@ def raises(raise_error: Type[Error], *handle_errors: Type[Exception]) -> Callabl
             try:
                 return wrapper_func(*args, **kwargs)
             except handle_errors as e:
-                raise raise_error() from e
+                raise raise_error(e) from e
 
         return wrapper
 

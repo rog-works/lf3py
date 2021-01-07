@@ -21,7 +21,7 @@ class DictSerializer(Serializer):
                 if not key.startswith('_')
             }
         except TypeError as e:
-            raise SerializeError() from e
+            raise SerializeError(e) from e
 
     def __serialize_value(self, prop_anno: PropertyAnnotation, value: Any) -> Any:
         if prop_anno.is_primitive:

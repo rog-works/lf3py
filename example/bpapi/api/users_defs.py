@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import List
 
+from lf3py.serialization.deserializer import DictDeserializer
 from lf3py.task.data import Result
 
 from example.bpapi.models.user import User
@@ -19,5 +20,5 @@ class ShowBody(Result):
 
 
 @dataclass
-class CreateParams:
+class CreateParams(DictDeserializer):
     name: str = ''
